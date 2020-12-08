@@ -45,6 +45,7 @@ router.get('/detail/:id', async (ctx) => {
     ctx.response.body = { message: '服务器错误' };
   }
 });
+
 router.get('/:category/', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {

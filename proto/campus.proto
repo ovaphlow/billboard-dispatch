@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package campus;
+
+service Campus {
+
+  rpc get(GetRequest) returns (Reply) {}
+
+  rpc search(SearchRequest) returns (Reply) {}
+
+}
+
+message GetRequest { 
+  uint32 id = 1; 
+  string uuid = 2;
+}
+
+message SearchRequest {
+  map<string, string> filter = 1;
+}
+
+message Reply { string data = 1; }

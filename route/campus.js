@@ -5,20 +5,23 @@ const grpc = require('grpc');
 const config = require('../config');
 const logger = require('../logger');
 
-const proto = grpc.loadPackageDefinition(
-  protoLoader.loadSync(`${__dirname}/../proto/campus.proto`, {
+// 2020-12 根据官方示例更新 -->
+const packageDefinition = protoLoader.loadSync(
+  `${__dirname}/../proto/campus.proto`,
+  {
     keepCase: true,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true,
-  }),
-).campus;
-
-const grpcClient = new proto.Campus(
+  },
+);
+const campus_proto = grpc.loadPackageDefinition(packageDefinition).campus;
+const grpcClient = new campus_proto.Campus(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
+// 2020-12 根据官方示例更新 <--
 
 const router = new Router({
   prefix: '/api/campus',

@@ -1,20 +1,11 @@
-const Router = require('@koa/router');
 const grpc = require('grpc');
-const protoLoader = require('@grpc/proto-loader');
+const Router = require('@koa/router');
+
 const config = require('../config');
-const console = require('../logger');
+const logger = require('../logger');
+const banner_proto = require('../proto/banner');
 
-const proto = grpc.loadPackageDefinition(
-  protoLoader.loadSync(`${__dirname}/../proto/banner.proto`, {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  }),
-).banner;
-
-const grpcClient = new proto.Banner(
+const grpcClient = new banner_proto.Banner(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
@@ -30,7 +21,7 @@ router.get('/detail/:id', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.detail(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -41,7 +32,7 @@ router.get('/detail/:id', async (ctx) => {
     ctx.params.uuid = ctx.query.uuid;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -51,7 +42,7 @@ router.get('/:category/', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.get(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -61,7 +52,7 @@ router.get('/:category/', async (ctx) => {
   try {
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });

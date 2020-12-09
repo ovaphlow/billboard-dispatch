@@ -1,27 +1,14 @@
-const protoLoader = require('@grpc/proto-loader');
-const Router = require('@koa/router');
 const grpc = require('grpc');
+const Router = require('@koa/router');
 
 const config = require('../config');
 const logger = require('../logger');
+const campus_proto = require('../proto/campus');
 
-// 2020-12 根据官方示例更新 -->
-const packageDefinition = protoLoader.loadSync(
-  `${__dirname}/../proto/campus.proto`,
-  {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  },
-);
-const campus_proto = grpc.loadPackageDefinition(packageDefinition).campus;
 const grpcClient = new campus_proto.Campus(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
-// 2020-12 根据官方示例更新 <--
 
 const router = new Router({
   prefix: '/api/campus',

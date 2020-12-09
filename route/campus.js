@@ -3,7 +3,7 @@ const Router = require('@koa/router');
 
 const config = require('../config');
 const logger = require('../logger');
-const campus_proto = require('../proto/campus');
+const campus_proto = require('../proto/campus_stub');
 
 const grpcClient = new campus_proto.Campus(
   `${config.grpcServer.host}:${config.grpcServer.port}`,

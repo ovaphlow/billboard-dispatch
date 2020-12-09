@@ -1,17 +1,14 @@
 syntax = "proto3";
 
-package campus;
+package billboard;
 
 service Campus {
-
-  rpc get(GetRequest) returns (Reply) {}
-
-  rpc search(SearchRequest) returns (Reply) {}
-
+  rpc Get (GetRequest) returns (Reply) {}
+  rpc Search (SearchRequest) returns (Reply) {}
 }
 
-message GetRequest { 
-  uint32 id = 1; 
+message GetRequest {
+  uint32 id = 1;
   string uuid = 2;
 }
 
@@ -19,4 +16,6 @@ message SearchRequest {
   map<string, string> filter = 1;
 }
 
-message Reply { string data = 1; }
+message Reply {
+  string data = 1;
+}

@@ -3,7 +3,7 @@ const Router = require('@koa/router');
 
 const config = require('../config');
 const logger = require('../logger');
-const banner_proto = require('../proto/banner');
+const banner_proto = require('../proto/banner_stub');
 
 const grpcClient = new banner_proto.Banner(
   `${config.grpcServer.host}:${config.grpcServer.port}`,

@@ -1,45 +1,28 @@
 syntax = "proto3";
 
-// option java_multiple_files = true;
-option java_package = "hengda.billboard";
-option java_outer_classname = "RecruitmentProto";
-
 package recruitment;
 
 service Recruitment {
-  
   rpc get(GetRequest) returns (Reply) {}
-
   rpc list(ListRequest) returns (Reply) {}
-
   rpc filter(FilterRequest) returns (Reply) {}
-
   rpc insert(InsertRequest) returns (Reply) {}
-
   rpc update(UpdateRequest) returns (Reply) {}
-
   rpc search(SearchRequest) returns (Reply) {}
-
   rpc keywordSearch(KeywordSearchRequest) returns (Reply) {}
-
   rpc status(StatusRequest) returns (Reply) {}
-
   rpc enterpriseList(EnterpriseListRequest) returns (Reply) {}
-
   rpc enterpriseSearch(EnterpriseSearchRequest) returns (Reply) {}
-
   rpc subject(SubjectRequest) returns (Reply) {}
-
   rpc jobFairEntList(JobFairEntListRequest) returns (Reply) {}
-
-  rpc jobFairList(JobFairListRequest) returns (Reply) {} 
+  rpc jobFairList(JobFairListRequest) returns (Reply) {}
 }
 
 message ListRequest {}
 
 message FilterRequest {
   string category = 1;
-  map<string, string> filter = 2;
+  map<string, string> param = 2;
 }
 
 message InsertRequest {
@@ -81,7 +64,7 @@ message UpdateRequest {
 message StatusRequest {
   string status = 1;
   uint32 id = 2;
-  string uuid = 3; 
+  string uuid = 3;
 }
 
 message GetRequest {

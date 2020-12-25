@@ -2,6 +2,7 @@
   "name": "dispatch",
   "scripts": {
     "start": "node app.js",
+    "serve": "node app.js",
     "lint": "eslint . --fix",
     "format": "prettier . --write"
   },
@@ -14,10 +15,10 @@
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "node-fetch": "^2.6.0",
-    "nodemailer": "^6.4.16"
+    "nodemailer": "^6.4.17"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
+    "eslint": "^7.16.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-koa": "^2.0.2",
     "eslint-config-standard": "^16.0.2",

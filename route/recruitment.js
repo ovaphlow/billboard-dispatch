@@ -26,6 +26,41 @@ const router = new Router({
 
 module.exports = router;
 
+/**
+ * 2020-11-09
+ * 微信小程序列表及查询
+ * 用于之后的接口整合，候选代码。
+ * url 参数：?category=@PARAM
+ */
+router.put('/filter', async (ctx) => {
+  const enums = ['', 'byCategory', 'wx-default-list'];
+  const category = ctx.request.query.category || '';
+  if (enums.indexOf(category) === -1) {
+    ctx.response.body = [];
+    return;
+  }
+  const gfetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.filter(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
+      });
+    });
+  try {
+    ctx.response.body = await gfetch({
+      category,
+      param: ctx.request.body,
+    });
+  } catch (err) {
+    logger.error(err);
+    ctx.response.status = 500;
+  }
+});
+
 router.get('/job-fair/ent/:job_fair_id/:ent_id', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {
@@ -254,41 +289,6 @@ router.get('/', async (ctx) => {
   } catch (err) {
     logger.error(err);
     ctx.response.body = { message: '服务器错误' };
-  }
-});
-
-/**
- * 2020-11-09
- * 按类别检索岗位功能。
- * 用于之后的接口整合，候选代码。
- * url 参数：?category=@PARAM
- */
-router.put('/', async (ctx) => {
-  const enums = ['', 'byCategory'];
-  const category = ctx.request.query.category || '';
-  if (enums.indexOf(category) === -1) {
-    ctx.response.body = [];
-    return;
-  }
-  const gfetch = (body) =>
-    new Promise((resolve, reject) => {
-      grpcClient.filter(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
-      });
-    });
-  try {
-    ctx.response.body = await gfetch({
-      category,
-      filter: ctx.request.body,
-    });
-  } catch (err) {
-    logger.error(err);
-    ctx.response.status = 500;
   }
 });
 

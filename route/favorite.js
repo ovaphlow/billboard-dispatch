@@ -5,6 +5,7 @@ const config = require('../config');
 const console = require('../logger');
 
 const proto = grpc.loadPackageDefinition(
+  // eslint-disable-next-line
   protoLoader.loadSync(`${__dirname}/../proto/favorite.proto`, {
     keepCase: true,
     longs: String,

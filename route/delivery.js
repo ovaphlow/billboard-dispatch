@@ -5,6 +5,7 @@ const config = require('../config');
 const console = require('../logger');
 
 const proto = grpc.loadPackageDefinition(
+  // eslint-disable-next-line
   protoLoader.loadSync(`${__dirname}/../proto/delivery.proto`, {
     keepCase: true,
     longs: String,
@@ -20,6 +21,7 @@ const grpcClient = new proto.Delivery(
 );
 
 const resumeProto = grpc.loadPackageDefinition(
+  // eslint-disable-next-line
   protoLoader.loadSync(`${__dirname}/../proto/resume.proto`, {
     keepCase: true,
     longs: String,

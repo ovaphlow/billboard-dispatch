@@ -1,6 +1,7 @@
 const protoLoader = require('@grpc/proto-loader');
 const grpc = require('grpc');
 
+// eslint-disable-next-line
 const packageDefinition = protoLoader.loadSync(`${__dirname}/banner.proto`, {
   keepCase: true,
   longs: String,

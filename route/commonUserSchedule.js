@@ -1,10 +1,12 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
+
 const config = require('../config');
 const console = require('../logger');
 
 const proto = grpc.loadPackageDefinition(
+  // eslint-disable-next-line
   protoLoader.loadSync(`${__dirname}/../proto/commonUserSchedule.proto`, {
     keepCase: true,
     longs: String,

@@ -8,6 +8,7 @@ const config = require('../config');
 const logger = require('../logger');
 
 const proto = grpc.loadPackageDefinition(
+  // eslint-disable-next-line
   protoLoader.loadSync(`${__dirname}/../proto/enterpriseUser.proto`, {
     keepCase: true,
     longs: String,

@@ -12,4 +12,3 @@ const packageDefinition = protoLoader.loadSync(`${__dirname}/recommend.proto`, {
 const proto = grpc.loadPackageDefinition(packageDefinition).recommend;
 
 module.exports = proto;
-

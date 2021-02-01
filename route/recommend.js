@@ -43,8 +43,8 @@ router.put('/filter', async (ctx) => {
         } else {
           resolve(JSON.parse(response.data));
         }
-      })
-    })
+      });
+    });
   try {
     ctx.response.body = await gfetch({
       filter,
@@ -54,7 +54,7 @@ router.put('/filter', async (ctx) => {
     logger.error(err);
     ctx.response.status = 500;
   }
-})
+});
 
 router.put('/', async (ctx) => {
   const grpcFetch = (body) =>

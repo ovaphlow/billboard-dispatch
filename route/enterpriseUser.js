@@ -52,10 +52,7 @@ router.post('/log-in/', async (ctx) => {
     if (result.message) {
       ctx.response.body = result;
     } else {
-      const passwordSalted = getSalted(
-        ctx.request.body.password,
-        result.content.salt,
-      );
+      const passwordSalted = getSalted(ctx.request.body.password, result.content.salt);
       if (passwordSalted !== result.content.password) {
         ctx.response.body = { message: '用户名或密码错误', content: '' };
       } else {
@@ -127,10 +124,7 @@ router.put('/updatePassword/:id', async (ctx) => {
     if (result.message) {
       ctx.response.body = result;
     } else {
-      const passwordSalted = getSalted(
-        ctx.request.body.old_password,
-        result.content.salt,
-      );
+      const passwordSalted = getSalted(ctx.request.body.old_password, result.content.salt);
       if (passwordSalted !== result.content.password) {
         ctx.response.body = { message: '密码错误' };
       } else {

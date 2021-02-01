@@ -173,18 +173,14 @@ if (require.main === module) {
     cluster.on('online', (worker) => {
       logger.log(
         // eslint-disable-next-line
-        `${new Date()} 子进程 PID:${worker.process.pid}, 端口:${
-          config.app.port
-        }`,
+        `${new Date()} 子进程 PID:${worker.process.pid}, 端口:${config.app.port}`,
       );
     });
 
     cluster.on('exit', (worker, code, signal) => {
       logger.log(
         // eslint-disable-next-line
-        `${new Date()} 子进程 PID:${
-          worker.process.pid
-        }终止，错误代码:${code}，信号:${signal}`,
+        `${new Date()} 子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`,
       );
       // eslint-disable-next-line
       logger.log(`${new Date()} 由主进程(PID:${process.pid})创建新的子进程`);

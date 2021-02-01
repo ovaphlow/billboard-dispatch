@@ -5,17 +5,6 @@ const recommend_proto = require('../proto/recommend_stub');
 const config = require('../config');
 const logger = require('../logger');
 
-// const proto = grpc.loadPackageDefinition(
-//   // eslint-disable-next-line
-//   protoLoader.loadSync(`${__dirname}/../proto/recommend.proto`, {
-//     keepCase: true,
-//     longs: String,
-//     enums: String,
-//     defaults: true,
-//     oneofs: true,
-//   }),
-// ).recommend;
-
 const grpcClient = new recommend_proto.Recommend(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),

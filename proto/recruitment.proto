@@ -8,6 +8,7 @@ service Recruitment {
   rpc filter(FilterRequest) returns (Reply) {}
   rpc insert(InsertRequest) returns (Reply) {}
   rpc update(UpdateRequest) returns (Reply) {}
+  rpc update2(Update2Request) returns (Reply) {}
   rpc search(SearchRequest) returns (Reply) {}
   rpc keywordSearch(KeywordSearchRequest) returns (Reply) {}
   rpc status(StatusRequest) returns (Reply) {}
@@ -59,6 +60,11 @@ message UpdateRequest {
   string category = 13;
   string industry = 14;
   string position = 15;
+}
+
+message Update2Request {
+  string option = 1;
+  map<string, string> param = 2;
 }
 
 message StatusRequest {

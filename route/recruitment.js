@@ -1,22 +1,11 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
-const protoLoader = require('@grpc/proto-loader');
 
 const config = require('../config');
 const logger = require('../logger');
+const stub = require('../proto/recruitment_stub');
 
-const proto = grpc.loadPackageDefinition(
-  // eslint-disable-next-line
-  protoLoader.loadSync(`${__dirname}/../proto/recruitment.proto`, {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  }),
-).recruitment;
-
-const grpcClient = new proto.Recruitment(
+const grpcClient = new stub.Recruitment(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
@@ -251,25 +240,57 @@ router.get('/:id', async (ctx) => {
   }
 });
 
+/**
+ * 2021-02
+ * 添加update2接口，用于刷新岗位时间及后续的接口整合
+ */
 router.put('/:id', async (ctx) => {
-  const grpcFetch = (body) =>
-    new Promise((resolve, reject) => {
-      grpcClient.update(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(JSON.parse(response.data));
-        }
+  const option = ctx.request.query.option || '';
+  if (option === '') {
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(JSON.parse(response.data));
+          }
+        });
       });
-    });
-  try {
-    ctx.request.body.id = ctx.params.id;
-    ctx.request.body.uuid = ctx.query.u_id;
-    ctx.response.body = await grpcFetch(ctx.request.body);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
+    try {
+      ctx.request.body.id = ctx.params.id;
+      ctx.request.body.uuid = ctx.query.u_id;
+      ctx.response.body = await grpcFetch(ctx.request.body);
+    } catch (err) {
+      logger.error(err);
+      ctx.response.body = { message: '服务器错误' };
+    }
+  } else if (option === 'refresh') {
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.update2(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
+    try {
+      await gfetch({
+        option,
+        param: {
+          id: parseInt(ctx.params.id),
+          uuid: ctx.request.query.uuid,
+        },
+      });
+      ctx.response.status = 200;
+    } catch (err) {
+      logger.error(err);
+      ctx.response.status = 500;
+    }
   }
 });
 

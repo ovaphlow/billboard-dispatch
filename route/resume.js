@@ -1,22 +1,12 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
-const protoLoader = require('@grpc/proto-loader');
+// const protoLoader = require('@grpc/proto-loader');
 
 const config = require('../config');
-const console = require('../logger');
+const logger = require('../logger');
+const stub = require('../proto/resume_stub');
 
-const proto = grpc.loadPackageDefinition(
-  // eslint-disable-next-line
-  protoLoader.loadSync(`${__dirname}/../proto/resume.proto`, {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  }),
-).resume;
-
-const grpcClient = new proto.Resume(
+const grpcClient = new stub.Resume(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
@@ -32,7 +22,7 @@ router.get('/:id', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.get(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -44,7 +34,7 @@ router.get('/:id', async (ctx) => {
     ctx.params.user_id = ctx.query.u_i;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -54,7 +44,7 @@ router.get('/user/:common_user_id', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.user(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -65,7 +55,7 @@ router.get('/user/:common_user_id', async (ctx) => {
     ctx.params.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -75,7 +65,7 @@ router.put('/retrieval/', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.retrieval(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -85,7 +75,7 @@ router.put('/retrieval/', async (ctx) => {
   try {
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -95,7 +85,7 @@ router.put('/recommend/', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.recommend(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -105,7 +95,7 @@ router.put('/recommend/', async (ctx) => {
   try {
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -115,7 +105,7 @@ router.put('/:common_user_id', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.update(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -127,7 +117,7 @@ router.put('/:common_user_id', async (ctx) => {
     ctx.request.body.common_user_id = ctx.params.common_user_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -137,7 +127,7 @@ router.post('/status/:id/', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.status(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -149,7 +139,7 @@ router.post('/status/:id/', async (ctx) => {
     ctx.request.body.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });
@@ -159,7 +149,7 @@ router.post('/init/', async (ctx) => {
     new Promise((resolve, reject) => {
       grpcClient.init(body, (err, response) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
           reject(err);
         } else {
           resolve(JSON.parse(response.data));
@@ -170,7 +160,7 @@ router.post('/init/', async (ctx) => {
     ctx.request.body.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     ctx.response.body = { message: '服务器错误' };
   }
 });

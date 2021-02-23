@@ -1,29 +1,16 @@
 syntax = "proto3";
 
-// option java_multiple_files = true;
-option java_package = "hengda.billboard";
-option java_outer_classname = "ResumeProto";
-
 package resume;
 
 service Resume {
-  
   rpc get(GetRequest) returns (Reply) {}
-
   rpc user(UserRequest) returns (Reply) {}
-
   rpc update(UpdateRequest) returns (Reply) {}
-
   rpc init(InitRequest) returns (Reply) {}
-
   rpc status(StatusRequest) returns (Reply) {}
-
   rpc retrieval(RetrievalRequest) returns (Reply) {}
-
   rpc recommend(RecommendRequest) returns (Reply) {}
-
   rpc check(CheckRequest) returns (Reply) {}
-    
 }
 
 message GetRequest {
@@ -56,6 +43,8 @@ message UpdateRequest {
   string ziwopingjia = 17;
   string common_user_id = 18;
   string uuid = 19;
+  map<string, string> career = 20;
+  map<string, string> record = 21;
 }
 
 message StatusRequest {

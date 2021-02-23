@@ -18,9 +18,9 @@ app.use(
 );
 
 app.use(async (ctx, next) => {
-  logger.info(`${new Date()} --> ${ctx.request.method} ${ctx.request.url}`);
+  logger.info(`--> ${ctx.request.method} ${ctx.request.url}`);
   await next();
-  logger.info(`${new Date()} <-- ${ctx.request.method} ${ctx.request.url}`);
+  logger.info(`<-- ${ctx.request.method} ${ctx.request.url}`);
 });
 
 app.on('error', (err, ctx) => {
@@ -163,27 +163,22 @@ module.exports = app;
 
 if (require.main === module) {
   if (cluster.isMaster) {
-    // eslint-disable-next-line
-    logger.log(`${new Date()} 主进程 PID:${process.pid}`);
+    logger.info(`主进程 PID:${process.pid}`); // eslint-disable-line
 
     for (let i = 0; i < config.app.numChildProcesses; i += 1) {
       cluster.fork();
     }
 
     cluster.on('online', (worker) => {
-      logger.log(
-        // eslint-disable-next-line
-        `${new Date()} 子进程 PID:${worker.process.pid}, 端口:${config.app.port}`,
-      );
+      // eslint-disable-next-line
+      logger.info(`子进程 PID:${worker.process.pid}, 端口:${config.app.port}`);
     });
 
     cluster.on('exit', (worker, code, signal) => {
-      logger.log(
-        // eslint-disable-next-line
-        `${new Date()} 子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`,
-      );
       // eslint-disable-next-line
-      logger.log(`${new Date()} 由主进程(PID:${process.pid})创建新的子进程`);
+      logger.info(`子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`);
+      // eslint-disable-next-line
+      logger.info(`由主进程(PID:${process.pid})创建新的子进程`);
       cluster.fork();
     });
   } else {

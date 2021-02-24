@@ -65,6 +65,10 @@ router.get('/user/:common_user_id', async (ctx) => {
   }
 });
 
+/**
+ * 2021-02
+ * to-do: remove
+ */
 router.put('/retrieval/', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {
@@ -85,6 +89,10 @@ router.put('/retrieval/', async (ctx) => {
   }
 });
 
+/**
+ * 2021-02
+ * to-do: remove
+ */
 router.put('/recommend/', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {
@@ -98,28 +106,6 @@ router.put('/recommend/', async (ctx) => {
       });
     });
   try {
-    ctx.response.body = await grpcFetch(ctx.request.body);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
-router.put('/:common_user_id', async (ctx) => {
-  const grpcFetch = (body) =>
-    new Promise((resolve, reject) => {
-      grpcClient.update(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(JSON.parse(response.data));
-        }
-      });
-    });
-  try {
-    ctx.request.body.uuid = ctx.query.u_id;
-    ctx.request.body.common_user_id = ctx.params.common_user_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);
@@ -142,6 +128,53 @@ router.post('/status/:id/', async (ctx) => {
   try {
     ctx.request.body.id = ctx.params.id;
     ctx.request.body.uuid = ctx.query.u_id;
+    ctx.response.body = await grpcFetch(ctx.request.body);
+  } catch (err) {
+    logger.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.put('/filter', async (ctx) => {
+  try {
+    const { filter } = ctx.request.query;
+    if (filter === 'employer-filter') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.filter(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response.data);
+            }
+          });
+        });
+      ctx.response.body = await gfetch({ filter, param: ctx.request.body });
+    } else {
+      ctx.response.body = '[]';
+    }
+  } catch (err) {
+    logger.error(err);
+    ctx.response.status = 500;
+  }
+});
+
+router.put('/:common_user_id', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.update(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
+      });
+    });
+  try {
+    ctx.request.body.uuid = ctx.query.u_id;
+    ctx.request.body.common_user_id = ctx.params.common_user_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);

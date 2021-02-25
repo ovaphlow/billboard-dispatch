@@ -160,25 +160,42 @@ router.put('/filter', async (ctx) => {
   }
 });
 
-router.put('/:common_user_id', async (ctx) => {
-  const grpcFetch = (body) =>
-    new Promise((resolve, reject) => {
-      grpcClient.update(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(JSON.parse(response.data));
-        }
-      });
-    });
+router.put('/:candidate_id', async (ctx) => {
   try {
-    ctx.request.body.uuid = ctx.query.u_id;
-    ctx.request.body.common_user_id = ctx.params.common_user_id;
-    ctx.response.body = await grpcFetch(ctx.request.body);
+    const option = ctx.request.query.option || '';
+    if (option === '') {
+      const grpcFetch = (body) =>
+        new Promise((resolve, reject) => {
+          grpcClient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(JSON.parse(response.data));
+            }
+          });
+        });
+      ctx.request.body.uuid = ctx.query.u_id;
+      ctx.request.body.common_user_id = ctx.params.candidate_id;
+      ctx.response.body = await grpcFetch(ctx.request.body);
+    } else if (option === 'refresh') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              loogger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+      await gfetch({ option, param: { candidate_id: ctx.params.candidate_id } });
+      ctx.response.status = 200;
+    }
   } catch (err) {
     logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
+    ctx.response.status = 500;
   }
 });
 

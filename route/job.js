@@ -31,7 +31,7 @@ router.put('/:id', async (ctx) => {
               logger.error(err);
               reject(err);
             } else {
-              resolve(response.data);
+              resolve(response);
             }
           });
         });

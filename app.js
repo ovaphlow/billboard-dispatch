@@ -58,6 +58,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/job');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/recruitment');
   app.use(router.routes());
   app.use(router.allowedMethods());

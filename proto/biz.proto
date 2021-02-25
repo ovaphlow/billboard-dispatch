@@ -35,11 +35,11 @@ message EmployerFilterRequest {
 }
 
 service Job {
-  rpc filter (JobFilterRequest) returns (BizReply) {}
+  rpc update (JobUpdateRequest) returns (BizReply) {}
 }
 
-message JobFilterRequest {
-  string filter = 1;
+message JobUpdateRequest {
+  string option = 1;
   map<string, string> param = 2;
 }
 

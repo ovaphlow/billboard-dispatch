@@ -4,14 +4,14 @@ const grpc = require('grpc');
 const config = require('../config');
 const logger = require('../logger');
 const stub = require('../proto/resume_stub');
-const stub_resume2102 = require('../proto/resume2102_stub');
+const stub_biz = require('../proto/biz_stub');
 
 const grpcClient = new stub.Resume(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );
 
-const gclient = new stub_resume2102.Resume2102(
+const gclient = new stub_biz.Resume2102(
   `${config.grpcServer.host}:${config.grpcServer.port}`,
   grpc.credentials.createInsecure(),
 );

@@ -37,7 +37,7 @@ router.put('/:id', async (ctx) => {
         });
       await gfetch({
         option: 'refresh',
-        param: ctx.request.body,
+        param: { id: ctx.params.id },
       });
       ctx.response.status = 200;
     }

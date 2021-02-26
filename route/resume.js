@@ -164,6 +164,7 @@ router.put('/:candidate_id', async (ctx) => {
   try {
     const option = ctx.request.query.option || '';
     if (option === '') {
+      logger.info('update resume');
       const grpcFetch = (body) =>
         new Promise((resolve, reject) => {
           grpcClient.update(body, (err, response) => {

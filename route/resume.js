@@ -164,21 +164,40 @@ router.put('/:candidate_id', async (ctx) => {
   try {
     const option = ctx.request.query.option || '';
     if (option === '') {
-      logger.info('update resume');
-      const grpcFetch = (body) =>
+      // const grpcFetch = (body) =>
+      //   new Promise((resolve, reject) => {
+      //     grpcClient.update(body, (err, response) => {
+      //       if (err) {
+      //         logger.error(err);
+      //         reject(err);
+      //       } else {
+      //         resolve(JSON.parse(response.data));
+      //       }
+      //     });
+      //   });
+      // ctx.request.body.uuid = ctx.query.u_id;
+      // ctx.request.body.common_user_id = ctx.params.candidate_id;
+      // ctx.response.body = await grpcFetch(ctx.request.body);
+      const gfetch = (body) =>
         new Promise((resolve, reject) => {
-          grpcClient.update(body, (err, response) => {
+          gclient.update(body, (err, response) => {
             if (err) {
               logger.error(err);
               reject(err);
             } else {
-              resolve(JSON.parse(response.data));
+              resolve(response);
             }
           });
         });
-      ctx.request.body.uuid = ctx.query.u_id;
-      ctx.request.body.common_user_id = ctx.params.candidate_id;
-      ctx.response.body = await grpcFetch(ctx.request.body);
+      await gfetch({
+        option,
+        param: {
+          ...ctx.request.body,
+          uuid: ctx.query.u_id,
+          common_user_id: ctx.params.candidate_id,
+        },
+      });
+      ctx.response.status = 200;
     } else if (option === 'refresh') {
       const gfetch = (body) =>
         new Promise((resolve, reject) => {

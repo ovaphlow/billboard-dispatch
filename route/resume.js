@@ -159,6 +159,20 @@ router.put('/:candidate_id', async (ctx) => {
         });
       await gfetch({ option, param: { candidate_id: ctx.params.candidate_id } });
       ctx.response.status = 200;
+    } else if (option === 'status') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
+        });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id, uuid: ctx.request.query.u_id },
+      });
     }
   } catch (err) {
     logger.error(err);

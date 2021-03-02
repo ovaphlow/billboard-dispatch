@@ -162,17 +162,88 @@ router.put('/:candidate_id', async (ctx) => {
     } else if (option === 'status') {
       const gfetch = (body) =>
         new Promise((resolve, reject) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
       await gfetch({
         option,
         param: { candidate_id: ctx.params.candidate_id, uuid: ctx.request.query.u_id },
       });
+      ctx.response.status = 200;
+    } else if (option === 'save-career') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+      });
+      ctx.response.status = 200;
+    } else if (option === 'update-career') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+      });
+      ctx.response.status = 200;
+    } else if (option === 'save-record') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+      });
+      ctx.response.status = 200;
+    } else if (option === 'update-record') {
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+      });
+      ctx.response.status = 200;
     }
   } catch (err) {
     logger.error(err);

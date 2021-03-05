@@ -1,31 +1,20 @@
 syntax = "proto3";
 
-// option java_multiple_files = true;
-option java_package = "hengda.billboard";
-option java_outer_classname = "JournalProto";
-
 package journal;
 
 service Journal {
-  
   rpc get(GetRequest) returns (Reply) {}
-
   rpc list(ListRequest) returns (Reply) {}
-
   rpc delete(DeleteRequest) returns (Reply) {}
-    
   rpc insert(InsertRequest) returns (Reply) {}
-
   rpc loginList(LoginListRequest) returns (Reply) {}
-
   rpc editList(EditListRequest) returns (Reply) {}
-
   rpc insertEdit(InsertEditRequest) returns (Reply) {}
-
+  rpc filter (FilterRequest) returns (Reply) {}
 }
 
 message GetRequest {
-  uint32 common_user_id = 1; 
+  uint32 common_user_id = 1;
   uint32 data_id = 2;
   string category = 3;
 }
@@ -35,13 +24,13 @@ message ListRequest {
 }
 
 message DeleteRequest {
-  uint32 common_user_id = 1; 
+  uint32 common_user_id = 1;
   uint32 data_id = 2;
   string category = 3;
 }
 
 message InsertRequest {
-  uint32 common_user_id = 1; 
+  uint32 common_user_id = 1;
   uint32 data_id = 2;
   string category = 3;
   string uuid = 4;
@@ -68,6 +57,11 @@ message EditListRequest {
 message LoginListRequest {
   uint32 id = 1;
   string category = 2;
+}
+
+message FilterRequest {
+  string option = 1;
+  map<string, string> param = 2;
 }
 
 message Reply { string data = 1; }

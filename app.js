@@ -34,6 +34,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/candidate');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/commonUser');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -161,6 +167,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/job-fair');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/hypervisor');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

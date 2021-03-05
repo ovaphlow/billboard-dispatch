@@ -37,7 +37,7 @@ router.get('/subject/:name', async (ctx) => {
   }
 });
 
-router.get('/job-fair/:job_fair_id/', async (ctx) => {
+router.get('/job-fair/:job_fair_id', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {
       grpcClient.JobFairList(body, (err, response) => {

@@ -1,6 +1,6 @@
 /**
  * 2021-03
- * 用于替换recommend.js
+ * 用于替换recommend.js, topic.js, campus.js 等
  */
 const Router = require('@koa/router');
 const grpc = require('grpc');

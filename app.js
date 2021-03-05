@@ -88,6 +88,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/send-in');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/delivery');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -107,6 +113,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/message');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/employer');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -143,6 +155,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/commonData');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/bulletin');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

@@ -1,6 +1,5 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
-const protoLoader = require('@grpc/proto-loader');
 
 const config = require('../config');
 const logger = require('../logger');
@@ -38,7 +37,7 @@ router.get('/subject/:name', async (ctx) => {
   }
 });
 
-router.get('/job-fair/:job_fair_id/', async (ctx) => {
+router.get('/job-fair/:job_fair_id', async (ctx) => {
   const grpcFetch = (body) =>
     new Promise((resolve, reject) => {
       grpcClient.JobFairList(body, (err, response) => {

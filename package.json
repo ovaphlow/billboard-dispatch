@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node app.js | bunyan -o short",
     "serve": "node app.js",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
     "format": "prettier . --write"
   },
   "license": "MIT",

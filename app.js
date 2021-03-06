@@ -34,6 +34,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/candidate');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/commonUser');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -58,6 +64,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/job');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/recruitment');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -71,6 +83,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/favorite');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/send-in');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -95,6 +113,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/message');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/employer');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -136,6 +160,12 @@ app.on('error', (err, ctx) => {
 })();
 
 (() => {
+  const router = require('./route/bulletin');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./route/recommend');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -155,6 +185,12 @@ app.on('error', (err, ctx) => {
 
 (() => {
   const router = require('./route/job-fair');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/hypervisor');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

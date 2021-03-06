@@ -173,7 +173,10 @@ router.put('/:candidate_id', async (ctx) => {
         });
       await gfetch({
         option,
-        param: { candidate_id: ctx.params.candidate_id, uuid: ctx.request.query.u_id },
+        param: {
+          candidate_id: ctx.params.candidate_id,
+          uuid: ctx.request.query.u_id,
+        },
       });
       ctx.response.status = 200;
     } else if (option === 'save-career') {
@@ -230,7 +233,10 @@ router.put('/:candidate_id', async (ctx) => {
         });
       await gfetch({
         option,
-        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+        param: {
+          candidate_id: ctx.params.candidate_id,
+          data: JSON.stringify(ctx.request.body),
+        },
       });
       ctx.response.status = 200;
     } else if (option === 'update-record') {
@@ -247,7 +253,10 @@ router.put('/:candidate_id', async (ctx) => {
         });
       await gfetch({
         option,
-        param: { candidate_id: ctx.params.candidate_id, data: JSON.stringify(ctx.request.body) },
+        param: {
+          candidate_id: ctx.params.candidate_id,
+          data: JSON.stringify(ctx.request.body),
+        },
       });
       ctx.response.status = 200;
     }

@@ -37,3 +37,50 @@ router.put('/statistic', async (ctx) => {
     ctx.response.status = 500;
   }
 });
+
+router.put('/filter', async (ctx) => {
+  try {
+    const option = ctx.request.query.option || '';
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.filter(body, (err, response) => {
+          if (err) {
+            logger.error(err.stack);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
+    const response = await gfetch({ option, data: ctx.request.body });
+    ctx.response.body = response;
+  } catch (err) {
+    logger.error(err.stack);
+    ctx.response.status = 500;
+  }
+});
+
+router.put('/filter-user', async (ctx) => {
+  try {
+    const option = ctx.request.query.option || '';
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.filterUser(body, (err, response) => {
+          if (err) {
+            logger.error(err.stack);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
+    const response = await gfetch({
+      option,
+      data: ctx.request.body,
+    });
+    ctx.response.body = response;
+  } catch (err) {
+    logger.error(err.stack);
+    ctx.response.status = 500;
+  }
+});

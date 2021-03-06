@@ -22,28 +22,6 @@ const router = new Router({
 
 module.exports = router;
 
-router.post('/status/:id/', async (ctx) => {
-  const grpcFetch = (body) =>
-    new Promise((resolve, reject) => {
-      grpcClient.status(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(JSON.parse(response.data));
-        }
-      });
-    });
-  try {
-    ctx.request.body.id = ctx.params.id;
-    ctx.request.body.uuid = ctx.query.u_id;
-    ctx.response.body = await grpcFetch(ctx.request.body);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
 router.put('/filter', async (ctx) => {
   try {
     const { filter } = ctx.request.query;
@@ -174,8 +152,9 @@ router.put('/:candidate_id', async (ctx) => {
       await gfetch({
         option,
         param: {
+          ...ctx.request.body,
           candidate_id: ctx.params.candidate_id,
-          uuid: ctx.request.query.u_id,
+          uuid: ctx.request.query.uuid || '',
         },
       });
       ctx.response.status = 200;

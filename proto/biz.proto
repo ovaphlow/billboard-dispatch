@@ -20,7 +20,7 @@ message CandidateStatisticRequest {
 }
 
 service Resume2102 {
-  rpc init(Resume2102InitRequest) returns (BizReply) {}
+  rpc init (Resume2102InitRequest) returns (BizReply) {}
   rpc filter (Resume2102FilterRequest) returns (BizReply) {}
   rpc get (Resume2102GetRequest) returns (BizReply) {}
   rpc update (Resume2102UpdateRequest) returns (google.protobuf.Empty) {}

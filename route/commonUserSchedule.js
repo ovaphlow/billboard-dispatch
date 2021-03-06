@@ -27,101 +27,104 @@ const router = new Router({
 
 module.exports = router;
 
-router
-  .get('/user/:user_id', async (ctx) => {
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.user(body, (err, response) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
+router.get('/user/:user_id', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.user(body, (err, response) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.params);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  })
-  .get('/count/:user_id', async (ctx) => {
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.count(body, (err, response) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
+    });
+  try {
+    ctx.response.body = await grpcFetch(ctx.params);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.get('/count/:user_id', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.count(body, (err, response) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.params);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  })
-  .get('/user/:user_id/:campus_id', async (ctx) => {
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.get(body, (err, response) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
+    });
+  try {
+    ctx.response.body = await grpcFetch(ctx.params);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.get('/user/:user_id/:campus_id', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.get(body, (err, response) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.params);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  })
-  .post('/', async (ctx) => {
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.insert(body, (err, response) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
+    });
+  try {
+    ctx.response.body = await grpcFetch(ctx.params);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.post('/', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.insert(body, (err, response) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.request.body);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  })
-  .delete('/:id', async (ctx) => {
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.delete(body, (err, response) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
+    });
+  try {
+    ctx.response.body = await grpcFetch(ctx.request.body);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.delete('/:id', async (ctx) => {
+  const grpcFetch = (body) =>
+    new Promise((resolve, reject) => {
+      grpcClient.delete(body, (err, response) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(JSON.parse(response.data));
+        }
       });
-    try {
-      ctx.params.common_user_id = ctx.query.u;
-      ctx.params.data_id = ctx.query.d;
-      ctx.response.body = await grpcFetch(ctx.params);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  });
+    });
+  try {
+    ctx.params.common_user_id = ctx.query.u;
+    ctx.params.data_id = ctx.query.d;
+    ctx.response.body = await grpcFetch(ctx.params);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});

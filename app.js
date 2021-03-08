@@ -3,7 +3,6 @@ const http = require('http');
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
-const config = require('./config');
 
 const logger = require('./logger');
 
@@ -99,6 +98,11 @@ app.on('error', (err, ctx) => {
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
+
+app.use(async (ctx, next) => {
+  await next();
+  logger.info(ctx.grpc_service);
+});
 
 (() => {
   const router = require('./route/enterpriseUser');

@@ -1,3 +1,5 @@
+configuration.yaml
+
 node_modules/
 *.log
 .vscode/

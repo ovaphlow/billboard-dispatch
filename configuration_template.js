@@ -1,15 +1,19 @@
 const os = require('os');
 
-const config = {
+const configuration_template = {
   env: 'production',
   app: {
     port: 6000,
     numChildProcesses: os.cpus().length,
+    token: '',
   },
-  grpcServer: {
-    host: '127.0.0.1',
-    port: '50051',
+  persistence: {
+    host: '127.0.0.1:3306',
+    database: '',
+    user: 'root',
+    password: '',
   },
+  grpc_service: '127.0.0.1:50051',
   email: {
     service: 'qq',
     auth: {
@@ -26,4 +30,4 @@ const config = {
   },
 };
 
-module.exports = config;
+module.exports = configuration_template;

@@ -3,6 +3,7 @@ const http = require('http');
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+const config = require('./config');
 
 const logger = require('./logger');
 
@@ -77,6 +78,10 @@ app.on('error', (err, ctx) => {
       const target = ctx.request.body.host.split(':');
       configuration.grpc_service = `${target[0] || '127.0.0.1'}:${target[1] || '50051'}`;
        */
+      if (ctx.request.body.token !== configuration.app.token) {
+        ctx.response.status = 200;
+        return;
+      }
 
       ctx.response.body = {
         persistence_host: configuration.persistence.host,

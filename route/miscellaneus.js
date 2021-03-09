@@ -13,13 +13,37 @@ const router = new Router({
 
 module.exports = router;
 
-router.put('/feedback/:id', async (ctx) => {
+router.put('/feedback/filter', async (ctx) => {
   try {
     const stub = require('../proto/miscellaneus_stub');
     const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
-        gclient.reply(body, (err, response) => {
+        gclient.filter(body, (err, response) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
+    const option = ctx.request.query.option || '';
+    const response = await gfetch({ option, data: ctx.request.body });
+    ctx.response.body = response;
+  } catch (err) {
+    logger.error(err.stack);
+    ctx.response.status = 500;
+  }
+});
+
+router.put('/feedback/:id', async (ctx) => {
+  try {
+    logger.info('wrong');
+    const stub = require('../proto/miscellaneus_stub');
+    const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
           if (err) {
             logger.error(err.stack);
             reject(err);
@@ -37,30 +61,6 @@ router.put('/feedback/:id', async (ctx) => {
       },
     });
     ctx.response.status = 200;
-  } catch (err) {
-    logger.error(err.stack);
-    ctx.response.status = 500;
-  }
-});
-
-router.put('/feedback/filter', async (ctx) => {
-  try {
-    const stub = require('../proto/miscellaneus_stub');
-    const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.filter(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
-    const option = ctx.request.query.option || '';
-    const response = await gfetch({ option, data: ctx.request.body });
-    ctx.response.body = response;
   } catch (err) {
     logger.error(err.stack);
     ctx.response.status = 500;

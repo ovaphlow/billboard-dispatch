@@ -16,7 +16,7 @@ module.exports = router;
 router.get('/:user_category/:user_id', async (ctx) => {
   try {
     const stub = require('../proto/miscellaneus_stub');
-    const gclient = new stub.Feedback2021(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.list(body, (err, response) => {
@@ -38,7 +38,7 @@ router.get('/:user_category/:user_id', async (ctx) => {
 router.post('/', async (ctx) => {
   try {
     const stub = require('../proto/miscellaneus_stub');
-    const gclient = new stub.Feedback2021(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.insert(body, (err, response) => {

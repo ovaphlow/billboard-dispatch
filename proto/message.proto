@@ -1,38 +1,22 @@
 syntax = "proto3";
 
-// option java_multiple_files = true;
-option java_package= "hengda.billboard";
-option java_outer_classname = "MessageProto";
-
 package message;
 
 service Message {
-
   rpc insert(InsertRequest) returns (Reply) {}
-
   rpc messageList(MessageListRequest) returns (Reply) {}
-
   rpc entTotal(EntTotalRequest) returns (Reply) {}
-
   rpc commonTotal(CommonTotalRequest) returns (Reply) {}
-
   rpc commonContent(CommonContentRequest) returns (Reply) {}
-
   rpc entContent(EntContentRequest) returns (Reply) {}
-
   rpc entChatTotal(EntChatTotalRequest) returns (Reply) {}
-
   rpc commonChatTotal(CommonChatTotalRequest) returns (Reply) {}
-
   rpc sysToEnt(SysToEntRequest) returns (Reply) {}
-
   rpc sysToCommon(SysToCommonRequest) returns (Reply) {}
-  
   rpc sysTotal(SysTotalRequest) returns (Reply) {}
-  
 }
 
-message InsertRequest { 
+message InsertRequest {
   uint32 common_user_id = 1;
   uint32 ent_user_id = 2;
   string content = 3;

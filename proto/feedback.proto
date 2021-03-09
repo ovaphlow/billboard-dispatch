@@ -1,17 +1,10 @@
 syntax = "proto3";
 
-// option java_multiple_files = true;
-option java_package = "hengda.billboard";
-option java_outer_classname = "FeedbackProto";
-
 package feedback;
 
 service Feedback {
-
   rpc insert(InsertRequest) returns (Reply) {}
-
   rpc list(ListRequest) returns (Reply) {}
-
 }
 
 message InsertRequest {

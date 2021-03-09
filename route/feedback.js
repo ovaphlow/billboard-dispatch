@@ -1,24 +1,11 @@
+/**
+ * 2021-03 to-do 合并到miscellaneus中
+ */
 const Router = require('@koa/router');
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
-const config = require('../config');
+
 const console = require('../logger');
-
-const proto = grpc.loadPackageDefinition(
-  // eslint-disable-next-line
-  protoLoader.loadSync(`${__dirname}/../proto/feedback.proto`, {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  }),
-).feedback;
-
-const grpcClient = new proto.Feedback(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
 
 const router = new Router({
   prefix: '/api/feedback',
@@ -26,11 +13,13 @@ const router = new Router({
 
 module.exports = router;
 
-router
-  .get('/:user_category/:user_id', async (ctx) => {
+router.get('/:user_category/:user_id', async (ctx) => {
+  try {
+    const stub = require('../proto/miscellaneus_stub');
+    const gclient = new stub.Feedback2021(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.list(body, (err, response) => {
+        gclient.list(body, (err, response) => {
           if (err) {
             console.error(err);
             reject(err);
@@ -39,17 +28,20 @@ router
           }
         });
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.params);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  })
-  .post('/', async (ctx) => {
+    ctx.response.body = await grpcFetch(ctx.params);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});
+
+router.post('/', async (ctx) => {
+  try {
+    const stub = require('../proto/miscellaneus_stub');
+    const gclient = new stub.Feedback2021(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.insert(body, (err, response) => {
+        gclient.insert(body, (err, response) => {
           if (err) {
             console.error(err);
             reject(err);
@@ -58,10 +50,9 @@ router
           }
         });
       });
-    try {
-      ctx.response.body = await grpcFetch(ctx.request.body);
-    } catch (err) {
-      console.error(err);
-      ctx.response.body = { message: '服务器错误' };
-    }
-  });
+    ctx.response.body = await grpcFetch(ctx.request.body);
+  } catch (err) {
+    console.error(err);
+    ctx.response.body = { message: '服务器错误' };
+  }
+});

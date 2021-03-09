@@ -74,9 +74,10 @@ app.on('error', (err, ctx) => {
     try {
       /**
        * 启用需要同时修改所有router中初始化gRPC客户端部分的代码
-      const target = ctx.request.body.host.split(':');
-      configuration.grpc_service = `${target[0] || '127.0.0.1'}:${target[1] || '50051'}`;
        */
+      // const target = ctx.request.body.host.split(':');
+      // configuration.grpc_service = `${target[0] || '127.0.0.1'}:${target[1] || '50051'}`;
+
       if (ctx.request.body.token !== configuration.app.token) {
         ctx.response.status = 200;
         return;
@@ -99,9 +100,12 @@ app.on('error', (err, ctx) => {
   app.use(router.allowedMethods());
 })();
 
+/**
+ * 设定grpc服务地址
+ */
 app.use(async (ctx, next) => {
+  ctx.grpc_service = configuration.grpc_service;
   await next();
-  logger.info(ctx.grpc_service);
 });
 
 (() => {
@@ -178,6 +182,12 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./route/report');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./route/miscellaneus');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

@@ -109,7 +109,7 @@ app.use(async (ctx, next) => {
 });
 
 (() => {
-  const router = require('./route/enterpriseUser');
+  const router = require('./enterpriseUser');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

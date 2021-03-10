@@ -1,7 +1,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const logger = require('../logger');
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/candidate',
@@ -11,7 +11,7 @@ module.exports = router;
 
 router.put('/statistic', async (ctx) => {
   try {
-    const stub = require('../proto/biz_stub');
+    const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ router.put('/statistic', async (ctx) => {
 
 router.put('/filter', async (ctx) => {
   try {
-    const stub = require('../proto/biz_stub');
+    const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ router.put('/filter', async (ctx) => {
 
 router.get('/:id', async (ctx) => {
   try {
-    const stub = require('../proto/biz_stub');
+    const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@ const grpc = require('grpc');
 
 const config = require('../config');
 const logger = require('../logger');
-const stub = require('../proto/biz_stub');
+const stub = require('../biz-stub');
 
 const gclient = new stub.Employer(
   `${config.grpcServer.host}:${config.grpcServer.port}`,

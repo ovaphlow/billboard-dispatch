@@ -5,7 +5,7 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 
-const console = require('../logger');
+const console = require('./logger');
 
 const router = new Router({
   prefix: '/api/feedback',
@@ -15,7 +15,7 @@ module.exports = router;
 
 router.get('/:user_category/:user_id', async (ctx) => {
   try {
-    const stub = require('../proto/miscellaneus_stub');
+    const stub = require('./miscellaneus-stub');
     const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ router.get('/:user_category/:user_id', async (ctx) => {
             console.error(err);
             reject(err);
           } else {
-            resolve(JSON.parse(response.data));
+            resolve(response.data);
           }
         });
       });
@@ -37,7 +37,7 @@ router.get('/:user_category/:user_id', async (ctx) => {
 
 router.post('/', async (ctx) => {
   try {
-    const stub = require('../proto/miscellaneus_stub');
+    const stub = require('./miscellaneus-stub');
     const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@ router.post('/', async (ctx) => {
             console.error(err);
             reject(err);
           } else {
-            resolve(JSON.parse(response.data));
+            resolve(response.data);
           }
         });
       });

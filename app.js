@@ -115,7 +115,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/candidate');
+  const router = require('./candidate');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -187,13 +187,13 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/miscellaneus');
+  const router = require('./miscellaneus');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
 (() => {
-  const router = require('./route/feedback');
+  const router = require('./feedback');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -265,7 +265,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/chart');
+  const router = require('./chart');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

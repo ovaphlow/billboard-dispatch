@@ -5,7 +5,6 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('./config');
 const logger = require('./logger');
 
 const router = new Router({

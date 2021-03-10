@@ -5,7 +5,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const logger = require('../logger');
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/miscellaneus',
@@ -15,7 +15,7 @@ module.exports = router;
 
 router.put('/feedback/filter', async (ctx) => {
   try {
-    const stub = require('../proto/miscellaneus_stub');
+    const stub = require('./miscellaneus-stub');
     const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
@@ -39,7 +39,7 @@ router.put('/feedback/filter', async (ctx) => {
 router.put('/feedback/:id', async (ctx) => {
   try {
     logger.info('wrong');
-    const stub = require('../proto/miscellaneus_stub');
+    const stub = require('./miscellaneus-stub');
     const gclient = new stub.Feedback(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {

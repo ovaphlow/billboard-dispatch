@@ -3,7 +3,7 @@ const grpc = require('grpc');
 
 const proto = grpc.loadPackageDefinition(
   // eslint-disable-next-line
-  protoLoader.loadSync(`${__dirname}/../proto/biz.proto`, {
+  protoLoader.loadSync(`${__dirname}/biz.proto`, {
     keepCase: true,
     longs: String,
     enums: String,

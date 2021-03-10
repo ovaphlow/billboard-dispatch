@@ -139,7 +139,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/banner');
+  const router = require('./banner');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -247,7 +247,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/bulletin');
+  const router = require('./bulletin');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

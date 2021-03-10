@@ -1,18 +1,12 @@
 /**
  * 2021-03
- * 用于替换recommend.js, topic.js, campus.js 等
+ * 用于替换bannder.js recommend.js, topic.js, campus.js 等
  */
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('../config');
-const logger = require('../logger');
-const stub = require('../proto/bulletin_stub');
-
-const gclientNotification = new stub.Notification(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
+const config = require('./config');
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/bulletin',
@@ -22,10 +16,11 @@ module.exports = router;
 
 router.put('/notification/statistic', async (ctx) => {
   try {
-    const option = ctx.request.query.option || '';
+    const stub = require('./bulletin-stub');
+    const gclient = new stub.Notification(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
-        gclientNotification.statistic(body, (err, response) => {
+        gclient.statistic(body, (err, response) => {
           if (err) {
             logger.error(err.stack);
             reject(err);
@@ -34,6 +29,7 @@ router.put('/notification/statistic', async (ctx) => {
           }
         });
       });
+    const option = ctx.request.query.option || '';
     const response = await gfetch({ option, data: ctx.request.body });
     ctx.response.body = response;
   } catch (err) {

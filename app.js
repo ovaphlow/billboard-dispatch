@@ -127,12 +127,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/commonUserFile');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./route/resume');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -259,7 +253,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/email');
+  const router = require('./email');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

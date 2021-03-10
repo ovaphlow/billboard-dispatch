@@ -53,3 +53,29 @@ service Chart {
 }
 
 message ChartEntHomeRequest { string data = 1; }
+
+service Email {
+  rpc insert (InsertRequest) returns (MiscReply) {}
+  rpc code (CodeRequest) returns (MiscReply) {}
+  rpc checkRecover (CheckRecoverRequest) returns (MiscReply) {}
+}
+
+message InsertRequest {
+  string email = 1;
+  string code = 2;
+  string user_id = 3;
+  string user_category = 4;
+}
+
+message CodeRequest {
+  uint32 user_id = 1;
+  string user_category = 2;
+  string code = 3;
+  string email = 4;
+}
+
+message CheckRecoverRequest {
+  string user_category = 1;
+  string code = 2;
+  string email = 3;
+}

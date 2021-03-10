@@ -229,7 +229,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/campus');
+  const router = require('./campus');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

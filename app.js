@@ -235,7 +235,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/commonUserSchedule');
+  const router = require('./commonUserSchedule');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

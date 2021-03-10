@@ -199,7 +199,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/employer');
+  const router = require('./employer');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

@@ -1,14 +1,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('../config');
-const logger = require('../logger');
-const stub = require('../biz-stub');
-
-const gclient = new stub.Employer(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/employer',
@@ -18,7 +11,8 @@ module.exports = router;
 
 router.put('/statistic', async (ctx) => {
   try {
-    const option = ctx.request.query.option || '';
+    const stub = require('./biz-stub');
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.statistic(body, (err, response) => {
@@ -30,6 +24,7 @@ router.put('/statistic', async (ctx) => {
           }
         });
       });
+    const option = ctx.request.query.option || '';
     const response = await gfetch({ option, data: ctx.request.body });
     ctx.response.body = response;
   } catch (err) {
@@ -40,7 +35,8 @@ router.put('/statistic', async (ctx) => {
 
 router.put('/filter', async (ctx) => {
   try {
-    const option = ctx.request.query.option || '';
+    const stub = require('./biz-stub');
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.filter(body, (err, response) => {
@@ -52,6 +48,7 @@ router.put('/filter', async (ctx) => {
           }
         });
       });
+    const option = ctx.request.query.option || '';
     const response = await gfetch({ option, data: ctx.request.body });
     ctx.response.body = response;
   } catch (err) {
@@ -62,7 +59,8 @@ router.put('/filter', async (ctx) => {
 
 router.put('/filter-user', async (ctx) => {
   try {
-    const option = ctx.request.query.option || '';
+    const stub = require('./biz-stub');
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.filterUser(body, (err, response) => {
@@ -74,6 +72,7 @@ router.put('/filter-user', async (ctx) => {
           }
         });
       });
+    const option = ctx.request.query.option || '';
     const response = await gfetch({
       option,
       data: ctx.request.body,

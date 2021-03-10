@@ -205,7 +205,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/enterprise');
+  const router = require('./enterprise');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package commonData;
+
+service CommonData {
+  rpc hangye(CommonDataRequest) returns (CommonDataReply) {}
+}
+
+message CommonDataRequest { string data = 1; }
+
+message CommonDataReply { string data = 1; }

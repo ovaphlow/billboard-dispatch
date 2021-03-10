@@ -121,7 +121,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/commonUser');
+  const router = require('./commonUser');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -241,7 +241,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/commonData');
+  const router = require('./commonData');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

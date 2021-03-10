@@ -3,27 +3,18 @@ syntax = "proto3";
 package delivery;
 
 service Delivery {
-  
   rpc get(GetRequest) returns (Reply) {}
-
   rpc recruitmentList(RecruitmentListRequest) returns (Reply) {}
-
   rpc details(DetailsRequest) returns (Reply) {}
-
   rpc userDeliveryList(UserDeliveryListRequest) returns (Reply) {}
-
   rpc userDelivery(UserDeliveryRequest) returns (Reply) {}
-  
   rpc insert(InsertRequest) returns (Reply) {}
-
   rpc search(SearchRequest) returns (Reply) {}
-
   rpc status(StatusRequest) returns (Reply) {}
-
 }
 
 message GetRequest {
-  uint32 id = 1; 
+  uint32 id = 1;
 }
 
 message RecruitmentListRequest {

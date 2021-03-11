@@ -11,7 +11,7 @@ module.exports = router;
 
 router.get('/detail/:id', async (ctx) => {
   try {
-    const stub = require('./banner-stub');
+    const stub = require('./bulletin-stub');
     const gclient = new stub.Banner(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ router.get('/detail/:id', async (ctx) => {
 
 router.get('/:category/', async (ctx) => {
   try {
-    const stub = require('./banner-stub');
+    const stub = require('./bulletin-stub');
     const gclient = new stub.Banner(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {

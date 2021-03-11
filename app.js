@@ -175,12 +175,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/report');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./miscellaneus');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -217,7 +211,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/topic');
+  const router = require('./topic');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

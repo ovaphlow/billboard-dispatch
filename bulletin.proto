@@ -8,6 +8,20 @@ message BulletinReply {
   string data = 1;
 }
 
+service Banner {
+  rpc Get (BannerGetRequest) returns (BulletinReply) {}
+  rpc detail (BannerDetailRequest) returns (BulletinReply) {}
+}
+
+message BannerGetRequest {
+  string category = 1;
+}
+
+message BannerDetailRequest {
+  uint32 id = 1;
+  string uuid = 2;
+}
+
 service Notification {
   rpc statistic (NotificationStatisticRequest) returns (BulletinReply) {}
   rpc filter (NotificationFilterRequest) returns (BulletinReply) {}

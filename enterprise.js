@@ -11,8 +11,8 @@ module.exports = router;
 
 router.get('/subject/:name', async (ctx) => {
   try {
-    const stub = require('./enterprise-stub');
-    const grpcClient = new stub.Enterprise(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.subject(body, (err, response) => {
@@ -34,8 +34,8 @@ router.get('/subject/:name', async (ctx) => {
 
 router.get('/job-fair/:job_fair_id', async (ctx) => {
   try {
-    const stub = require('./enterprise-stub');
-    const grpcClient = new stub.Enterprise(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.JobFairList(body, (err, response) => {
@@ -56,8 +56,8 @@ router.get('/job-fair/:job_fair_id', async (ctx) => {
 
 router.get('/:id', async (ctx) => {
   try {
-    const stub = require('./enterprise-stub');
-    const grpcClient = new stub.Enterprise(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.get(body, (err, response) => {
@@ -79,8 +79,8 @@ router.get('/:id', async (ctx) => {
 
 router.get('/check/:id', async (ctx) => {
   try {
-    const stub = require('./enterprise-stub');
-    const grpcClient = new stub.Enterprise(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.check(body, (err, response) => {
@@ -102,8 +102,8 @@ router.get('/check/:id', async (ctx) => {
 
 router.put('/:id', async (ctx) => {
   try {
-    const stub = require('./enterprise-stub');
-    const grpcClient = new stub.Enterprise(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.update(body, (err, response) => {

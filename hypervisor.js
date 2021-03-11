@@ -1,14 +1,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('../config');
-const logger = require('../logger');
-const stub = require('../proto/hypervisor_stub');
-
-const gclientStaff = new stub.Staff(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/hypervisor',
@@ -18,6 +11,8 @@ module.exports = router;
 
 router.post('/staff/sign-in', async (ctx) => {
   try {
+    const stub = require('./hypervisor-stub');
+    const gclientStaff = new stub.Staff(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclientStaff.signIn(body, (err, response) => {

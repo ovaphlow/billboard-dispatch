@@ -157,7 +157,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/favorite');
+  const router = require('./favorite');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

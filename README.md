@@ -22,4 +22,4 @@ chart, email, favorite, feedback
 
 ### logbook
 
-### message
+### mailbox

@@ -3,13 +3,13 @@ const protoLoader = require('@grpc/proto-loader');
 
 const proto = grpc.loadPackageDefinition(
   // eslint-disable-next-line
-  protoLoader.loadSync(`${__dirname}/journal.proto`, {
+  protoLoader.loadSync(`${__dirname}/message.proto`, {
     keepCase: true,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true,
   }),
-).journal;
+).message;
 
 module.exports = proto;

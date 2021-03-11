@@ -3,17 +3,17 @@ syntax = "proto3";
 package message;
 
 service Message {
-  rpc insert(InsertRequest) returns (Reply) {}
-  rpc messageList(MessageListRequest) returns (Reply) {}
-  rpc entTotal(EntTotalRequest) returns (Reply) {}
-  rpc commonTotal(CommonTotalRequest) returns (Reply) {}
-  rpc commonContent(CommonContentRequest) returns (Reply) {}
-  rpc entContent(EntContentRequest) returns (Reply) {}
-  rpc entChatTotal(EntChatTotalRequest) returns (Reply) {}
-  rpc commonChatTotal(CommonChatTotalRequest) returns (Reply) {}
-  rpc sysToEnt(SysToEntRequest) returns (Reply) {}
-  rpc sysToCommon(SysToCommonRequest) returns (Reply) {}
-  rpc sysTotal(SysTotalRequest) returns (Reply) {}
+  rpc insert (InsertRequest) returns (Reply) {}
+  rpc messageList (MessageListRequest) returns (Reply) {}
+  rpc entTotal (EntTotalRequest) returns (Reply) {}
+  rpc commonTotal (CommonTotalRequest) returns (Reply) {}
+  rpc commonContent (CommonContentRequest) returns (Reply) {}
+  rpc entContent (EntContentRequest) returns (Reply) {}
+  rpc entChatTotal (EntChatTotalRequest) returns (Reply) {}
+  rpc commonChatTotal (CommonChatTotalRequest) returns (Reply) {}
+  rpc sysToEnt (SysToEntRequest) returns (Reply) {}
+  rpc sysToCommon (SysToCommonRequest) returns (Reply) {}
+  rpc sysTotal (SysTotalRequest) returns (Reply) {}
 }
 
 message InsertRequest {

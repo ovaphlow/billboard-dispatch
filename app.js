@@ -193,7 +193,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/message');
+  const router = require('./message');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

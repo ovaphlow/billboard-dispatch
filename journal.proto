@@ -3,13 +3,13 @@ syntax = "proto3";
 package journal;
 
 service Journal {
-  rpc get(GetRequest) returns (Reply) {}
-  rpc list(ListRequest) returns (Reply) {}
-  rpc delete(DeleteRequest) returns (Reply) {}
-  rpc insert(InsertRequest) returns (Reply) {}
-  rpc loginList(LoginListRequest) returns (Reply) {}
-  rpc editList(EditListRequest) returns (Reply) {}
-  rpc insertEdit(InsertEditRequest) returns (Reply) {}
+  rpc get (GetRequest) returns (Reply) {}
+  rpc list (ListRequest) returns (Reply) {}
+  rpc delete (DeleteRequest) returns (Reply) {}
+  rpc insert (InsertRequest) returns (Reply) {}
+  rpc loginList (LoginListRequest) returns (Reply) {}
+  rpc editList (EditListRequest) returns (Reply) {}
+  rpc insertEdit (InsertEditRequest) returns (Reply) {}
   rpc filter (FilterRequest) returns (Reply) {}
 }
 

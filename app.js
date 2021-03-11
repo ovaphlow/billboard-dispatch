@@ -151,7 +151,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/journal');
+  const router = require('./journal');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

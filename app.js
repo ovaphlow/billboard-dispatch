@@ -45,7 +45,7 @@ let configuration;
 
 module.exports.configuration = configuration;
 
-app.env = configuration.env;
+app.env = 'production';
 
 app.use(
   bodyParser({
@@ -78,7 +78,7 @@ app.on('error', (err, ctx) => {
       // const target = ctx.request.body.host.split(':');
       // configuration.grpc_service = `${target[0] || '127.0.0.1'}:${target[1] || '50051'}`;
 
-      if (ctx.request.body.token !== configuration.app.token) {
+      if (ctx.request.body.token !== configuration.secret_token) {
         ctx.response.status = 200;
         return;
       }
@@ -139,7 +139,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/job');
+  const router = require('./job');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -279,16 +279,19 @@ app.use(async (ctx, next) => {
 module.exports = app;
 
 if (require.main === module) {
+  const os = require('os');
+
+  const port = process.argv[2] || 8421;
   if (cluster.isMaster) {
     logger.info(`主进程 PID:${process.pid}`); // eslint-disable-line
 
-    for (let i = 0; i < configuration.app.numChildProcesses; i += 1) {
+    for (let i = 0; i < os.cpus().length; i += 1) {
       cluster.fork();
     }
 
     cluster.on('online', (worker) => {
       // eslint-disable-next-line
-      logger.info(`子进程 PID:${worker.process.pid}, 端口:${configuration.app.port}`);
+      logger.info(`子进程 PID:${worker.process.pid}, 端口:${port}`);
     });
 
     cluster.on('exit', (worker, code, signal) => {
@@ -299,6 +302,6 @@ if (require.main === module) {
       cluster.fork();
     });
   } else {
-    http.createServer(app.callback()).listen(configuration.app.port);
+    http.createServer(app.callback()).listen(port);
   }
 }

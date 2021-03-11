@@ -5,14 +5,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('../config');
-const logger = require('../logger');
-const stub = require('../biz-stub');
-
-const gclient = new stub.Job(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/job',
@@ -22,6 +15,8 @@ module.exports = router;
 
 router.put('/statistic', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
     const option = ctx.request.query.option || '';
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
@@ -44,6 +39,8 @@ router.put('/statistic', async (ctx) => {
 
 router.put('/:id', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
     const option = ctx.request.query.option || '';
     if (option === 'refresh') {
       const gfetch = (body) =>

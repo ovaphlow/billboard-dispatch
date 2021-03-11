@@ -1,12 +1,7 @@
 const os = require('os');
 
 const configuration_template = {
-  env: 'production',
-  app: {
-    port: 6000,
-    numChildProcesses: os.cpus().length,
-    token: '',
-  },
+  secret_token: '',
   persistence: {
     host: '127.0.0.1:3306',
     database: '',

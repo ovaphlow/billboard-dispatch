@@ -1,11 +1,6 @@
 const os = require('os');
 
 const config = {
-  env: 'production',
-  app: {
-    port: 6000,
-    numChildProcesses: os.cpus().length,
-  },
   grpcServer: {
     host: '127.0.0.1',
     port: '50051',

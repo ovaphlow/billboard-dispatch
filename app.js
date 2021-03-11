@@ -247,7 +247,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/recommend');
+  const router = require('./notification');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

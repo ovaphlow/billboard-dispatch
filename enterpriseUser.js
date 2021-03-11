@@ -19,11 +19,11 @@ module.exports = router;
 
 router.post('/log-in/', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.logIn(body, (err, response) => {
+        grpcClient.signIn(body, (err, response) => {
           if (err) {
             logger.error(err);
             reject(err);
@@ -54,11 +54,11 @@ router.post('/log-in/', async (ctx) => {
 // 注册：拼写错误，应为sign-up
 router.post('/sign-in', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.signIn(body, (err, response) => {
+        grpcClient.signUp(body, (err, response) => {
           if (err) {
             logger.error(err);
             reject(err);
@@ -82,8 +82,8 @@ router.post('/sign-in', async (ctx) => {
 
 router.put('/updatePassword/:id', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.upPasswordCheck(body, (err, response) => {
@@ -134,8 +134,8 @@ router.put('/updatePassword/:id', async (ctx) => {
 
 router.put('/checkEmail/', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkEmail(body, (err, response) => {
@@ -156,8 +156,8 @@ router.put('/checkEmail/', async (ctx) => {
 
 router.put('/checkPhone/', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkPhone(body, (err, response) => {
@@ -178,8 +178,8 @@ router.put('/checkPhone/', async (ctx) => {
 
 router.put('/checkRecover/', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkRecover(body, (err, response) => {
@@ -200,8 +200,8 @@ router.put('/checkRecover/', async (ctx) => {
 
 router.put('/recover/', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.recover(body, (err, response) => {
@@ -246,11 +246,11 @@ router.put('/recover/', async (ctx) => {
 
 router.put('/:id', async (ctx) => {
   try {
-    const stub = require('./enterpriseUser-stub');
-    const grpcClient = new stub.EnterpriseUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const stub = require('./biz-stub');
+    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.update(body, (err, response) => {
+        grpcClient.updateUser(body, (err, response) => {
           if (err) {
             logger.error(err);
             reject(err);

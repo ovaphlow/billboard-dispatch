@@ -11,7 +11,7 @@ module.exports = router;
 
 router.get('/:id', async (ctx) => {
   try {
-    const stub = require('./campus-stub');
+    const stub = require('./bulletin-stub');
     const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ router.get('/:id', async (ctx) => {
 
 router.put('/', async (ctx) => {
   try {
-    const stub = require('./campus-stub');
+    const stub = require('./bulletin-stub');
     const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {

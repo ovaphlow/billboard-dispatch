@@ -62,3 +62,18 @@ message FairUpdateRequest {
   string ent_uuid = 3;
   string recruitment_id = 4;
 }
+
+service Topic {
+  rpc common(TopicCommonRequest) returns (BulletinReply) {}
+  rpc get(TopicGetRequest) returns (BulletinReply) {}
+  rpc ent(TopicEntRequest) returns (BulletinReply) {}
+}
+
+message TopicCommonRequest {}
+
+message TopicGetRequest {
+  uint32 id = 1;
+  string uuid = 2;
+}
+
+message TopicEntRequest {}

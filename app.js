@@ -127,7 +127,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/resume');
+  const router = require('./resume');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -163,7 +163,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/send-in');
+  const router = require('./send-in');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

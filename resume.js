@@ -1,14 +1,7 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
 
-const config = require('../config');
-const logger = require('../logger');
-const stub = require('../biz-stub');
-
-const gclient = new stub.Resume2102(
-  `${config.grpcServer.host}:${config.grpcServer.port}`,
-  grpc.credentials.createInsecure(),
-);
+const logger = require('./logger');
 
 const router = new Router({
   prefix: '/api/resume',
@@ -18,6 +11,8 @@ module.exports = router;
 
 router.put('/filter', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const { filter } = ctx.request.query;
     if (filter === 'employer-filter') {
       const gfetch = (body) =>
@@ -43,6 +38,8 @@ router.put('/filter', async (ctx) => {
 
 router.get('/user/:candidate_id', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.get(body, (err, response) => {
@@ -69,6 +66,8 @@ router.get('/user/:candidate_id', async (ctx) => {
 
 router.get('/:id', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.get(body, (err, response) => {
@@ -95,6 +94,8 @@ router.get('/:id', async (ctx) => {
 
 router.put('/:candidate_id', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const option = ctx.request.query.option || '';
     if (option === '') {
       const gfetch = (body) =>
@@ -245,6 +246,8 @@ router.put('/:candidate_id', async (ctx) => {
  */
 router.post('/', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.init(body, (err, response) => {

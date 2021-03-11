@@ -211,7 +211,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/offer');
+  const router = require('./interview');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

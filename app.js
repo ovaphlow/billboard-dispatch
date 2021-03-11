@@ -145,7 +145,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/recruitment');
+  const router = require('./recruitment');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

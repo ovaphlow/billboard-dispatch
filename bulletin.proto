@@ -10,7 +10,7 @@ message BulletinReply {
 
 service Notification {
   rpc statistic (NotificationStatisticRequest) returns (BulletinReply) {}
-  rpc filter(NotificationFilterRequest) returns (BulletinReply) {}
+  rpc filter (NotificationFilterRequest) returns (BulletinReply) {}
   rpc list(NotificationListRequest) returns (BulletinReply) {}
   rpc get(NotificationGetRequest) returns (BulletinReply) {}
 }
@@ -36,6 +36,7 @@ message NotificationListRequest {
 message NotificationGetRequest {
   uint32 id = 1;
   string uuid = 2;
+}
 
 service Fair {
   rpc list (FairListRequest) returns (BulletinReply) {}

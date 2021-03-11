@@ -11,14 +11,14 @@ module.exports = router;
 
 router.put('/filter', async (ctx) => {
   try {
+    const stub = require('./bulletin-stub');
+    const grpcClient = new stub.Notification(ctx.grpc_service, grpc.credentials.createInsecure());
     const enums = ['wx-default-list'];
     const filter = ctx.request.query.filter || '';
     if (enums.indexOf(filter) === -1) {
       ctx.response.body = [];
       return;
     }
-    const stub = require('./bulletin-stub');
-    const grpcClient = new stub.Notification(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.filter(body, (err, response) => {

@@ -265,13 +265,13 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route/job-fair');
+  const router = require('./fair');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
 (() => {
-  const router = require('./route/hypervisor');
+  const router = require('./hypervisor');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

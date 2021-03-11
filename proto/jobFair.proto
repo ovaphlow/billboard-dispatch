@@ -7,29 +7,24 @@ option java_outer_classname = "JobFairProto";
 package jobFair;
 
 service JobFair {
-
-  rpc list(ListRequest) returns (Reply) {}
-
-  rpc get(GetRequest) returns (Reply) {}
-
-  rpc search(SearchRequest) returns (Reply) {}
-
-  rpc update(UpdateRequest) returns (Reply) {}
-  
+  rpc list (FairListRequest) returns (BulletinReply) {}
+  rpc get (FairGetRequest) returns (BulletinReply) {}
+  rpc search (FairSearchRequest) returns (BulletinReply) {}
+  rpc update (FairUpdateRequest) returns (BulletinReply) {}
 }
 
-message ListRequest {}
+message FairListRequest {}
 
-message GetRequest {
+message FairGetRequest {
   uint32 id = 1;
 }
 
-message SearchRequest {
+message FairSearchRequest {
   uint32 ent_id = 1;
   string ent_uuid = 2;
 }
 
-message UpdateRequest {
+message FairUpdateRequest {
   uint32 job_fair_id = 1;
   uint32 ent_id = 2;
   string ent_uuid = 3;

@@ -38,15 +38,15 @@ service Employer {
   rpc update(EmployerUpdateRequest) returns (BizReply) {}
   rpc subject(EmployerSubjectRequest) returns (BizReply) {}
   rpc jobFairList(EmployerJobFairListRequest) returns (BizReply) {}
-  rpc signUp(SignUpRequest) returns (Reply) {}
-  rpc signIn(SignInRequest) returns (Reply) {}
-  rpc updateUser(UpdateUserRequest) returns (Reply) {}
-  rpc updatePassword(UpdatePasswordRequest) returns (Reply) {}
-  rpc upPasswordCheck(UpPasswordCheckRequest) returns (Reply) {}
-  rpc recover(RecoverRequest) returns (Reply) {}
-  rpc checkEmail(CheckEmailRequest) returns (Reply) {}
-  rpc checkPhone(CheckPhoneRequest) returns (Reply) {}
-  rpc checkRecover(CheckRecoverRequest) returns (Reply) {}
+  rpc signUp(SignUpRequest) returns (BizReply) {}
+  rpc signIn(SignInRequest) returns (BizReply) {}
+  rpc updateUser(UpdateUserRequest) returns (BizReply) {}
+  rpc updatePassword(UpdatePasswordRequest) returns (BizReply) {}
+  rpc upPasswordCheck(UpPasswordCheckRequest) returns (BizReply) {}
+  rpc recover(RecoverRequest) returns (BizReply) {}
+  rpc checkEmail(CheckEmailRequest) returns (BizReply) {}
+  rpc checkPhone(CheckPhoneRequest) returns (BizReply) {}
+  rpc checkRecover(CheckRecoverRequest) returns (BizReply) {}
 }
 
 message EmployerFilterRequest {

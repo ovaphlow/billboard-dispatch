@@ -42,24 +42,25 @@ router.put('/:id', async (ctx) => {
     const stub = require('./biz-stub');
     const gclient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
     const option = ctx.request.query.option || '';
-    if (option === 'refresh') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
-      await gfetch({
-        option: 'refresh',
-        param: { id: ctx.params.id },
       });
-      ctx.response.status = 200;
-    }
+    await gfetch({
+      option,
+      data: {
+        ...ctx.request.body,
+        id: ctx.params.id,
+      },
+    });
+    ctx.response.status = 200;
   } catch (err) {
     logger.error(err);
     ctx.response.status = 500;

@@ -52,7 +52,7 @@ router.post('/log-in', async (ctx) => {
             logger.error(err.stack);
             reject(err);
           } else {
-            resolve(response.data);
+            resolve(JSON.parse(response.data));
           }
         });
       });

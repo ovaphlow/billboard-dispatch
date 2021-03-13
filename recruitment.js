@@ -250,7 +250,7 @@ router.post('/', async (ctx) => {
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.insert(body, (err, response) => {
+        grpcClient.save(body, (err, response) => {
           if (err) {
             logger.error(err);
             reject(err);

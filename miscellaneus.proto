@@ -22,19 +22,19 @@ message FavoriteFilterRequest {
   map<string, string> data = 2;
 }
 
-message ListRequest {
+message FavoriteListRequest {
   string category1 = 1;
   uint32 user_id =2;
 }
 
-message SearchOneRequest {
+message FavoriteSearchOneRequest {
   uint32 user_id = 1;
   uint32 data_id = 2;
   string category1 = 3;
   string category2 = 4;
 }
 
-message SearchResumeRequest {
+message FavoriteSearchResumeRequest {
   string user_id = 1;
   string name = 2;
   string qiwanghangye = 3;
@@ -43,11 +43,11 @@ message SearchResumeRequest {
   string education =6;
 }
 
-message DeleteRequest {
+message FavoriteDeleteRequest {
   uint32 id = 1;
 }
 
-message InsertRequest {
+message FavoriteInsertRequest {
   uint32 user_id = 1;
   string user_uuid = 2;
   uint32 data_id = 3;
@@ -94,26 +94,26 @@ service Chart {
 message ChartEntHomeRequest { string data = 1; }
 
 service Email {
-  rpc insert (InsertRequest) returns (MiscReply) {}
-  rpc code (CodeRequest) returns (MiscReply) {}
-  rpc checkRecover (CheckRecoverRequest) returns (MiscReply) {}
+  rpc insert (EmailInsertRequest) returns (MiscReply) {}
+  rpc code (EmailCodeRequest) returns (MiscReply) {}
+  rpc checkRecover (EmailCheckRecoverRequest) returns (MiscReply) {}
 }
 
-message InsertRequest {
+message EmailInsertRequest {
   string email = 1;
   string code = 2;
   string user_id = 3;
   string user_category = 4;
 }
 
-message CodeRequest {
+message EmailCodeRequest {
   uint32 user_id = 1;
   string user_category = 2;
   string code = 3;
   string email = 4;
 }
 
-message CheckRecoverRequest {
+message EmailCheckRecoverRequest {
   string user_category = 1;
   string code = 2;
   string email = 3;

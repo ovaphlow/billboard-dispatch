@@ -11,7 +11,7 @@ module.exports = router;
 router.get('/', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const grpcClient = new stub.JobFair(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Fair(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.list(body, (err, response) => {
@@ -33,7 +33,7 @@ router.get('/', async (ctx) => {
 router.get('/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const grpcClient = new stub.JobFair(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Fair(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.get(body, (err, response) => {
@@ -55,7 +55,7 @@ router.get('/:id', async (ctx) => {
 router.put('/edit/', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const grpcClient = new stub.JobFair(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Fair(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.update(body, (err, response) => {
@@ -82,7 +82,7 @@ router.put('/edit/', async (ctx) => {
 router.put('/:ent_id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const grpcClient = new stub.JobFair(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Fair(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.search(body, (err, response) => {

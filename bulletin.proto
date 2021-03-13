@@ -9,8 +9,8 @@ message BulletinReply {
 }
 
 service Banner {
-  rpc Get (BannerGetRequest) returns (BulletinReply) {}
-  rpc detail (BannerDetailRequest) returns (BulletinReply) {}
+  rpc get(BannerGetRequest) returns (BulletinReply) {}
+  rpc detail(BannerDetailRequest) returns (BulletinReply) {}
 }
 
 message BannerGetRequest {
@@ -23,8 +23,8 @@ message BannerDetailRequest {
 }
 
 service Campus {
-  rpc get (CampusGetRequest) returns (BulletinReply) {}
-  rpc search (CampusSearchRequest) returns (BulletinReply) {}
+  rpc get(CampusGetRequest) returns (BulletinReply) {}
+  rpc search(CampusSearchRequest) returns (BulletinReply) {}
 }
 
 message CampusGetRequest {
@@ -37,10 +37,10 @@ message CampusSearchRequest {
 }
 
 service Fair {
-  rpc list (FairListRequest) returns (BulletinReply) {}
-  rpc get (FairGetRequest) returns (BulletinReply) {}
-  rpc search (FairSearchRequest) returns (BulletinReply) {}
-  rpc update (FairUpdateRequest) returns (BulletinReply) {}
+  rpc list(FairListRequest) returns (BulletinReply) {}
+  rpc get(FairGetRequest) returns (BulletinReply) {}
+  rpc search(FairSearchRequest) returns (BulletinReply) {}
+  rpc update(FairUpdateRequest) returns (BulletinReply) {}
 }
 
 message FairListRequest {}
@@ -62,8 +62,8 @@ message FairUpdateRequest {
 }
 
 service Notification {
-  rpc statistic (NotificationStatisticRequest) returns (BulletinReply) {}
-  rpc filter (NotificationFilterRequest) returns (BulletinReply) {}
+  rpc statistic(NotificationStatisticRequest) returns (BulletinReply) {}
+  rpc filter(NotificationFilterRequest) returns (BulletinReply) {}
   rpc list(NotificationListRequest) returns (BulletinReply) {}
   rpc get(NotificationGetRequest) returns (BulletinReply) {}
 }

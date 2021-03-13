@@ -31,6 +31,7 @@ let configuration;
 
   if (fs.existsSync(conf_path)) {
     configuration = yaml.load(fs.readFileSync(conf_path, 'utf8'));
+    configuration = { ...configuration, api_module: [] };
   } else {
     logger.info(`首次运行`);
     const template = yaml.dump(configuration_template, { sortKeys: true });
@@ -94,6 +95,25 @@ app.on('error', (err, ctx) => {
       logger.error(err);
       ctx.response.status = 500;
     }
+  });
+
+  router.post('/sentinel', async (ctx) => {
+    logger.info(ctx.request.ip);
+    logger.info(ctx.request.body);
+    configuration.api_module.push({
+      host: ctx.request.ip,
+      port: ctx.request.body.port,
+      prefix: ctx.request.body.path_prefix,
+    });
+    logger.info(configuration.api_module);
+    ctx.response.body = {
+      persistence_host: configuration.persistence.host,
+      persistence_port: configuration.persistence.port,
+      persistence_user: configuration.persistence.user,
+      persistence_password: configuration.persistence.password,
+      persistence_database: configuration.persistence.database,
+    };
+    // router.
   });
 
   app.use(router.routes());

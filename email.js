@@ -2,7 +2,7 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 const nodemailer = require('nodemailer');
 
-const { configuration } = require('app');
+const { configuration } = require('./app');
 const logger = require('./logger');
 
 const router = new Router({
@@ -61,7 +61,7 @@ router.put('/', async (ctx) => {
     const code = math.toString();
     const transporter = nodemailer.createTransport(configuration.email);
     const mailOptions = {
-      from: config.email.auth.user,
+      from: configuration.email.auth.user,
       to: ctx.request.body.email,
       subject: '学子就业网邮箱验证',
       html: `您的验证码是:<br/>
@@ -76,7 +76,7 @@ router.put('/', async (ctx) => {
       }
     });
 
-    const stub = requrie('./miscellaneus-stub');
+    const stub = require('./miscellaneus-stub');
     const grpcClient = new stub.Email(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {

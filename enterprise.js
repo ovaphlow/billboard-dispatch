@@ -38,7 +38,7 @@ router.get('/job-fair/:job_fair_id', async (ctx) => {
     const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
-        grpcClient.JobFairList(body, (err, response) => {
+        grpcClient.jobFairList(body, (err, response) => {
           if (err) {
             logger.error(err);
             reject(err);

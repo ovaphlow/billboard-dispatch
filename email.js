@@ -2,6 +2,7 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 const nodemailer = require('nodemailer');
 
+const { configuration } = require('app');
 const logger = require('./logger');
 
 const router = new Router({
@@ -58,7 +59,7 @@ router.put('/', async (ctx) => {
   try {
     const math = parseInt(Math.floor(Math.random() * (999999 - 100000 + 1) + 100000), 10);
     const code = math.toString();
-    const transporter = nodemailer.createTransport(config.email);
+    const transporter = nodemailer.createTransport(configuration.email);
     const mailOptions = {
       from: config.email.auth.user,
       to: ctx.request.body.email,

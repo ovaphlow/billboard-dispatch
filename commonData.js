@@ -12,7 +12,7 @@ module.exports = router;
 router.get('/hangye/', async (ctx) => {
   try {
     const stub = require('./commonData-stub');
-    const gclient = new stub.CommonData(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.commonData(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = () =>
       new Promise((resolve, reject) => {
         gclient.hangye({ data: JSON.stringify({}) }, (err, response) => {

@@ -9,6 +9,6 @@ const packageDefinition = protoLoader.loadSync(`${__dirname}/commonData.proto`, 
   defaults: true,
   oneofs: true,
 });
-const proto = grpc.loadPackageDefinition(packageDefinition).billboard;
+const proto = grpc.loadPackageDefinition(packageDefinition).commonData;
 
 module.exports = proto;

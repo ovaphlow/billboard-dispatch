@@ -66,26 +66,34 @@ router.get('/user/:candidate_id', async (ctx) => {
 
 router.get('/:id', async (ctx) => {
   try {
-    const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
+    const option = ctx.request.query.option || '';
+    if (option === 'export') {
+      const buffer = '123123123';
+      const file_name = require('dayjs')().format('YYYYMMDDHHmmss');
+      ctx.response.set('content-disposition', `attachment; filename=${file_name}.txt`);
+      ctx.response.body = buffer;
+    } else {
+      const stub = require('./biz-stub');
+      const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.get(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response.data);
+            }
+          });
         });
+      ctx.response.body = await gfetch({
+        option: '',
+        param: {
+          id: ctx.params.id,
+          uuid: ctx.request.query.u_id,
+        },
       });
-    ctx.response.body = await gfetch({
-      option: '',
-      param: {
-        id: ctx.params.id,
-        uuid: ctx.request.query.u_id,
-      },
-    });
+    }
   } catch (err) {
     logger.error(err);
     ctx.response.status = 500;

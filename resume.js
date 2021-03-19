@@ -66,26 +66,53 @@ router.get('/user/:candidate_id', async (ctx) => {
 
 router.get('/:id', async (ctx) => {
   try {
+    const stub = require('./biz-stub');
+    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.get(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
     const option = ctx.request.query.option || '';
     if (option === 'export') {
-      const buffer = '123123123';
+      const xlsx = require('node-xlsx').default;
+
+      const resume = JSON.parse(
+        await gfetch({
+          option: '',
+          param: {
+            id: ctx.params.id,
+            uuid: ctx.request.query.u_id,
+          },
+        }),
+      );
+      let data = [];
+      data.push([
+        '姓名',
+        resume.name,
+        null,
+        '性别',
+        resume.gender,
+        null,
+        '出生日期',
+        resume.birthday,
+      ]);
+      const range = [
+        { s: { c: 1, r: 0 }, e: { c: 2, r: 0 } },
+        { s: { c: 4, r: 0 }, e: { c: 5, r: 0 } },
+        { s: { c: 7, r: 0 }, e: { c: 8, r: 0 } },
+      ];
+      const buffer = xlsx.build([{ name: '简历', data: data }], { '!merges': range });
       const file_name = require('dayjs')().format('YYYYMMDDHHmmss');
-      ctx.response.set('content-disposition', `attachment; filename=${file_name}.txt`);
+      ctx.response.set('content-disposition', `attachment; filename=${file_name}.xlsx`);
       ctx.response.body = buffer;
     } else {
-      const stub = require('./biz-stub');
-      const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.get(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response.data);
-            }
-          });
-        });
       ctx.response.body = await gfetch({
         option: '',
         param: {

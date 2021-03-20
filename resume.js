@@ -93,24 +93,65 @@ router.get('/:id', async (ctx) => {
         }),
       );
       let data = [];
-      data.push([
-        '姓名',
-        resume.name,
-        null,
-        '性别',
-        resume.gender,
-        null,
-        '出生日期',
-        resume.birthday,
-      ]);
+      data.push(
+        ['姓名', resume.name],
+        ['性别', resume.gender, null, null, null, '出生日期', resume.birthday],
+        ['邮箱', resume.email, null, null, null, '电话号码', resume.phone],
+        ['毕业院校', resume.school],
+        ['专业', resume.major, null, null, null, '学历', resume.education],
+        ['家庭住址', `${resume.address1} ${resume.address2} ${resume.address3}`],
+        ['期望行业', resume.qiwanghangye, null, null, null, '期望职位', resume.qiwangzhiwei],
+        ['意向城市', resume.yixiangchengshi],
+        [null],
+      );
       const range = [
-        { s: { c: 1, r: 0 }, e: { c: 2, r: 0 } },
-        { s: { c: 4, r: 0 }, e: { c: 5, r: 0 } },
-        { s: { c: 7, r: 0 }, e: { c: 8, r: 0 } },
+        { s: { c: 1, r: 0 }, e: { c: 8, r: 0 } },
+        { s: { c: 1, r: 1 }, e: { c: 4, r: 1 } },
+        { s: { c: 6, r: 1 }, e: { c: 8, r: 1 } },
+        { s: { c: 1, r: 2 }, e: { c: 4, r: 2 } },
+        { s: { c: 6, r: 2 }, e: { c: 8, r: 2 } },
+        { s: { c: 1, r: 3 }, e: { c: 8, r: 3 } },
+        { s: { c: 1, r: 4 }, e: { c: 4, r: 4 } },
+        { s: { c: 6, r: 4 }, e: { c: 8, r: 4 } },
+        { s: { c: 1, r: 5 }, e: { c: 8, r: 5 } },
+        { s: { c: 1, r: 6 }, e: { c: 4, r: 6 } },
+        { s: { c: 6, r: 6 }, e: { c: 8, r: 6 } },
+        { s: { c: 1, r: 7 }, e: { c: 8, r: 7 } },
       ];
+
+      data.push(['工作经历']);
+      range.push({ s: { c: 0, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      JSON.parse(resume.career).forEach((element) => {
+        const e = JSON.parse(element);
+        data.push(['公司名称', e.employer]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        data.push(['职位', e.title, null, null, null, '起止时间', `${e.date_begin} ${e.date_end}`]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 } });
+        range.push({ s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        data.push(['工作描述', e.description]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      });
+
+      data.push([null]);
+
+      data.push(['项目经验']);
+      range.push({ s: { c: 0, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      JSON.parse(resume.record).forEach((element) => {
+        const e = JSON.parse(element);
+        data.push(['项目名称', e.name]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        data.push(['职位', e.title, null, null, null, '起止时间', `${e.date_begin} ${e.date_end}`]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 } });
+        range.push({ s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        data.push(['项目描述', e.description]);
+        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      });
+
       const buffer = xlsx.build([{ name: '简历', data: data }], { '!merges': range });
-      const file_name = require('dayjs')().format('YYYYMMDDHHmmss');
-      ctx.response.set('content-disposition', `attachment; filename=${file_name}.xlsx`);
+      ctx.response.set(
+        'content-disposition',
+        `attachment; filename=${resume.uuid || resume.id}.xlsx`,
+      );
       ctx.response.body = buffer;
     } else {
       ctx.response.body = await gfetch({

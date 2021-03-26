@@ -224,7 +224,9 @@ router.put('/recover/', async (ctx) => {
           }
         });
       });
+    logger.info(ctx.request.body);
     const result = await grpcFetch(ctx.request.body);
+    logger.info(result);
     if (result.message) {
       ctx.response.body = result;
     } else {

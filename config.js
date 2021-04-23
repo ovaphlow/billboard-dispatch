@@ -1,5 +1,3 @@
-const os = require('os');
-
 const config = {
   grpcServer: {
     host: '127.0.0.1',

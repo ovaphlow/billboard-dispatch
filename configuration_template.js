@@ -1,7 +1,5 @@
-const os = require('os');
-
 const configuration_template = {
-  secret_token: '',
+  secret_token: 'by-ovaphlow',
   persistence: {
     host: '127.0.0.1:3306',
     database: '',
@@ -16,12 +14,9 @@ const configuration_template = {
       pass: 'djtkwgcgtbknjhbh',
     },
   },
-  wx: {
-    appid: 'wx79586a354703320a',
-    appSecret: '53b1e116cfb28e1626d1c76ea484b05b',
-    getTokenApi: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&',
-    getTicketApi:
-      'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=TOKEN&type=jsapi',
+  weixin: {
+    appid: 'wxbf9bb377ed519ed8',
+    secret: '9b6e8dbfcb137b42be93a0c91a19622f',
   },
 };
 

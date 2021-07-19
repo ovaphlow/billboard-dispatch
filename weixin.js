@@ -5,7 +5,7 @@ const { configuration } = require('./app');
 const logger = require('./logger');
 
 const router = new Router({
-  prefix: '/api/weixin',
+  prefix: '/api/wx-minip',
 });
 
 module.exports = router;

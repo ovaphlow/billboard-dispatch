@@ -12,21 +12,6 @@ module.exports = router;
 
 // 测试用
 router.get('/token', async (ctx) => {
-  // const path = [
-  //   'https://api.weixin.qq.com/cgi-bin/token',
-  //   '?grant_type=client_credential',
-  //   `&appid=${configuration.weixin.appid}`,
-  //   `&secret=${configuration.weixin.secret}`,
-  // ];
-  // superagent
-  //   .get(path.join(''))
-  //   .then((response) => {
-  //     logger.info(response.body.access_token, response.body.expires_in);
-  //   })
-  //   .catch((err) => {
-  //     logger.error(err.stack);
-  //   });
-  // ctx.response.status = 200;
   try {
     let path = [
       'https://api.weixin.qq.com/cgi-bin/token',

@@ -3,6 +3,7 @@ syntax = "proto3";
 package commonUser;
 
 service CommonUser {
+  rpc review(ReviewRequest) returns (Reply) {}
   rpc get(GetRequest) returns (Reply) {}
   rpc signIn(SignInRequest) returns (Reply) {}
   rpc logIn(LogInRequest) returns (Reply) {}
@@ -15,6 +16,13 @@ service CommonUser {
   rpc checkPassword (CheckPasswordRequest) returns (Reply) {}
   rpc checkCaptcha (CheckCaptchaRequest) returns (Reply) {}
   rpc updatePassword (UpdatePasswordRequest) returns (Reply) {}
+}
+
+message ReviewRequest {
+  uint32 id = 1;
+  string uuid = 2;
+  string option = 3;
+  map<string, string> data = 4;
 }
 
 message GetRequest {
@@ -36,6 +44,7 @@ message LogInRequest {
   string password = 2;
   string ip = 3;
   string address = 4;
+  string wx_openid = 5;
 }
 
 message UpdateRequest {

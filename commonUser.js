@@ -11,6 +11,39 @@ const router = new Router({
 
 module.exports = router;
 
+router.put('/review', async (ctx) => {
+  try {
+    let option = ctx.request.query.option || '';
+    const stub = require('./commonUser-stub');
+    const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.review(body, (err, response) => {
+          if (err) {
+            logger.error(err.stack);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
+      });
+    await gfetch({
+      id: parseInt(ctx.request.body.id),
+      uuid: ctx.request.body.uuid,
+      option,
+      data: ctx.request.body,
+    });
+    ctx.response.status = 200;
+  } catch (err) {
+    logger.error(err.stack);
+    ctx.response.status = 500;
+  }
+});
+
+/**
+ * 注册
+ * todo: 地址修改为sign-up
+ */
 router.post('/sign-in', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');

@@ -199,7 +199,7 @@ router.put('/:candidate_id', async (ctx) => {
         new Promise((resolve, reject) => {
           gclient.update(body, (err, response) => {
             if (err) {
-              loogger.error(err);
+              logger.error(err);
               reject(err);
             } else {
               resolve(response);

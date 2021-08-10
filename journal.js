@@ -11,6 +11,7 @@ module.exports = router;
 
 router.put('/filter', async (ctx) => {
   try {
+    const option = ctx.request.query.option || '';
     const stub = require('./journal-stub');
     const grpcClient = new stub.Journal(ctx.grpc_service, grpc.credentials.createInsecure());
     if (option === 'logbook') {
@@ -25,7 +26,6 @@ router.put('/filter', async (ctx) => {
             }
           });
         });
-      const option = ctx.request.query.option || '';
       const resp = await gfetch({ option, param: { list: ctx.request.body } });
       ctx.response.body = resp;
     }

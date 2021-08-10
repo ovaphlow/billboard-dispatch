@@ -40,7 +40,7 @@ let configuration;
     saveConfig(conf_path, template);
     logger.info(`生成配置文件 ${conf_path}`);
     logger.info('请编辑配置文件后再次运行');
-    process.exit(0);
+    process.exit(0); //eslint-disable-line
   }
 })();
 
@@ -301,7 +301,7 @@ module.exports = app;
 if (require.main === module) {
   const os = require('os');
 
-  const port = process.argv[2] || 8421;
+  const port = process.argv[2] || 8421; //eslint-disable-line
   if (cluster.isMaster) {
     logger.info(`主进程 PID:${process.pid}`); // eslint-disable-line
 

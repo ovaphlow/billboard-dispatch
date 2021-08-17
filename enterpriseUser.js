@@ -91,7 +91,7 @@ router.put('/updatePassword/:id', async (ctx) => {
             logger.error(err);
             reject(err);
           } else {
-            resolve(response.data);
+            resolve(JSON.parse(response.data));
           }
         });
       });

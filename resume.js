@@ -159,6 +159,7 @@ router.get('/:id', async (ctx) => {
         param: {
           id: ctx.params.id,
           uuid: ctx.request.query.u_id,
+          user_id: ctx.request.query.u_i,
         },
       });
     }

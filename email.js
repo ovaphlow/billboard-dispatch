@@ -13,7 +13,7 @@ module.exports = router;
 
 router.put('/check/', async (ctx) => {
   try {
-    const stub = requrie('./miscellaneus-stub');
+    const stub = requrie('./miscellaneus-stub'); //eslint-disable-line
     const grpcClient = new stub.Email(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ router.put('/check/', async (ctx) => {
 
 router.put('/checkRecover/', async (ctx) => {
   try {
-    const stub = requrie('./miscellaneus-stub');
+    const stub = requrie('./miscellaneus-stub'); //eslint-disable-line
     const grpcClient = new stub.Email(ctx.grpc_service, grpc.credentials.createInsecure());
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {

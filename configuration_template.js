@@ -16,7 +16,7 @@ const configuration_template = {
   },
   weixin: {
     appid: 'wxbf9bb377ed519ed8',
-    secret: '9b6e8dbfcb137b42be93a0c91a19622f',
+    secret: '042dd07bb366dcdab45b03cfb0824fc0',
   },
 };
 

@@ -2,9 +2,17 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./repos-employer');
 
 const router = new Router({
   prefix: '/api',
+});
+
+router.get('/biz/employer/statistic', async (ctx) => {
+  let option = ctx.request.query.option || '';
+  if ('to-certificate-qty' === option) {
+    ctx.response.body = await repos.statistic(option);
+  } else ctx.response.body = {};
 });
 
 router.put('/employer/statistic', async (ctx) => {

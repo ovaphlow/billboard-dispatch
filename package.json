@@ -1,9 +1,9 @@
 {
-  "name": "dispatch",
+  "name": "billboard-dispatch",
   "scripts": {
-    "serve": "node app.js | bunyan -o short",
-    "format": "npx prettier --write .",
-    "lint": "npx eslint ."
+    "serve": "node src/app.js | bunyan -o short",
+    "format": "npx prettier --write src",
+    "lint": "npx eslint src"
   },
   "license": "MIT",
   "dependencies": {
@@ -17,11 +17,10 @@
     "koa": "^2.13.3",
     "koa-bodyparser": "^4.2.1",
     "koa-rewrite": "^3.0.1",
+    "mysql2": "^2.3.0",
     "node-xlsx": "^0.17.2",
     "nodemailer": "^6.6.5",
     "superagent": "^6.1.0"
   },
-  "devDependencies": {
-    "eslint": "^7.20.0"
-  }
+  "devDependencies": {}
 }

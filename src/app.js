@@ -5,6 +5,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 
 const logger = require('./logger');
+const pool = require('./mysql');
 
 const app = new Koa();
 
@@ -40,13 +41,13 @@ let configuration;
     saveConfig(conf_path, template);
     logger.info(`生成配置文件 ${conf_path}`);
     logger.info('请编辑配置文件后再次运行');
-    process.exit(0); //eslint-disable-line
+    process.exit(0);
   }
 })();
 
 module.exports.configuration = configuration;
 
-app.env = 'production';
+app.env = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
 app.use(
   bodyParser({
@@ -55,13 +56,20 @@ app.use(
 );
 
 app.use(async (ctx, next) => {
-  logger.info(`--> ${ctx.request.method} ${ctx.request.url}`);
+  logger.debug(`--> ${ctx.request.method} ${ctx.request.url}`);
   await next();
-  logger.info(`<-- ${ctx.request.method} ${ctx.request.url}`);
+  logger.debug(`<-- ${ctx.request.method} ${ctx.request.url}`);
+});
+
+app.use(async (ctx, next) => {
+  ctx.db_client = pool.promise();
+  await next();
 });
 
 app.on('error', (err, ctx) => {
-  logger.error('server error', err, ctx);
+  logger.error(`server error: [${ctx.request.method}] ${ctx.request.url}`);
+  logger.error(err.stack);
+  ctx.response.status = 500;
 });
 
 (() => {
@@ -299,25 +307,20 @@ app.use(async (ctx, next) => {
 module.exports = app;
 
 if (require.main === module) {
-  const os = require('os');
-
-  const port = process.argv[2] || 8421; //eslint-disable-line
+  const port = parseInt(process.env.NODE_PORT, 10) || 8080;
   if (cluster.isMaster) {
-    logger.info(`主进程 PID:${process.pid}`); // eslint-disable-line
+    logger.info(`主进程 PID:${process.pid}`);
 
-    for (let i = 0; i < os.cpus().length; i += 1) {
+    for (let i = 0; i < parseInt(process.env.NODE_PROC || 1, 10); i += 1) {
       cluster.fork();
     }
 
     cluster.on('online', (worker) => {
-      // eslint-disable-next-line
       logger.info(`子进程 PID:${worker.process.pid}, 端口:${port}`);
     });
 
     cluster.on('exit', (worker, code, signal) => {
-      // eslint-disable-next-line
-      logger.info(`子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`);
-      // eslint-disable-next-line
+      logger.error(`子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`);
       logger.info(`由主进程(PID:${process.pid})创建新的子进程`);
       cluster.fork();
     });

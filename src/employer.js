@@ -4,12 +4,10 @@ const grpc = require('grpc');
 const logger = require('./logger');
 
 const router = new Router({
-  prefix: '/api/employer',
+  prefix: '/api',
 });
 
-module.exports = router;
-
-router.put('/statistic', async (ctx) => {
+router.put('/employer/statistic', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -33,7 +31,7 @@ router.put('/statistic', async (ctx) => {
   }
 });
 
-router.put('/filter', async (ctx) => {
+router.put('/employer/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -57,7 +55,7 @@ router.put('/filter', async (ctx) => {
   }
 });
 
-router.put('/filter-user', async (ctx) => {
+router.put('/employer/filter-user', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -83,3 +81,5 @@ router.put('/filter-user', async (ctx) => {
     ctx.response.status = 500;
   }
 });
+
+module.exports = router;

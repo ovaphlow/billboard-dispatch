@@ -67,6 +67,26 @@ module.exports = {
             if (err) reject(err);
             resolve(result[0] || {});
           });
+        } else if ('topic' === option) {
+          let sql = `
+              select
+                content
+                , date
+                , id
+                , mis_user_id
+                , tag
+                , time
+                , title
+                , uuid
+              from topic
+              where id = ?
+                and uuid = ?
+              limit 1
+              `;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
         }
         pool.releaseConnection(cnx);
       });
@@ -150,6 +170,25 @@ module.exports = {
               resolve(result);
             },
           );
+        } else if ('topic' === option) {
+          let sql = `
+              update topic
+              set title = ?
+                , tag = ?
+                , date = ?
+                , time = ?
+                , content = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(
+            sql,
+            [data.title, data.tag, data.date, data.time, data.content, data.id, data.uuid],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
         }
         pool.releaseConnection(cnx);
       });
@@ -175,6 +214,12 @@ module.exports = {
         } else if ('fair' === option) {
           let sql = 'delete from job_fair where id = ? 1';
           cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('topic' === option) {
+          let sql = 'delete from topic where id = ? and uuid = ?';
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });
@@ -237,6 +282,26 @@ module.exports = {
               limit 100
               `;
           cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('topic === option') {
+          let sql = `
+              select
+                date
+                , id
+                , mis_user_id
+                , tag
+                , time
+                , title
+                , uuid
+              from topic
+              where position(? in date) > 0
+                and position(? in title) > 0
+              order by id desc
+              limit 100
+              `;
+          cnx.execute(sql, [data.date, data.title], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });
@@ -327,6 +392,34 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('topic' === option) {
+          let sql = `
+              insert into topic (
+                uuid
+                , mis_user_id
+                , tag
+                , title
+                , date
+                , time
+                , content
+              ) values(
+                uuid()
+                , 0
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+              )
+              `;
+          cnx.execute(
+            sql,
+            [data.tag, data.title, data.date, data.time, data.content],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
         }
         pool.releaseConnection(cnx);
       });

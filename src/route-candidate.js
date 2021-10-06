@@ -2,14 +2,19 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./repos-candidate');
 
 const router = new Router({
-  prefix: '/api/candidate',
+  prefix: '/api',
 });
 
-module.exports = router;
+router.get('/biz/candidate', async (ctx) => {
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    list: ctx.request.query.list || '0',
+  });
+});
 
-router.put('/statistic', async (ctx) => {
+router.put('/candidate/statistic', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -33,7 +38,7 @@ router.put('/statistic', async (ctx) => {
   }
 });
 
-router.put('/filter', async (ctx) => {
+router.put('/candidate/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -57,7 +62,7 @@ router.put('/filter', async (ctx) => {
   }
 });
 
-router.get('/:id', async (ctx) => {
+router.get('/candidate/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -82,3 +87,5 @@ router.get('/:id', async (ctx) => {
     ctx.response.status = 500;
   }
 });
+
+module.exports = router;

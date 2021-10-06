@@ -7,8 +7,6 @@ const router = new Router({
   prefix: '/api/enterprise',
 });
 
-module.exports = router;
-
 router.get('/subject/:name', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -123,3 +121,5 @@ router.put('/:id', async (ctx) => {
     ctx.response.body = { message: '服务器错误' };
   }
 });
+
+module.exports = router;

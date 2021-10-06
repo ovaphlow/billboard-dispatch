@@ -143,7 +143,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./candidate');
+  const router = require('./route-candidate');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

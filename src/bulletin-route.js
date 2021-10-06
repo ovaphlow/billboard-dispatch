@@ -13,30 +13,32 @@ const router = new Router({
 });
 
 router.get('/bulletin/:id', async (ctx) => {
-  ctx.response.body = await repos.get({
-    id: parseInt(ctx.params.id, 10),
+  ctx.response.body = await repos.get(ctx.request.query.option || '', {
+    id: parseInt(ctx.params.id || 0, 10),
     uuid: ctx.request.query.uuid || '',
   });
 });
 
 router.put('/bulletin/:id', async (ctx) => {
-  ctx.response.body = await repos.update({
+  ctx.response.body = await repos.update(ctx.request.query.option || '', {
     ...ctx.request.body,
-    id: parseInt(ctx.params.id, 10),
+    id: parseInt(ctx.params.id || 0, 10),
     uuid: ctx.request.query.uuid || '',
   });
 });
 
 router.delete('/bulletin/:id', async (ctx) => {
-  ctx.response.body = await repos.remove({
-    id: parseInt(ctx.params.id, 10),
+  ctx.response.body = await repos.remove(ctx.request.query.option || '', {
+    id: parseInt(ctx.params.id || 0, 10),
     uuid: ctx.request.query.uuid || '',
   });
 });
 
 router.get('/bulletin', async (ctx) => {
-  let option = ctx.request.query.option || '';
-  ctx.response.body = await repos.filter(option);
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    title: ctx.request.query.title || '',
+    date: ctx.request.query.date || '',
+  });
 });
 
 router.post('/bulletin', async (ctx) => {

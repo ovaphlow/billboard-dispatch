@@ -69,6 +69,38 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('by-fair-id' === option) {
+          let sql = `
+              select
+                address1
+                , address2
+                , address3
+                , category
+                , date
+                , date_refresh
+                , description
+                , education
+                , enterprise_id
+                , enterprise_uuid
+                , id
+                , industry
+                , job_fair_id
+                , name
+                , position
+                , qty
+                , requirement
+                , salary1
+                , salary2
+                , status
+                , uuid
+              from recruitment
+              where json_search(job_fair_id, "one", ?)
+              order by id desc
+              `;
+          cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         }
         pool.releaseConnection(cnx);
       });

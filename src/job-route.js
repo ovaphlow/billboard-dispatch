@@ -6,14 +6,21 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./job-repos');
 
 const router = new Router({
-  prefix: '/api/job',
+  prefix: '/api',
 });
 
-module.exports = router;
+router.get('/biz/job', async (ctx) => {
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    id: parseInt(ctx.request.query.id || 0, 10),
+    uuid: ctx.request.query.uuid || '',
+    list: ctx.request.query.list || '0',
+  });
+});
 
-router.put('/statistic', async (ctx) => {
+router.put('/job/statistic', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -37,7 +44,7 @@ router.put('/statistic', async (ctx) => {
   }
 });
 
-router.put('/:id', async (ctx) => {
+router.put('/job/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -66,3 +73,5 @@ router.put('/:id', async (ctx) => {
     ctx.response.status = 500;
   }
 });
+
+module.exports = router;

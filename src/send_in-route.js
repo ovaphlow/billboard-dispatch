@@ -6,14 +6,21 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./send_in-repos');
 
 const router = new Router({
-  prefix: '/api/send-in',
+  prefix: '/api',
 });
 
-module.exports = router;
+router.get('/biz/send-in', async (ctx) => {
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    id: parseInt(ctx.request.query.job_id || 0, 10),
+    date: ctx.request.query.date || '',
+    date2: ctx.request.query.date2 || '',
+  });
+});
 
-router.put('/statistic', async (ctx) => {
+router.put('/send-in/statistic', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -36,3 +43,5 @@ router.put('/statistic', async (ctx) => {
     ctx.response.status = 500;
   }
 });
+
+module.exports = router;

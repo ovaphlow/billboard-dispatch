@@ -2,22 +2,37 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
-const repos = require('./repos-candidate');
+const repos = require('./employer-repos');
 
 const router = new Router({
   prefix: '/api',
 });
 
-router.get('/biz/candidate', async (ctx) => {
-  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
-    list: ctx.request.query.list || '0',
+router.get('/biz/employer/statistic', async (ctx) => {
+  let option = ctx.request.query.option || '';
+  if ('to-certificate-qty' === option) {
+    ctx.response.body = await repos.statistic(option);
+  }
+});
+
+router.get('/biz/employer/:id', async (ctx) => {
+  ctx.response.body = await repos.get(ctx.request.query.option || '', {
+    id: parseInt(ctx.params.id || 0, 10),
+    uuid: ctx.request.query.uuid || '',
   });
 });
 
-router.put('/candidate/statistic', async (ctx) => {
+router.get('/biz/employer', async (ctx) => {
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    list: ctx.request.query.list || '0',
+    keyword: ctx.request.query.keyword || '',
+  });
+});
+
+router.put('/employer/statistic', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.statistic(body, (err, response) => {
@@ -38,10 +53,10 @@ router.put('/candidate/statistic', async (ctx) => {
   }
 });
 
-router.put('/candidate/filter', async (ctx) => {
+router.put('/employer/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.filter(body, (err, response) => {
@@ -62,13 +77,13 @@ router.put('/candidate/filter', async (ctx) => {
   }
 });
 
-router.get('/candidate/:id', async (ctx) => {
+router.put('/employer/filter-user', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const gclient = new stub.Candidate(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
     const gfetch = (body) =>
       new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
+        gclient.filterUser(body, (err, response) => {
           if (err) {
             logger.error(err.stack);
             reject(err);
@@ -77,9 +92,10 @@ router.get('/candidate/:id', async (ctx) => {
           }
         });
       });
+    const option = ctx.request.query.option || '';
     const response = await gfetch({
-      id: parseInt(ctx.params.id),
-      uuid: ctx.request.query.uuid,
+      option,
+      data: ctx.request.body,
     });
     ctx.response.body = response;
   } catch (err) {

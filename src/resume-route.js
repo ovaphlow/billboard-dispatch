@@ -2,14 +2,29 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./resume-repos');
 
 const router = new Router({
-  prefix: '/api/resume',
+  prefix: '/api',
 });
 
 module.exports = router;
 
-router.put('/filter', async (ctx) => {
+router.get('/biz/resume/:id', async (ctx) => {
+  ctx.response.body = await repos.get({
+    id: parseInt(ctx.params.id || 0, 10),
+    uuid: ctx.request.query.uuid || '',
+  });
+});
+
+router.get('/biz/resume', async (ctx) => {
+  ctx.response.body = await repos.filter(ctx.request.query.option || '', {
+    id: parseInt(ctx.request.query.id || 0, 10),
+    list: ctx.request.query.list || '0',
+  });
+});
+
+router.put('/resume/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -36,7 +51,7 @@ router.put('/filter', async (ctx) => {
   }
 });
 
-router.get('/user/:candidate_id', async (ctx) => {
+router.get('/resume/user/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -64,7 +79,7 @@ router.get('/user/:candidate_id', async (ctx) => {
   }
 });
 
-router.get('/:id', async (ctx) => {
+router.get('/resume/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -170,7 +185,7 @@ router.get('/:id', async (ctx) => {
   }
 });
 
-router.put('/:candidate_id', async (ctx) => {
+router.put('/resume/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -322,7 +337,7 @@ router.put('/:candidate_id', async (ctx) => {
  * 2021-02 变更
  * 初始化简历
  */
-router.post('/', async (ctx) => {
+router.post('/resume/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());

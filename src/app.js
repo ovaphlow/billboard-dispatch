@@ -137,13 +137,13 @@ app.use(async (ctx, next) => {
 });
 
 (() => {
-  const router = require('./enterpriseUser');
+  let router = require('./bulletin-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
 (() => {
-  const router = require('./route-candidate');
+  const router = require('./candidate-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -155,7 +155,13 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./resume');
+  const router = require('./enterpriseUser');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./resume-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -167,7 +173,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./job');
+  const router = require('./job-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -191,7 +197,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./send-in');
+  const router = require('./send_in-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -221,7 +227,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./route-employer');
+  const router = require('./employer-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -258,12 +264,6 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./commonData');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  let router = require('./route-bulletin');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

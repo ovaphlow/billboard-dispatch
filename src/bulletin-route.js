@@ -6,7 +6,7 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
-const repos = require('./repos-bulletin');
+const repos = require('./bulletin-repos');
 
 const router = new Router({
   prefix: '/api',

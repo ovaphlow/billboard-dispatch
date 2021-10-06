@@ -263,7 +263,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./bulletin');
+  let router = require('./route-bulletin');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

@@ -1,7 +1,7 @@
 const pool = require('./mysql');
 
 module.exports = {
-  statistic: async (option) => {
+  statistic: (option) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
@@ -16,6 +16,7 @@ module.exports = {
             if (err) reject(err);
             resolve(result[0]);
           });
+          pool.releaseConnection(cnx);
         }
       });
     });

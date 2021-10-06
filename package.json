@@ -2,27 +2,26 @@
   "name": "dispatch",
   "scripts": {
     "serve": "node app.js | bunyan -o short",
-    "format": "prettier --write .",
-    "lint": "eslint ."
+    "format": "npx prettier --write .",
+    "lint": "npx eslint ."
   },
   "license": "MIT",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.6",
-    "@koa/router": "^10.0.0",
+    "@koa/router": "^10.1.1",
     "bunyan": "^1.8.15",
-    "dayjs": "^1.10.4",
+    "dayjs": "^1.10.7",
     "google-protobuf": "^3.15.1",
     "grpc": "^1.24.5",
     "js-yaml": "^4.0.0",
-    "koa": "^2.13.1",
+    "koa": "^2.13.3",
     "koa-bodyparser": "^4.2.1",
     "koa-rewrite": "^3.0.1",
-    "node-xlsx": "^0.16.1",
-    "nodemailer": "^6.4.18",
+    "node-xlsx": "^0.17.2",
+    "nodemailer": "^6.6.5",
     "superagent": "^6.1.0"
   },
   "devDependencies": {
-    "eslint": "^7.20.0",
-    "prettier": "^2.2.1"
+    "eslint": "^7.20.0"
   }
 }

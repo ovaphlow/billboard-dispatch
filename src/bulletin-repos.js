@@ -63,7 +63,7 @@ module.exports = {
         let sql = 'delete from bulletin where id = ? and uuid = ?';
         cnx.execute(sql, [data.id, data.uuid], (err, result) => {
           if (err) reject(err);
-          resolve(resule);
+          resolve(result);
         });
         pool.releaseConnection(cnx);
       });

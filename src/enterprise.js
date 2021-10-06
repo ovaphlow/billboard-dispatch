@@ -8,10 +8,6 @@ const router = new Router({
   prefix: '/api',
 });
 
-router.get('/biz/employer', async (ctx) => {
-
-})
-
 router.get('/enterprise/subject/:name', async (ctx) => {
   try {
     const stub = require('./biz-stub');

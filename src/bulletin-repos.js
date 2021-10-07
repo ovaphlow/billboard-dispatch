@@ -31,7 +31,28 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('' === option) {
+        if ('banner' === option) {
+          let sql = `
+              select
+                category
+                , comment
+                , data_url
+                , datime
+                , id
+                , source_url
+                , status
+                , title
+                , uuid
+              from banner
+              where id = ?
+                and uuid = ?
+              limit 1
+              `;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('' === option) {
           let sql = `
             select id
               , uuid
@@ -147,7 +168,36 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('' === option) {
+        if ('banner' === option) {
+          let sql = `
+              update banner
+              set status = ?
+                , category = ?
+                , title = ?
+                , comment = ?
+                , datime = ?
+                , data_url = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(
+            sql,
+            [
+              data.status,
+              data.category,
+              data.title,
+              data.comment,
+              data.datime,
+              data.data_url,
+              data.id,
+              data.uuid,
+            ],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
+        } else if ('' === option) {
           let sql = `
             update bulletin
             set uuid = ?
@@ -286,7 +336,13 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('' === option) {
+        if ('banner' === option) {
+          let sql = `delete from banner where id = ? and uuid = ?`;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('' === option) {
           let sql = 'delete from bulletin where id = ? and uuid = ?';
           cnx.execute(sql, [data.id, data.uuid], (err, result) => {
             if (err) reject(err);
@@ -326,7 +382,29 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('bulletin' === option) {
+        if ('banner' === option) {
+          let sql = `
+              select
+                category
+                , comment
+                , data_url
+                , datime
+                , id
+                , source_url
+                , status
+                , title
+                , uuid
+              from banner
+              where category = ?
+                and status = ?
+              order by datime desc
+              limit 20
+              `;
+          cnx.execute(sql, [data.category, data.status], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('bulletin' === option) {
           let sql = `
               select *
               from bulletin
@@ -431,7 +509,21 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('bulletin' === option) {
+        if ('banner' === option) {
+          let sql = `
+              insert into banner
+                (uuid, status, category, title, comment, datime, data_url)
+                values(uuid(), ?, ?, ?, ?, ?, ?)
+              `;
+          cnx.execute(
+            sql,
+            [data.status, data.category, data.title, data.comment, data.datime, data.data_url],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
+        } else if ('bulletin' === option) {
           let sql = `
             insert into bulletin (uuid
               , title

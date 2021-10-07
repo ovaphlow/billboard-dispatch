@@ -45,6 +45,8 @@ router.get('/bulletin', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     title: ctx.request.query.title || '',
     date: ctx.request.query.date || '',
+    category: ctx.request.query.category || '',
+    status: ctx.request.query.status || '',
   });
 });
 

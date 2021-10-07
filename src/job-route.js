@@ -12,6 +12,10 @@ const router = new Router({
   prefix: '/api',
 });
 
+router.get('/biz/job/statistic', async (ctx) => {
+  ctx.response.body = await repos.statistic(ctx.request.query.option || '', {});
+});
+
 router.get('/biz/job', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     id: parseInt(ctx.request.query.id || 0, 10),

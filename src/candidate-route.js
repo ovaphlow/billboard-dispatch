@@ -1,11 +1,18 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
+const dayjs = require('dayjs');
 
 const logger = require('./logger');
 const repos = require('./candidate-repos');
 
 const router = new Router({
   prefix: '/api',
+});
+
+router.get('/biz/candidate/statistic', async (ctx) => {
+  ctx.response.body = await repos.statistic(ctx.request.query.option || '', {
+    date: dayjs().format('YYYY-MM-DD'),
+  });
 });
 
 router.get('/biz/candidate/:id', async (ctx) => {

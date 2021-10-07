@@ -1,6 +1,32 @@
 const pool = require('./mysql');
 
 module.exports = {
+  statistic: (option, data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('all' === option) {
+          let sql = 'select count(*) as qty from common_user';
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('today' === option) {
+          let sql = `
+              select count(*) as qty
+              from common_user
+              where position(? in date_create) > 0
+              `;
+          cnx.execute(sql, [data.date], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   get: (data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {

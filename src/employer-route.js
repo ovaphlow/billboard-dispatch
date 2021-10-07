@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const grpc = require('grpc');
+const dayjs = require('dayjs');
 
 const logger = require('./logger');
 const repos = require('./employer-repos');
@@ -9,10 +10,9 @@ const router = new Router({
 });
 
 router.get('/biz/employer/statistic', async (ctx) => {
-  let option = ctx.request.query.option || '';
-  if ('to-certificate-qty' === option) {
-    ctx.response.body = await repos.statistic(option);
-  }
+  ctx.response.body = await repos.statistic(ctx.request.query.option || '', {
+    date: dayjs().format('YYYY-MM-DD'),
+  });
 });
 
 router.get('/biz/employer/:id', async (ctx) => {

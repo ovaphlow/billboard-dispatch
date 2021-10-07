@@ -1,11 +1,27 @@
 const pool = require('./mysql');
 
 module.exports = {
-  statistic: (option) => {
+  statistic: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('to-certificate-qty' === option) {
+        if ('all' === option) {
+          let sql = 'select count(*) as qty from enterprise';
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('today' === option) {
+          let sql = `
+              select count(*) as qty
+              from enterprise
+              where position(? in date) > 0
+              `;
+          cnx.execute(sql, [data.date], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('to-certificate-qty' === option) {
           let sql = `
               select count(*) as qty
               from enterprise

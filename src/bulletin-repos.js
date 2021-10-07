@@ -1,6 +1,32 @@
 const pool = require('./mysql');
 
 module.exports = {
+  statistic: (option, data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('tuijian-all' === option) {
+          let sql = 'select count(*) as qty from recommend';
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('tuijian-today' === option) {
+          let sql = `
+              select count(*) qty
+              from recommend
+              where position(? in date_create) > 0
+              `;
+          cnx.execute(sql, [data.date], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   get: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
@@ -64,6 +90,30 @@ module.exports = {
               limit 1
               `;
           cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if ('notification' === option) {
+          let sql = `
+                select
+                  address_level1
+                  , address_level2
+                  , baomignfangshi
+                  , category
+                  , content
+                  , date1
+                  , date2
+                  , date_create
+                  , id
+                  , publisher
+                  , qty
+                  , title
+                  , uuid
+              from recommend
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
             if (err) reject(err);
             resolve(result[0] || {});
           });
@@ -170,6 +220,43 @@ module.exports = {
               resolve(result);
             },
           );
+        } else if ('notification' === option) {
+          let sql = `
+              update recommend
+              set category = ?
+                , title = ?
+                , date1 = ?
+                , date2 = ?
+                , address_level1 = ?
+                , address_level2 = ?
+                , publisher = ?
+                , qty = ?
+                , baomignfangshi = ?
+                , content = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(
+            sql,
+            [
+              data.category,
+              data.title,
+              data.date1,
+              data.date2,
+              data.address_level1,
+              data.address_level2,
+              data.publisher,
+              data.qty,
+              data.baomingfangshi,
+              data.content,
+              data.id,
+              data.uuid,
+            ],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
         } else if ('topic' === option) {
           let sql = `
               update topic
@@ -214,6 +301,12 @@ module.exports = {
         } else if ('fair' === option) {
           let sql = 'delete from job_fair where id = ? 1';
           cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('notification' === option) {
+          let sql = 'delete from recommend where id = ? and uuid = ?';
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });
@@ -285,7 +378,30 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
-        } else if ('topic === option') {
+        } else if ('notification' === option) {
+          let sql = `
+              select
+                address_level1
+                , address_level2
+                , baomignfangshi
+                , category
+                , date1
+                , date2
+                , id
+                , publisher
+                , qty
+                , title
+                , uuid
+              from recommend
+              where position(? in title) > 0
+                and ? between date1 and date2
+              order by id desc
+              `;
+          cnx.execute(sql, [data.title, data.date], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('topic' === option) {
           let sql = `
               select
                 date
@@ -392,6 +508,53 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('notification' === option) {
+          let sql = `
+              insert into recommend (
+                uuid
+                , category
+                , title
+                , date1
+                , date2
+                , address_level1
+                , address_level2
+                , publisher
+                , qty
+                , baomignfangshi
+                , content
+              ) values(
+                uuid()
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?
+              )
+              `;
+          cnx.execute(
+            sql,
+            [
+              data.category,
+              data.title,
+              data.date1,
+              data.date2,
+              data.address_level1,
+              data.address_level2,
+              data.publisher,
+              data.qty,
+              data.baomingfangshi,
+              data.content,
+            ],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
         } else if ('topic' === option) {
           let sql = `
               insert into topic (

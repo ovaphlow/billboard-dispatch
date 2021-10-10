@@ -25,8 +25,7 @@ module.exports = {
         if (err) reject(err);
         if ('by-id' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , category

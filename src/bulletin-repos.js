@@ -417,8 +417,7 @@ module.exports = {
           });
         } else if ('campus' === option) {
           let sql = `
-              select
-                address_level1
+              select address_level1
                 , address_level2
                 , address_level3
                 , address_level4
@@ -440,6 +439,27 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('campus-by-id-list' === option) {
+          let sql = `
+              select address_level1
+                , address_level2
+                , address_level3
+                , address_level4
+                , category
+                , date
+                , id
+                , mis_user_id
+                , school
+                , time
+                , title
+                , uuid
+              from campus
+              where id in ${data.id_list}
+              `;
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('fair' === option) {
           let sql = `
               select
@@ -458,8 +478,7 @@ module.exports = {
           });
         } else if ('notification' === option) {
           let sql = `
-              select
-                address_level1
+              select address_level1
                 , address_level2
                 , baomignfangshi
                 , category
@@ -476,6 +495,26 @@ module.exports = {
               order by id desc
               `;
           cnx.execute(sql, [data.title, data.date], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('notification-by-id_list' === option) {
+          let sql = `
+              select address_level1
+                , address_level2
+                , baomignfangshi
+                , category
+                , date1
+                , date2
+                , id
+                , publisher
+                , qty
+                , title
+                , uuid
+              from recommend
+              where id in (${data.id_list})
+              `;
+          cnx.execute(sql, [], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

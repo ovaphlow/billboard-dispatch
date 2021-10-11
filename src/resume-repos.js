@@ -1,13 +1,13 @@
 const pool = require('./mysql');
 
 module.exports = {
-  get: (data) => {
+  get: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        let sql = `
-            select
-              address1
+        if ('' === option) {
+          let sql = `
+            select address1
               , address2
               , address3
               , address4
@@ -38,10 +38,23 @@ module.exports = {
               and uuid = ?
             limit 1
             `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result.length === 1 ? result[0] : {});
-        });
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result.length === 1 ? result[0] : {});
+          });
+        } else if ('by-subscriber' === option) {
+          let sql = `
+              select id
+                , name
+              from resume
+              where common_user_id = ?
+              limit 1
+              `;
+          cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        }
         pool.releaseConnection(cnx);
       });
     });
@@ -53,8 +66,7 @@ module.exports = {
         if (err) reject(err);
         if ('by-id' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , address4
@@ -83,8 +95,7 @@ module.exports = {
           });
         } else if ('by-candidate' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , address4
@@ -108,6 +119,18 @@ module.exports = {
               where common_user_id = ?
               `;
           cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('by-subscriber_list' === option) {
+          let sql = `
+              select id
+                , common_user_id
+                , name
+              from resume
+              where common_user_id in (${data.list})
+              `;
+          cnx.execute(sql, [], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

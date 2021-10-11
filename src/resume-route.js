@@ -11,8 +11,8 @@ const router = new Router({
 module.exports = router;
 
 router.get('/biz/resume/:id', async (ctx) => {
-  ctx.response.body = await repos.get({
-    id: parseInt(ctx.params.id || 0, 10),
+  ctx.response.body = await repos.get(ctx.request.query.option || '', {
+    id: parseInt(ctx.params.id, 10),
     uuid: ctx.request.query.uuid || '',
   });
 });

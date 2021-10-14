@@ -1,3 +1,4 @@
+const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
@@ -5,11 +6,24 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('tuijian-all' === option) {
-          let sql = 'select count(*) as qty from recommend';
-          cnx.execute(sql, [], (err, result) => {
+        if ('campus-qty-by-total-today' === option) {
+          let sql = `
+              select (select count(*) qty from campus) total
+                , (select count(*)
+                   from campus
+                   where position(? in mp->>'$.create_at') > 0) today
+              `;
+          cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
             if (err) reject(err);
-            resolve(result[0] || {});
+            resolve(result[0] || { total: 0, today: 0 });
+          });
+        } else if ('notification-qty-by-total-today' === option) {
+          let sql = `select (select count(*) from recommend) total
+              , (select count(*) from recommend where position(? in date_create) > 0) today
+              `;
+          cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || { total: 0, today: 0 });
           });
         } else if ('tuijian-today' === option) {
           let sql = `

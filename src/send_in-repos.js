@@ -1,3 +1,5 @@
+const dayjs = require('dayjs');
+
 const pool = require('./mysql');
 
 module.exports = {
@@ -5,11 +7,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('all' === option) {
-          let sql = 'select count(*) as qty from delivery';
-          cnx.execute(sql, [], (err, result) => {
+        if ('qty-by-total-today' === option) {
+          let sql = `
+              select (select count(*) from delivery) total
+                , (select count(*) from delivery where position(? in datime) > 0) today
+              `;
+          cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
             if (err) reject(err);
-            resolve(result[0] || {});
+            resolve(result[0] || { total: 0, today: 0 });
           });
         }
         pool.releaseConnection(cnx);

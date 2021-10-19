@@ -10,6 +10,10 @@ const router = new Router({
 
 module.exports = router;
 
+router.get('/biz/resume/statistic', async (ctx) => {
+  ctx.response.body = await repos.statistic(ctx.request.query.option || '');
+});
+
 router.get('/biz/resume/:id', async (ctx) => {
   ctx.response.body = await repos.get(ctx.request.query.option || '', {
     id: parseInt(ctx.params.id, 10),

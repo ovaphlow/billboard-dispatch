@@ -1,4 +1,5 @@
 const dayjs = require('dayjs');
+const logger = require('./logger');
 const pool = require('./mysql');
 
 module.exports = {
@@ -418,6 +419,18 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('banner-by-category' === option) {
+          let sql = `
+              select id, uuid, datime, data_url, source_url, category
+              from banner
+              where category = ?
+                and status = '启用'
+              order by datime desc
+              `;
+          cnx.execute(sql, [data.category], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('bulletin' === option) {
           let sql = `
               select *
@@ -549,6 +562,25 @@ module.exports = {
               limit 100
               `;
           cnx.execute(sql, [data.date, data.title], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('topic-by-limit' === option) {
+          let sql = `
+              select id
+                , uuid
+                , date
+                , time
+                , tag
+                , title
+                , content
+                , mis_user_id
+              from topic
+              where tag != '热门话题'
+              order by id desc
+              limit 5
+              `;
+          cnx.execute(sql, [], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

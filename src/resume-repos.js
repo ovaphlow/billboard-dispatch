@@ -1,6 +1,30 @@
 const pool = require('./mysql');
 
 module.exports = {
+  statistic: (option) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('by-qiwangzhiwei' === option) {
+          let sql = `
+              select qiwangzhiwei, count(qiwangzhiwei) qty
+              from resume
+              where qiwanghangye != ''
+                and qiwangzhiwei != ''
+              group by qiwangzhiwei
+              order by qty desc
+              limit 10
+              `;
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   get: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {

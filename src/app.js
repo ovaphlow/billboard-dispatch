@@ -281,12 +281,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./chart');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./fair');
   app.use(router.routes());
   app.use(router.allowedMethods());

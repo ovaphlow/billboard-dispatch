@@ -1,4 +1,5 @@
 const dayjs = require('dayjs');
+const logger = require('./logger');
 const pool = require('./mysql');
 
 module.exports = {
@@ -90,8 +91,7 @@ module.exports = {
           });
         } else if ('by-fair-id' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , category
@@ -117,6 +117,19 @@ module.exports = {
               order by id desc
               `;
           cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('by-ref_id-fair' === option) {
+          let sql = `
+              select id
+                , job_fair_id
+                , json_overlaps(job_fair_id, '[${data.list}]') qty
+              from billboard.recruitment
+              where enterprise_id = ?
+                and enterprise_uuid = ?
+              `;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

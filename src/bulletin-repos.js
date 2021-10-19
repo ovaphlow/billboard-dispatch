@@ -489,17 +489,30 @@ module.exports = {
           });
         } else if ('fair' === option) {
           let sql = `
-              select
-                content
+              select id
                 , datime
-                , id
                 , status
                 , title
+                , content
               from job_fair
               order by id desc
               limit 100
               `;
           cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('fair-by-status' === option) {
+          let sql = `
+              select id
+                , datime
+                , status
+                , title
+              from job_fair
+              where status = ?
+              order by id desc
+              `;
+          cnx.execute(sql, [data.status], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

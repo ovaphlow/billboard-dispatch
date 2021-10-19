@@ -3,6 +3,25 @@ const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
+  signIn: (data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        let sql = `
+            select *
+            from enterprise_user
+            where phone = ?
+              or email = ?
+            `;
+        cnx.execute(sql, [data.username, data.username], (err, result) => {
+          if (err) reject(err);
+          resolve(result[0] || {});
+        });
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   statistic: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
@@ -39,8 +58,7 @@ module.exports = {
         if (err) reject(err);
         if ('' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , address4

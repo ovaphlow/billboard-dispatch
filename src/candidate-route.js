@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const Router = require('@koa/router');
 const grpc = require('grpc');
 const dayjs = require('dayjs');
@@ -16,10 +18,43 @@ router.get('/biz/candidate/statistic', async (ctx) => {
 });
 
 router.get('/biz/candidate/:id', async (ctx) => {
-  ctx.response.body = await repos.get({
+  let option = ctx.request.query.option || '';
+  ctx.response.body = await repos.get(option, {
     id: parseInt(ctx.params.id, 10),
     uuid: ctx.request.query.uuid || '',
   });
+});
+
+router.put('/biz/candidate/:id', async (ctx) => {
+  let option = ctx.request.query.option || '';
+  if ('password' === option) {
+    let r = await repos.get('password', {
+      id: parseInt(ctx.params.id, 10),
+      uuid: ctx.request.body.uuid,
+    });
+    if (!r.password) {
+      ctx.response.status = 401;
+      return;
+    }
+    let hmac = crypto.createHmac('sha256', r.salt);
+    hmac.update(ctx.request.body.current_password);
+    let passwordSalted = hmac.digest('hex');
+    console.log('salted', passwordSalted)
+    console.log('password', r.password);
+    if (passwordSalted !== r.password) {
+      ctx.response.status = 401;
+      return;
+    }
+    hmac = crypto.createHmac('sha256', r.salt);
+    hmac.update(ctx.request.body.password);
+    passwordSalted = hmac.digest('hex');
+    console.log('new salted', passwordSalted);
+    ctx.response.body = await repos.update('password', {
+      id: parseInt(ctx.params.id, 10),
+      uuid: ctx.request.body.uuid,
+      password: passwordSalted,
+    });
+  }
 });
 
 router.get('/biz/candidate', async (ctx) => {

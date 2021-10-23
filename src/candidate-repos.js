@@ -22,11 +22,12 @@ module.exports = {
     });
   },
 
-  get: (data) => {
+  get: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        let sql = `
+        if ('' === option) {
+          let sql = `
             select
               email
               , id
@@ -38,10 +39,43 @@ module.exports = {
               and uuid = ?
             limit 1
             `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result.length === 1 ? result[0] : {});
-        });
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result.length === 1 ? result[0] : {});
+          });
+        } else if ('password' === option) {
+          let sql = `
+              select password, salt
+              from common_user
+              where id = ?
+                and uuid = ?
+              limit 1`;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result.length === 1 ? result[0] : {});
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
+  update: (option, data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('password' === option) {
+          let sql = `
+              update common_user
+              set password = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(sql, [data.password, data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
         pool.releaseConnection(cnx);
       });
     });

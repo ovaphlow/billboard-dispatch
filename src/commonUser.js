@@ -250,26 +250,3 @@ router.put('/', async (ctx) => {
     ctx.response.body = { message: '服务器错误' };
   }
 });
-
-router.get('/journal/:user_id', async (ctx) => {
-  try {
-    const stub = require('./commonUser-stub');
-    const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.journal(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
-    ctx.params.category = '个人用户';
-    ctx.response.body = await grpcFetch(ctx.params);
-  } catch (err) {
-    logger.error(err.stack);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});

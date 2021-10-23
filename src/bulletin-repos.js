@@ -579,6 +579,7 @@ module.exports = {
             resolve(result);
           });
         } else if ('topic-by-limit' === option) {
+          // 用于企业网站
           let sql = `
               select id
                 , uuid
@@ -592,6 +593,24 @@ module.exports = {
               where tag != '热门话题'
               order by id desc
               limit 5
+              `;
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('topic-wxmp-by-limit' === option) {
+          // 用于微信小程序
+          let sql = `
+              select id
+                , uuid
+                , date
+                , time
+                , tag
+                , title
+              from topic
+              where tag = '热门话题'
+              order by id desc
+              limit 9
               `;
           cnx.execute(sql, [], (err, result) => {
             if (err) reject(err);

@@ -245,12 +245,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./topic');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./campus');
   app.use(router.routes());
   app.use(router.allowedMethods());

@@ -197,16 +197,7 @@ module.exports = {
               `;
           cnx.execute(
             sql,
-            [
-              data.status,
-              data.category,
-              data.title,
-              data.comment,
-              data.datime,
-              data.data_url,
-              data.id,
-              data.uuid,
-            ],
+            [data.status, data.category, data.title, data.comment, data.datime, data.data_url, data.id, data.uuid],
             (err, result) => {
               if (err) reject(err);
               resolve(result);
@@ -277,14 +268,10 @@ module.exports = {
                 , status = ?
               where id = ?
               `;
-          cnx.execute(
-            sql,
-            [data.title, data.content, data.title, data.status, data.id],
-            (err, result) => {
-              if (err) reject(err);
-              resolve(result);
-            },
-          );
+          cnx.execute(sql, [data.title, data.content, data.title, data.status, data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('notification' === option) {
           let sql = `
               update recommend
@@ -558,6 +545,25 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('notification-wx-default' === option) {
+          let sql = `
+              select id, uuid, category, title, date1, date2, address_level1, address_level2,
+                publisher, qty, baomignfangshi
+              from recommend
+              where position(category in ?) > 0
+                and position(? in address_level2) > 0
+                and position(? in title) > 0
+              order by date1 desc, date2
+              limit ${data.page > 1 ? (data.page - 1) * 50 : 0}, 50
+              `;
+          cnx.execute(
+            sql,
+            [data.category, data.address_level2, data.keyword],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
         } else if ('topic' === option) {
           let sql = `
               select
@@ -649,14 +655,10 @@ module.exports = {
               , doc)
               values(?, ?, ?, ?, ?)
             `;
-          cnx.execute(
-            sql,
-            [data.uuid, data.title, data.dday, data.receiver, data.doc],
-            (err, result) => {
-              if (err) reject(err);
-              resolve(result);
-            },
-          );
+          cnx.execute(sql, [data.uuid, data.title, data.dday, data.receiver, data.doc], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('campus' === option) {
           let sql = `
               insert into campus (
@@ -784,14 +786,10 @@ module.exports = {
                 , ?
               )
               `;
-          cnx.execute(
-            sql,
-            [data.tag, data.title, data.date, data.time, data.content],
-            (err, result) => {
-              if (err) reject(err);
-              resolve(result);
-            },
-          );
+          cnx.execute(sql, [data.tag, data.title, data.date, data.time, data.content], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         }
         pool.releaseConnection(cnx);
       });

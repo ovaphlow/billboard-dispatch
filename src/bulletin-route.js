@@ -49,6 +49,9 @@ router.get('/bulletin', async (ctx) => {
     status: ctx.request.query.status || '',
     id_list: ctx.request.query.id_list || '0',
     limit: ctx.request.query.limit || '5',
+    address_level2: ctx.request.query.address_level2 || '',
+    keyword: ctx.request.query.keyword || '',
+    page: parseInt(ctx.request.query.page || 1, 10),
   });
 });
 

@@ -474,6 +474,27 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('campus-by-address_level2-category-keyword' === option) {
+          let sql = `
+              select id
+                , uuid
+                , title
+                , address_level3
+                , address_level2
+                , date
+                , school
+                , category
+              from campus
+              where date >= curdate()
+                and position(? in address_level2) > 0
+                and position(category in ?) > 0
+                and (position(? in title) > 0 or position(? in school) > 0)
+              order by date
+              `;
+          cnx.execute(sql, [data.address_level2, data.category, data.keyword, data.keyword], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('fair' === option) {
           let sql = `
               select id

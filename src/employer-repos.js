@@ -104,6 +104,21 @@ module.exports = {
             if (err) reject(err);
             resolve(result[0] || {});
           });
+        } else if ('user-by-employer1' === option) {
+          let sql = `
+              select id
+                , name
+                , phone
+                , email
+                , enterprise_id
+              from enterprise_user
+              where enterprise_id = ?
+                and enterprise_uuid = ?
+              `;
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
         }
         pool.releaseConnection(cnx);
       });

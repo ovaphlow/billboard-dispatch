@@ -22,6 +22,24 @@ module.exports = {
     });
   },
 
+  signIn: (data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        let sql = `
+            select id, uuid, email, name, phone, wx_openid, password, salt
+            from common_user
+            where email = ?
+              or phone = ?
+            `;
+        cnx.execute(sql, [data.username, data.username], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      });
+    });
+  },
+
   get: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {

@@ -17,6 +17,24 @@ router.get('/biz/candidate/statistic', async (ctx) => {
   });
 });
 
+router.post('/biz/candidate/sign-in', async (ctx) => {
+  let auth = await repos.signIn(ctx.request.body);
+  if (1 !== auth.length) {
+    ctx.response.status = 401;
+    return;
+  }
+  const hmac = crypto.createHmac('sha256', auth[0].salt);
+  hmac.update(ctx.request.body.password);
+  const passwordSalted = hmac.digest('hex');
+  if (passwordSalted !== auth[0].password) {
+    ctx.response.status = 401;
+    return;
+  }
+  delete auth[0].password;
+  delete auth[0].salt;
+  ctx.response.body = auth[0];
+});
+
 router.get('/biz/candidate/:id', async (ctx) => {
   let option = ctx.request.query.option || '';
   ctx.response.body = await repos.get(option, {
@@ -39,7 +57,7 @@ router.put('/biz/candidate/:id', async (ctx) => {
     let hmac = crypto.createHmac('sha256', r.salt);
     hmac.update(ctx.request.body.current_password);
     let passwordSalted = hmac.digest('hex');
-    console.log('salted', passwordSalted)
+    console.log('salted', passwordSalted);
     console.log('password', r.password);
     if (passwordSalted !== r.password) {
       ctx.response.status = 401;

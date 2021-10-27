@@ -16,11 +16,23 @@ router.get('/biz/job/statistic', async (ctx) => {
   ctx.response.body = await repos.statistic(ctx.request.query.option || '', {});
 });
 
+router.get('/biz/job/:id', async (ctx) => {
+  ctx.response.body = await repos.get({
+    id: parseInt(ctx.params.id || 0, 10),
+    uuid: ctx.request.query.uuid || '',
+  });
+});
+
 router.get('/biz/job', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     id: parseInt(ctx.request.query.id || 0, 10),
     uuid: ctx.request.query.uuid || '',
     list: ctx.request.query.list || '0',
+    category: ctx.request.query.category || '',
+    address_level2: ctx.request.query.address_level2 || '',
+    industry: ctx.request.query.industry || '',
+    name: ctx.request.query.name || '',
+    page: parseInt(ctx.request.query.page || 1, 10),
   });
 });
 

@@ -22,6 +22,39 @@ module.exports = {
     });
   },
 
+  get: (data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        let sql = `
+              select id
+                , uuid
+                , name
+                , date
+                , address1
+                , address2
+                , education
+                , category
+                , salary1
+                , salary2
+                , enterprise_id
+                , enterprise_uuid
+                , requirement
+                , description
+                , status
+              from recruitment
+              where id = ?
+                and uuid = ?
+              `;
+        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+          if (err) reject(err);
+          resolve(result[0] || {});
+        });
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   filter: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
@@ -130,6 +163,25 @@ module.exports = {
                 and enterprise_uuid = ?
               `;
           cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('by-category-address_level2-industry-name' === option) {
+          let sql = `
+              select *
+              from recruitment
+              where status = '在招'
+                and position(category in ?) > 0
+                and position(? in address2) > 0
+                and position(? in industry) > 0
+                and (
+                  position(? in name) > 0
+                  or enterprise_id in (select id from enterprise where position(? in name) > 0)
+                )
+              order by date_refresh desc, id desc
+              limit ${data.page > 1 ? (data.page - 1) * 100 : 0}, 100
+              `;
+          cnx.execute(sql, [data.category, data.address_level2, data.industry, data.name, data.name], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

@@ -115,12 +115,11 @@ module.exports = {
           });
         } else if ('fair' === option) {
           let sql = `
-              select
-                content
+              select id
                 , datime
-                , id
-                , status
                 , title
+                , content
+                , status
               from job_fair
               where id = ?
               limit 1

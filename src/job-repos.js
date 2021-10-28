@@ -116,9 +116,10 @@ module.exports = {
               from recruitment
               where enterprise_id = ?
                 and enterprise_uuid = ?
+                and position(? in status) > 0
               limit 100
               `;
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+          cnx.execute(sql, [data.id, data.uuid, data.status], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });
@@ -182,6 +183,39 @@ module.exports = {
               limit ${data.page > 1 ? (data.page - 1) * 100 : 0}, 100
               `;
           cnx.execute(sql, [data.category, data.address_level2, data.industry, data.name, data.name], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
+  batchUpdate: (option, data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('fair-save-by-employer' === option) {
+          let sql = `
+              update recruitment
+              set job_fair_id = json_array_append(job_fair_id, '$', ?)
+              where enterprise_id = ?
+                and id in (${data.list})
+              `;
+          cnx.execute(sql, [`${data.fair_id}`, data.employer_id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('fair-remove-by-employer' === option) {
+          let sql = `
+              update recruitment
+              set job_fair_id = json_remove(job_fair_id,
+                  json_unquote(json_search(job_fair_id, 'one', ?)))
+              where enterprise_id = ?
+                and id in (${data.list})
+              `;
+          cnx.execute(sql, [`${data.fair_id}`, data.employer_id], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

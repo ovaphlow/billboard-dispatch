@@ -33,6 +33,16 @@ router.get('/biz/job', async (ctx) => {
     industry: ctx.request.query.industry || '',
     name: ctx.request.query.name || '',
     page: parseInt(ctx.request.query.page || 1, 10),
+    status: ctx.request.query.status || '',
+  });
+});
+
+router.put('/biz/job', async (ctx) => {
+  ctx.response.body = await repos.batchUpdate(ctx.request.query.option || '', {
+    employer_id: parseInt(ctx.request.body.employer_id || 0, 10),
+    employer_uuid: ctx.request.body.employer_uuid || '',
+    fair_id: parseInt(ctx.request.body.fair_id || 0, 10),
+    list: ctx.request.body.list || '0',
   });
 });
 

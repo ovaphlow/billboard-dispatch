@@ -46,6 +46,7 @@ router.get('/bulletin', async (ctx) => {
     title: ctx.request.query.title || '',
     date: ctx.request.query.date || '',
     category: ctx.request.query.category || '',
+    tag: ctx.request.query.tag || '',
     status: ctx.request.query.status || '',
     id_list: ctx.request.query.id_list || '0',
     limit: ctx.request.query.limit || '5',

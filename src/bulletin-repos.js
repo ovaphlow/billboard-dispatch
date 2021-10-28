@@ -428,6 +428,25 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('bulletin-by-tag' === option) {
+          let sql = `
+              select id
+                , uuid
+                , title
+                , b.doc->>'$.content' content
+                , dday
+              from bulletin b
+                -- left join resume r on r.education = b.doc ->> '$.education'
+                --   and r.address1 = b.doc ->> '$.address_level1'
+                --   and r.address2 = b.doc ->> '$.address_level2'
+              where dday >= CURRENT_DATE
+                and receiver = ?
+              order by id desc
+              `;
+          cnx.execute(sql, [data.tag], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('campus' === option) {
           let sql = `
               select address_level1

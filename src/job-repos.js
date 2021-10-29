@@ -91,14 +91,12 @@ module.exports = {
           });
         } else if ('list-by-employer-id' === option) {
           let sql = `
-              select
-                address1
+              select address1
                 , address2
                 , address3
                 , category
                 , date
                 , date_refresh
-                , description
                 , education
                 , enterprise_id
                 , enterprise_uuid
@@ -108,7 +106,6 @@ module.exports = {
                 , name
                 , position
                 , qty
-                , requirement
                 , salary1
                 , salary2
                 , status
@@ -117,7 +114,6 @@ module.exports = {
               where enterprise_id = ?
                 and enterprise_uuid = ?
                 and position(? in status) > 0
-              limit 100
               `;
           cnx.execute(sql, [data.id, data.uuid, data.status], (err, result) => {
             if (err) reject(err);

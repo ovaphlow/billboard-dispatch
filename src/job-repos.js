@@ -55,6 +55,24 @@ module.exports = {
     });
   },
 
+  update: (option, data) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if ('refresh' === option) {
+          let sql = `
+            update recruitment set date_refresh = now() where id = ?
+            `;
+          cnx.execute(sql, [data.id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    });
+  },
+
   filter: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {

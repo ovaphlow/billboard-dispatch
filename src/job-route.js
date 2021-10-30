@@ -23,6 +23,14 @@ router.get('/biz/job/:id', async (ctx) => {
   });
 });
 
+router.put('/biz/job/:id', async (ctx) => {
+  ctx.response.body = await repos.update(ctx.request.query.option || '', {
+    ...ctx.request.body,
+    id: parseInt(ctx.params.id || 0, 10),
+    uuid: ctx.request.query.uuid || '',
+  })
+})
+
 router.get('/biz/job', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     id: parseInt(ctx.request.query.id || 0, 10),

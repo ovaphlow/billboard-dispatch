@@ -21,6 +21,7 @@ router.get('/biz/send-in', async (ctx) => {
     id: parseInt(ctx.request.query.job_id || 0, 10),
     date: ctx.request.query.date || '',
     date2: ctx.request.query.date2 || '',
+    list: ctx.request.query.list || '0',
   });
 });
 

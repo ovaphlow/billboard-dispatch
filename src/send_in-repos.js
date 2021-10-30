@@ -44,6 +44,18 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('qty-by-job_list' === option) {
+          let sql = `
+              select recruitment_id
+                , count(*) qty
+              from billboard.delivery
+              where recruitment_id in (${data.list})
+              group by recruitment_id
+              `;
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         }
         pool.releaseConnection(cnx);
       });

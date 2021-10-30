@@ -33,6 +33,7 @@ module.exports = {
                 , date
                 , address1
                 , address2
+                , address3
                 , education
                 , category
                 , salary1
@@ -42,6 +43,7 @@ module.exports = {
                 , requirement
                 , description
                 , status
+                , qty
               from recruitment
               where id = ?
                 and uuid = ?

@@ -40,6 +40,8 @@ module.exports = {
                 , salary2
                 , enterprise_id
                 , enterprise_uuid
+                , industry
+                , position
                 , requirement
                 , description
                 , status
@@ -61,7 +63,61 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
-        if ('refresh' === option) {
+        if ('' === option) {
+          let sql = `
+              update recruitment
+              set name = ?,
+                qty = ?,
+                description = ?,
+                requirement = ?,
+                address1 = ?,
+                address2 = ?,
+                address3 = ?,
+                salary1 = ?,
+                salary2 = ?,
+                education = ?,
+                category = ?,
+                industry = ?,
+                position = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(
+            sql,
+            [
+              data.name,
+              data.qty,
+              data.description,
+              data.requirement,
+              data.address1,
+              data.address2,
+              data.address3,
+              data.salary1,
+              data.salary2,
+              data.education,
+              data.category,
+              data.industry,
+              data.position,
+              data.id,
+              data.uuid,
+            ],
+            (err, result) => {
+              if (err) reject(err);
+              resolve(result);
+            },
+          );
+        } else if ('by-status' === option) {
+          let sql = `
+              update recruitment
+              set status = ?
+              where id = ?
+                and uuid = ?
+              `;
+          cnx.execute(sql, [data.status, data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if ('refresh' === option) {
           let sql = `
             update recruitment set date_refresh = now() where id = ?
             `;

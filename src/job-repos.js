@@ -240,11 +240,30 @@ module.exports = {
             resolve(result);
           });
         } else if ('by-category-address_level2-industry-name' === option) {
+          console.log(data.category, data.address_level2);
           let sql = `
-              select *
+              select address1
+                , address2
+                , address3
+                , category
+                , date
+                , date_refresh
+                , education
+                , enterprise_id
+                , enterprise_uuid
+                , id
+                , industry
+                , job_fair_id
+                , name
+                , position
+                , qty
+                , salary1
+                , salary2
+                , status
+                , uuid
               from recruitment
               where status = '在招'
-                and position(category in ?) > 0
+                and position(? in category) > 0
                 and position(? in address2) > 0
                 and position(? in industry) > 0
                 and (

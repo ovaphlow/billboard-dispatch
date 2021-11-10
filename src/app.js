@@ -289,11 +289,11 @@ app.use(async (ctx, next) => {
 module.exports = app;
 
 if (require.main === module) {
-  const port = parseInt(process.env.NODE_PORT, 10) || 8080;
+  const port = parseInt(process.env.PORT, 10) || 8080;
   if (cluster.isMaster) {
     logger.info(`主进程 PID:${process.pid}`);
 
-    for (let i = 0; i < parseInt(process.env.NODE_PROC || 1, 10); i += 1) {
+    for (let i = 0; i < parseInt(process.env.PROC || 1, 10); i += 1) {
       cluster.fork();
     }
 

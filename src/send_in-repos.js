@@ -44,6 +44,22 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('by-job' === option) {
+          let sql = `
+              select id
+                , datime
+                , recruitment_id
+                , recruitment_uuid
+                , resume_id
+                , resume_uuid
+                , status
+              from delivery
+              where recruitment_id in (${data.list})
+              `;
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err)
+            resolve(result);
+          })
         } else if ('qty-by-job_list' === option) {
           let sql = `
               select recruitment_id

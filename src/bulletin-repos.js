@@ -599,6 +599,21 @@ module.exports = {
             if (err) reject(err);
             resolve(result);
           });
+        } else if ('notification-by-category-address_level2-title' === option) {
+          let sql = `
+              select id, uuid, category, title, date1, date2, address_level1, address_level2,
+                publisher, qty, baomignfangshi
+              from recommend
+              where position(? in category) > 0
+                and position(? in address_level2) > 0
+                and position(? in title) > 0
+              order by date1 desc, date2
+              limit ${data.page > 1 ? (data.page - 1) * 50 : 0}, 50
+              `;
+          cnx.execute(sql, [data.category, data.address_level2, data.keyword], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
         } else if ('topic' === option) {
           let sql = `
               select

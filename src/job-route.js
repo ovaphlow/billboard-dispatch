@@ -45,6 +45,9 @@ router.get('/biz/job', async (ctx) => {
   });
 });
 
+/**
+ * 参加/退出 线上招聘会
+ */
 router.put('/biz/job', async (ctx) => {
   ctx.response.body = await repos.batchUpdate(ctx.request.query.option || '', {
     employer_id: parseInt(ctx.request.body.employer_id || 0, 10),

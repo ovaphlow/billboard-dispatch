@@ -283,6 +283,9 @@ module.exports = {
     });
   },
 
+  /**
+   * 参加/退出 线上招聘会
+   */
   batchUpdate: (option, data) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
@@ -302,7 +305,7 @@ module.exports = {
           let sql = `
               update recruitment
               set job_fair_id = json_remove(job_fair_id,
-                  json_unquote(json_search(job_fair_id, 'one', ?)))
+                  ifnull(json_unquote(json_search(job_fair_id, 'one', ?)), '$.E'))
               where enterprise_id = ?
                 and id in (${data.list})
               `;

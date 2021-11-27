@@ -293,11 +293,16 @@ module.exports = {
         if ('fair-save-by-employer' === option) {
           let sql = `
               update recruitment
-              set job_fair_id = json_array_append(job_fair_id, '$', ?)
+              set job_fair_id = (
+                case
+                when json_search(job_fair_id, 'one', ?) is null
+                  then json_array_append(job_fair_id, '$', ?)
+                else job_fair_id
+                end)
               where enterprise_id = ?
                 and id in (${data.list})
               `;
-          cnx.execute(sql, [`${data.fair_id}`, data.employer_id], (err, result) => {
+          cnx.execute(sql, [data.fair_id, `${data.fair_id}`, data.employer_id], (err, result) => {
             if (err) reject(err);
             resolve(result);
           });

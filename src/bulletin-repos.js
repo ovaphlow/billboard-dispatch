@@ -1,5 +1,4 @@
 const dayjs = require('dayjs');
-const logger = require('./logger');
 const pool = require('./mysql');
 
 module.exports = {
@@ -486,7 +485,7 @@ module.exports = {
                 , title
                 , uuid
               from campus
-              where id in ${data.id_list}
+              where id in (${data.id_list})
               `;
           cnx.execute(sql, [], (err, result) => {
             if (err) reject(err);

@@ -3,6 +3,7 @@ const http = require('http');
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+require('dotenv').config()
 
 const logger = require('./logger');
 const pool = require('./mysql');

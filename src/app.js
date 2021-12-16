@@ -287,6 +287,12 @@ app.use(async (ctx, next) => {
   app.use(router.allowedMethods());
 })();
 
+(() => {
+  const router = require('./staff-route');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
 module.exports = app;
 
 if (require.main === module) {

@@ -434,6 +434,7 @@ module.exports = {
                 , title
                 , b.doc->>'$.content' content
                 , dday
+                , doc
               from bulletin b
                 -- left join resume r on r.education = b.doc ->> '$.education'
                 --   and r.address1 = b.doc ->> '$.address_level1'

@@ -10,6 +10,13 @@ const router = new Router({
 
 module.exports = router;
 
+router.get('/biz/complex/resume', async (ctx) => {
+  const { option } = ctx.request.query;
+  if (option === '') {
+    console.log(ids, 'ids');
+  }
+});
+
 router.get('/biz/resume/statistic', async (ctx) => {
   ctx.response.body = await repos.statistic(ctx.request.query.option || '');
 });

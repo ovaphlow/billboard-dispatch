@@ -293,6 +293,14 @@ app.use(async (ctx, next) => {
   app.use(router.allowedMethods());
 })();
 
+import('./complex-route.mjs').then((module) => {
+  const { router } = module;
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+}).catch((err) => {
+  logger.error(err);
+})
+
 module.exports = app;
 
 if (require.main === module) {

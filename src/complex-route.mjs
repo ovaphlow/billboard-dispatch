@@ -20,7 +20,7 @@ router.get('/resume', async (ctx) => {
         return {
           sendin_id: current.id,
           job_id: current.recruitment_id,
-          sendin_stauts: current.status,
+          sendin_status: current.status,
           sendin_time: current.datime,
           resume_id: r.id,
           resume_uuid: r.uuid,
@@ -32,7 +32,7 @@ router.get('/resume', async (ctx) => {
       return {
         sendin_id: current.id,
         job_id: current.recruitment_id,
-        sendin_stauts: current.status,
+        sendin_status: current.status,
         sendin_time: current.datime,
       };
     });

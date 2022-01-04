@@ -8,29 +8,7 @@ const router = new Router({
   prefix: '/api',
 });
 
-router.get('/enterprise/subject/:name', async (ctx) => {
-  try {
-    const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.subject(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
-    ctx.request.body.name = ctx.params.name;
-    ctx.response.body = await grpcFetch(ctx.request.body);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
+// wx-minip job-fair/Details.jsx
 router.get('/enterprise/job-fair/:job_fair_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -53,6 +31,10 @@ router.get('/enterprise/job-fair/:job_fair_id', async (ctx) => {
   }
 });
 
+// wx-minip recruitment/Enterprise.jsx
+// wx-minip user/Report.jsx
+// website enterprise/Revise.jsx
+// website enterprise/Update.jsx
 router.get('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -76,6 +58,8 @@ router.get('/enterprise/:id', async (ctx) => {
   }
 });
 
+// website resume/ListDetails.jsx
+// website resume/ResumeDetails.jsx
 router.get('/enterprise/check/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -99,6 +83,8 @@ router.get('/enterprise/check/:id', async (ctx) => {
   }
 });
 
+// website enterprise/Revise.jsx
+// website enterprise/Update.jsx
 router.put('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');

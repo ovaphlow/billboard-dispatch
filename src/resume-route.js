@@ -35,6 +35,7 @@ router.get('/biz/resume', async (ctx) => {
   });
 });
 
+// website resume/Retrieval.jsx
 router.put('/resume/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -62,6 +63,8 @@ router.put('/resume/filter', async (ctx) => {
   }
 });
 
+// wx-minip recruitment/Details.jsx
+// wx-minip user/Resume.jsx
 router.get('/resume/user/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -90,6 +93,10 @@ router.get('/resume/user/:candidate_id', async (ctx) => {
   }
 });
 
+// wx-minip user/Resume.jsx
+// website resume/Components.jsx
+// website resume/ListDetails.jsx
+// website resume/ResumeDetails.jsx
 router.get('/resume/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -196,6 +203,8 @@ router.get('/resume/:id', async (ctx) => {
   }
 });
 
+// wx-minip components/ToBack.jsx
+// wx-minip user/Resume.jsx
 router.put('/resume/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -348,6 +357,7 @@ router.put('/resume/:candidate_id', async (ctx) => {
  * 2021-02 变更
  * 初始化简历
  */
+// wx-minip user/Resume.jsx
 router.post('/resume/', async (ctx) => {
   try {
     const stub = require('./biz-stub');

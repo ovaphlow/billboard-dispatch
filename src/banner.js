@@ -9,6 +9,7 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip banner.jsx
 router.get('/detail/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
@@ -25,28 +26,6 @@ router.get('/detail/:id', async (ctx) => {
         });
       });
     ctx.params.uuid = ctx.query.uuid;
-    ctx.response.body = await gfetch(ctx.params);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
-router.get('/:category/', async (ctx) => {
-  try {
-    const stub = require('./bulletin-stub');
-    const gclient = new stub.Banner(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
     ctx.response.body = await gfetch(ctx.params);
   } catch (err) {
     logger.error(err);

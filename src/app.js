@@ -186,12 +186,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./journal');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./favorite');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -205,24 +199,6 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./delivery');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./miscellaneus');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./feedback');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./message');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -259,12 +235,6 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./commonData');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./notification');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

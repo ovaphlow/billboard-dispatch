@@ -9,6 +9,7 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip user/Schedule.jsx
 router.get('/user/:user_id', async (ctx) => {
   try {
     const stub = require('./commonUserSchedule-stub');
@@ -34,6 +35,7 @@ router.get('/user/:user_id', async (ctx) => {
   }
 });
 
+// wx-minip user/User.jsx
 router.get('/count/:user_id', async (ctx) => {
   try {
     const stub = require('./commonUserSchedule-stub');
@@ -59,6 +61,7 @@ router.get('/count/:user_id', async (ctx) => {
   }
 });
 
+// wx-minip user/Details.jsx
 router.get('/user/:user_id/:campus_id', async (ctx) => {
   try {
     const stub = require('./commonUserSchedule-stub');
@@ -84,6 +87,7 @@ router.get('/user/:user_id/:campus_id', async (ctx) => {
   }
 });
 
+// wx-minip user/Details.jsx
 router.post('/', async (ctx) => {
   try {
     const stub = require('./commonUserSchedule-stub');
@@ -109,6 +113,7 @@ router.post('/', async (ctx) => {
   }
 });
 
+// wx-minip user/Details.jsx
 router.delete('/:id', async (ctx) => {
   try {
     const stub = require('./commonUserSchedule-stub');

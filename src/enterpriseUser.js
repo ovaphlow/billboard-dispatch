@@ -17,6 +17,7 @@ const getSalted = (password, salt) => {
 
 module.exports = router;
 
+// website Login.jsx
 router.post('/log-in/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -51,6 +52,7 @@ router.post('/log-in/', async (ctx) => {
   }
 });
 
+// website SignIn.jsx
 // 注册：拼写错误，应为sign-up
 router.post('/sign-in', async (ctx) => {
   try {
@@ -80,6 +82,7 @@ router.post('/sign-in', async (ctx) => {
   }
 });
 
+// website enterprise/UpdatePassword.jsx
 router.put('/updatePassword/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -132,6 +135,7 @@ router.put('/updatePassword/:id', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/checkEmail/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -154,6 +158,7 @@ router.put('/checkEmail/', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/checkPhone/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -176,6 +181,7 @@ router.put('/checkPhone/', async (ctx) => {
   }
 });
 
+// website Recover.jsx
 router.put('/checkRecover/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -198,6 +204,7 @@ router.put('/checkRecover/', async (ctx) => {
   }
 });
 
+// website Recover.jsx
 router.put('/recover/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -244,6 +251,7 @@ router.put('/recover/', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');

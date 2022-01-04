@@ -1,5 +1,5 @@
 const dayjs = require('dayjs');
-const logger = require('./logger');
+
 const pool = require('./mysql');
 
 module.exports = {
@@ -9,9 +9,9 @@ module.exports = {
         if (err) reject(err);
         if ('qty-by-total-today' === option) {
           let sql = `
-              select (select count(*) from recruitment) total
-                , (select count(*) from recruitment where position(? in date) > 0) today
-              `;
+          select (select count(*) from recruitment) total
+            , (select count(*) from recruitment where position(? in date) > 0) today
+          `;
           cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
             if (err) reject(err);
             resolve(result[0] || { total: 0, today: 0 });

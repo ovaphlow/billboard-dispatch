@@ -9,6 +9,8 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip user/Resume.jsx
+// website components/InputField.jsx
 router.get('/hangye/', async (ctx) => {
   try {
     const stub = require('./commonData-stub');

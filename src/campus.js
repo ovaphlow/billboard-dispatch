@@ -9,6 +9,7 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip recruit/Details.jsx
 router.get('/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
@@ -32,6 +33,7 @@ router.get('/:id', async (ctx) => {
   }
 });
 
+// wx-minip recruit/KeywordSearch.jsx
 router.put('/', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');

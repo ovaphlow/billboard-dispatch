@@ -15,6 +15,7 @@ router.get('/biz/interview/statistic', async (ctx) => {
   });
 });
 
+// website message/Offer.jsx
 router.get('/offer/ent/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -37,6 +38,7 @@ router.get('/offer/ent/:id', async (ctx) => {
   }
 });
 
+// wx-minip user/User.jsx
 router.get('/offer/common/total/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -59,6 +61,7 @@ router.get('/offer/common/total/:id', async (ctx) => {
   }
 });
 
+// wx-minip user/Offer.jsx
 router.get('/offer/common/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
@@ -81,6 +84,8 @@ router.get('/offer/common/:id', async (ctx) => {
   }
 });
 
+// website resume/ListDetails.jsx
+// website resume/ResumeDetails.jsx
 router.post('/offer/', async (ctx) => {
   try {
     const stub = require('./biz-stub');

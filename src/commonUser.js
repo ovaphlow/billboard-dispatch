@@ -11,6 +11,7 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip user/User.jsx
 router.put('/review', async (ctx) => {
   try {
     let option = ctx.request.query.option || '';
@@ -44,6 +45,7 @@ router.put('/review', async (ctx) => {
  * 注册
  * todo: 地址修改为sign-up
  */
+// wx-minip user/SignIn.jsx
 router.post('/sign-in', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -74,42 +76,7 @@ router.post('/sign-in', async (ctx) => {
   }
 });
 
-router.post('/log-in', async (ctx) => {
-  try {
-    const stub = require('./commonUser-stub');
-    const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.logIn(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(JSON.parse(response.data));
-          }
-        });
-      });
-    const result = await grpcFetch(ctx.request.body);
-    if (result.message) {
-      ctx.response.body = result;
-    } else {
-      const hmac = crypto.createHmac('sha256', result.content.salt);
-      hmac.update(ctx.request.body.password);
-      const passwordSalted = hmac.digest('hex');
-      if (passwordSalted !== result.content.password) {
-        ctx.response.body = { message: '用户名或密码错误', content: '' };
-      } else {
-        result.content.salt = undefined;
-        result.content.password = undefined;
-        ctx.response.body = result;
-      }
-    }
-  } catch (err) {
-    logger.error(err.stack);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
+// wx-minip user/Recover.jsx
 router.put('/recover/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -140,6 +107,7 @@ router.put('/recover/', async (ctx) => {
   }
 });
 
+// wx-minip user/Settings.jsx
 router.put('/checkEmail/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -162,6 +130,7 @@ router.put('/checkEmail/', async (ctx) => {
   }
 });
 
+// wx-minip user/Recover.jsx
 router.put('/checkRecover/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -184,6 +153,8 @@ router.put('/checkRecover/', async (ctx) => {
   }
 });
 
+// wx-minip user/Phone.jsx
+// wx-minip user/Settings.jsx
 router.get('/:id', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -207,6 +178,7 @@ router.get('/:id', async (ctx) => {
   }
 });
 
+// wx-minip user/Phone.jsx
 router.put('/phone', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
@@ -229,6 +201,7 @@ router.put('/phone', async (ctx) => {
   }
 });
 
+// wx-minip user/Settings.jsx
 router.put('/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');

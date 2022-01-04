@@ -61,30 +61,6 @@ router.post('/bulletin', async (ctx) => {
   ctx.response.body = await repos.save(option, ctx.request.body);
 });
 
-router.put('/bulletin/notification/statistic', async (ctx) => {
-  try {
-    const stub = require('./bulletin-stub');
-    const gclient = new stub.Notification(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.statistic(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
-    const option = ctx.request.query.option || '';
-    const response = await gfetch({ option, data: ctx.request.body });
-    ctx.response.body = response;
-  } catch (err) {
-    logger.error(err);
-    ctx.response.status = 500;
-  }
-});
-
 router.get('/bulletin/notification', async (ctx) => {
   ctx.response.body = [];
 });

@@ -185,8 +185,8 @@ module.exports = {
           select id, uuid, name, faren
           from enterprise
           where status = '待认证'
-            and yingyezhizhao_tu is not null
-            and position(? in name) > 0
+              and yingyezhizhao_tu is not null
+              and position(? in name) > 0
           order by id desc
           `;
           cnx.execute(sql, [data.name], (err, result) => {

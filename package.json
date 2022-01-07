@@ -1,6 +1,7 @@
 {
   "name": "billboard-dispatch",
   "scripts": {
+    "dev": "node src/app.js | bunyan -o short",
     "serve": "node src/app.js | bunyan -o short",
     "format": "npx prettier --write src",
     "lint": "npx eslint src"

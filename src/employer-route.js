@@ -43,6 +43,7 @@ router.get('/biz/employer', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     list: ctx.request.query.list || '0',
     keyword: ctx.request.query.keyword || '',
+    name: ctx.request.query.name || '',
   });
 });
 

@@ -2,18 +2,31 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const pool = require('./mysql');
 
 const router = new Router();
 
 module.exports = router;
 
-const update = async () => {
-  console.log(1123);
+const update = async (option, data) => {
+  const client = pool.promise();
+  if (option === 'status') {
+    const sql = `
+    update resume set status = ? where id = ?
+    `;
+    const [result] = await client.query(sql, [data.status, data.id]);
+    return result;
+  }
+  return [];
 };
 
 router.put('/api/biz/simple/resume/:id', async (ctx) => {
-  update();
-  ctx.response.status = 200;
+  const { option } = ctx.request.query;
+  if (option === 'status') {
+    const { status } = ctx.request.body;
+    update(option, { status, id: parseInt(ctx.params.id, 10) || 0 });
+    ctx.response.status = 200;
+  }
 });
 
 router.put('/api/resume/filter', async (ctx) => {

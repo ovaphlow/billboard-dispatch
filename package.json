@@ -2,7 +2,6 @@
   "name": "billboard-dispatch",
   "scripts": {
     "serve": "node src/app.js | bunyan -o short",
-    "format": "npx prettier --write src",
     "lint": "npx eslint src"
   },
   "license": "MIT",
@@ -17,10 +16,9 @@
     "koa": "^2.13.3",
     "koa-bodyparser": "^4.2.1",
     "koa-rewrite": "^3.0.1",
-    "mysql2": "^2.3.0",
+    "mysql2": "^2.3.3",
     "node-xlsx": "^0.17.2",
-    "nodemailer": "^6.6.5",
+    "nodemailer": "^6.7.2",
     "superagent": "^6.1.0"
-  },
-  "devDependencies": {}
+  }
 }

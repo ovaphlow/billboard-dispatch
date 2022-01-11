@@ -3,13 +3,20 @@ const grpc = require('grpc');
 
 const logger = require('./logger');
 
-const router = new Router({
-  prefix: '/api/resume',
-});
+const router = new Router();
 
 module.exports = router;
 
-router.put('/filter', async (ctx) => {
+const update = async () => {
+  console.log(1123);
+};
+
+router.put('/api/biz/simple/resume/:id', async (ctx) => {
+  update();
+  ctx.response.status = 200;
+});
+
+router.put('/api/resume/filter', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -36,7 +43,7 @@ router.put('/filter', async (ctx) => {
   }
 });
 
-router.get('/user/:candidate_id', async (ctx) => {
+router.get('/api/resume/user/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -64,7 +71,7 @@ router.get('/user/:candidate_id', async (ctx) => {
   }
 });
 
-router.get('/:id', async (ctx) => {
+router.get('/api/resume/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -170,7 +177,7 @@ router.get('/:id', async (ctx) => {
   }
 });
 
-router.put('/:candidate_id', async (ctx) => {
+router.put('/api/resume/:candidate_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
@@ -322,7 +329,7 @@ router.put('/:candidate_id', async (ctx) => {
  * 2021-02 变更
  * 初始化简历
  */
-router.post('/', async (ctx) => {
+router.post('/api/resume/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());

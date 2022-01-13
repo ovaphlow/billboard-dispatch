@@ -5,13 +5,13 @@ const router = new Router({
 });
 
 router.post('/staff/sign-in', async (ctx) => {
-  let sql = `
+  const sql = `
   select id , username , detail->>'$.name' name , detail->>'$.uuid' uuid
   from ovaphlow.subscriber
   where username = ?
     and detail->>'$.password' = ?
   `;
-  let [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.query(sql, [
     ctx.request.body.username,
     ctx.request.body.password,
   ]);
@@ -19,13 +19,13 @@ router.post('/staff/sign-in', async (ctx) => {
 });
 
 router.get('/staff/:id', async (ctx) => {
-  let sql = `
+  const sql = `
   select id, username, detail->>'$.name' name, detail->>'$.uuid' uuid
   from ovaphlow.subscriber
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  let [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.query(sql, [
     parseInt(ctx.params.id, 10),
     ctx.request.query.uuid,
   ]);
@@ -33,14 +33,14 @@ router.get('/staff/:id', async (ctx) => {
 });
 
 router.put('/staff/:id', async (ctx) => {
-  let sql = `
+  const sql = `
   update ovaphlow.subscriber
   set username = ?
     , detail = json_set(detail, '$.name', ?)
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  let [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.query(sql, [
     ctx.request.body.username,
     ctx.request.body.name,
     parseInt(ctx.params.id, 10),
@@ -50,28 +50,28 @@ router.put('/staff/:id', async (ctx) => {
 });
 
 router.delete('/staff/:id', async (ctx) => {
-  let sql = `
+  const sql = `
   delete from ovaphlow.subscriber
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  let [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.query(sql, [
     parseInt(ctx.params.id, 10),
     ctx.request.query.uuid || '',
   ]);
   ctx.response.body = result;
 });
 router.get('/staff', async (ctx) => {
-  let option = ctx.request.query.option || '';
-  if ('tag' === option) {
-    let sql = `
+  const option = ctx.request.query.option || '';
+  if (option === 'tag') {
+    const sql = `
     select id , username , detail->>'$.name' name , detail->>'$.uuid' uuid
     from ovaphlow.subscriber
     where detail->>'$.tag' = ?
     order by id desc
     limit 20
     `;
-    let [result] = await ctx.db_client.query(sql, [ctx.request.query.tag]);
+    const [result] = await ctx.db_client.query(sql, [ctx.request.query.tag]);
     ctx.response.body = result;
   } else ctx.response.body = [];
 });

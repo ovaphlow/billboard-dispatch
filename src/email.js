@@ -40,17 +40,16 @@ router.put('/', async (ctx) => {
 
     const stub = require('./miscellaneus-stub');
     const grpcClient = new stub.Email(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.insert(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.insert(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch({
       ...ctx.request.body,
       code,

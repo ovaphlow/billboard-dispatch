@@ -14,17 +14,16 @@ router.get('/detail/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
     const gclient = new stub.Banner(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.detail(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      gclient.detail(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.params.uuid = ctx.query.uuid;
     ctx.response.body = await gfetch(ctx.params);
   } catch (err) {

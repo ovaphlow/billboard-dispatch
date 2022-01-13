@@ -14,20 +14,19 @@ module.exports = router;
 // wx-minip user/User.jsx
 router.put('/review', async (ctx) => {
   try {
-    let option = ctx.request.query.option || '';
+    const option = ctx.request.query.option || '';
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.review(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      gclient.review(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     await gfetch({
       id: parseInt(ctx.request.body.id),
       uuid: ctx.request.body.uuid,
@@ -50,17 +49,16 @@ router.post('/sign-in', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.signIn(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.signIn(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     const salt = crypto.randomBytes(8).toString('hex');
     const hmac = crypto.createHmac('sha256', salt);
     hmac.update(ctx.request.body.password);
@@ -81,17 +79,16 @@ router.put('/recover/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.recover(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.recover(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     const salt = crypto.randomBytes(8).toString('hex');
     const hmac = crypto.createHmac('sha256', salt);
     hmac.update(ctx.request.body.password);
@@ -112,17 +109,16 @@ router.put('/checkEmail/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.checkEmail(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.checkEmail(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err.stack);
@@ -135,17 +131,16 @@ router.put('/checkRecover/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.checkRecover(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.checkRecover(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err.stack);
@@ -159,17 +154,16 @@ router.get('/:id', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.get(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.params.uuid = ctx.query.uuid;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
@@ -183,17 +177,16 @@ router.put('/phone', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.phone(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.phone(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err.stack);
@@ -206,17 +199,16 @@ router.put('/', async (ctx) => {
   try {
     const stub = require('./commonUser-stub');
     const gclient = new stub.CommonUser(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err.stack);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      gclient.update(body, (err, response) => {
+        if (err) {
+          logger.error(err.stack);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err.stack);

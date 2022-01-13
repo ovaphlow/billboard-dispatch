@@ -26,17 +26,16 @@ router.put('/filter', async (ctx) => {
     }
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.filter(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.filter(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await gfetch({
       category,
       param: ctx.request.body,
@@ -52,17 +51,16 @@ router.get('/job-fair/:job_fair_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.jobFairList(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.jobFairList(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -75,17 +73,16 @@ router.get('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.enterpriseList(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.enterpriseList(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.params.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
@@ -99,17 +96,16 @@ router.put('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.enterpriseSearch(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.enterpriseSearch(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.request.body.enterprise_id = ctx.params.id;
     ctx.request.body.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.request.body);
@@ -124,17 +120,16 @@ router.get('/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.get(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.params.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
@@ -148,17 +143,16 @@ router.post('/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
     const grpcClient = new stub.Job(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.save(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.save(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);

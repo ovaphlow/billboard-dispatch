@@ -17,17 +17,16 @@ router.get('/user/:user_id', async (ctx) => {
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
     );
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.user(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.user(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -43,17 +42,16 @@ router.get('/count/:user_id', async (ctx) => {
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
     );
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.count(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.count(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -69,17 +67,16 @@ router.get('/user/:user_id/:campus_id', async (ctx) => {
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
     );
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.get(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -95,17 +92,16 @@ router.post('/', async (ctx) => {
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
     );
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.insert(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.insert(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);
@@ -121,17 +117,16 @@ router.delete('/:id', async (ctx) => {
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
     );
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.delete(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.delete(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.params.common_user_id = ctx.query.u;
     ctx.params.data_id = ctx.query.d;
     ctx.response.body = await grpcFetch(ctx.params);

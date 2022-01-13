@@ -57,7 +57,7 @@ router.get('/bulletin', async (ctx) => {
 });
 
 router.post('/bulletin', async (ctx) => {
-  let option = ctx.request.query.option || '';
+  const option = ctx.request.query.option || '';
   ctx.response.body = await repos.save(option, ctx.request.body);
 });
 

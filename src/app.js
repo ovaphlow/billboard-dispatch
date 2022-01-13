@@ -3,7 +3,7 @@ const http = require('http');
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
-require('dotenv').config()
+require('dotenv').config();
 
 const logger = require('./logger');
 const pool = require('./mysql');
@@ -35,7 +35,7 @@ let configuration;
     configuration = yaml.load(fs.readFileSync(conf_path, 'utf8'));
     configuration = { ...configuration, api_module: [] };
   } else {
-    logger.info(`首次运行`);
+    logger.info('首次运行');
     const template = yaml.dump(configuration_template, { sortKeys: true });
     logger.info('读取配置文件模板');
     logger.info(template);
@@ -138,7 +138,7 @@ app.use(async (ctx, next) => {
 });
 
 (() => {
-  let router = require('./bulletin-route');
+  const router = require('./bulletin-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -269,7 +269,7 @@ import('./complex-route.mjs').then((module) => {
   app.use(router.allowedMethods());
 }).catch((err) => {
   logger.error(err);
-})
+});
 
 module.exports = app;
 

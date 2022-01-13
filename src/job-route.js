@@ -26,8 +26,8 @@ router.put('/biz/job/:id', async (ctx) => {
     ...ctx.request.body,
     id: parseInt(ctx.params.id || 0, 10),
     uuid: ctx.request.query.uuid || '',
-  })
-})
+  });
+});
 
 router.get('/biz/job', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {

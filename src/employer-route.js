@@ -10,10 +10,10 @@ const router = new Router({
 });
 
 router.post('/biz/employer/sign-in', async (ctx) => {
-  let r = await repos.signIn(ctx.request.body);
-  let hmac = crypto.createHmac('sha256', r.salt);
+  const r = await repos.signIn(ctx.request.body);
+  const hmac = crypto.createHmac('sha256', r.salt);
   hmac.update(ctx.request.body.password);
-  let passwordSalted = hmac.digest('hex');
+  const passwordSalted = hmac.digest('hex');
   if (passwordSalted !== r.password) ctx.response.status = 401;
   ctx.response.body = {
     id: r.id,

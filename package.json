@@ -3,14 +3,12 @@
   "scripts": {
     "dev": "node src/app.js | bunyan -o short",
     "serve": "node src/app.js | bunyan -o short",
-    "format": "npx prettier --write src",
-    "lint": "npx eslint src"
+    "lint": "npx eslint --fix src .eslintrc.js"
   },
   "license": "MIT",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.6",
     "@koa/router": "^10.1.1",
-    "@prisma/client": "^3.7.0",
     "bunyan": "^1.8.15",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
@@ -26,6 +24,8 @@
     "superagent": "^6.1.0"
   },
   "devDependencies": {
-    "prisma": "^3.7.0"
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
   }
 }

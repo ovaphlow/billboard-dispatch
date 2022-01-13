@@ -16,8 +16,8 @@ router.get('/biz/candidate/statistic', async (ctx) => {
 });
 
 router.post('/biz/candidate/sign-in', async (ctx) => {
-  let auth = await repos.signIn(ctx.request.body);
-  if (1 !== auth.length) {
+  const auth = await repos.signIn(ctx.request.body);
+  if (auth.length !== 1) {
     ctx.response.status = 401;
     return;
   }
@@ -34,7 +34,7 @@ router.post('/biz/candidate/sign-in', async (ctx) => {
 });
 
 router.get('/biz/candidate/:id', async (ctx) => {
-  let option = ctx.request.query.option || '';
+  const option = ctx.request.query.option || '';
   ctx.response.body = await repos.get(option, {
     id: parseInt(ctx.params.id, 10),
     uuid: ctx.request.query.uuid || '',
@@ -42,9 +42,9 @@ router.get('/biz/candidate/:id', async (ctx) => {
 });
 
 router.put('/biz/candidate/:id', async (ctx) => {
-  let option = ctx.request.query.option || '';
-  if ('password' === option) {
-    let r = await repos.get('password', {
+  const option = ctx.request.query.option || '';
+  if (option === 'password') {
+    const r = await repos.get('password', {
       id: parseInt(ctx.params.id, 10),
       uuid: ctx.request.body.uuid,
     });

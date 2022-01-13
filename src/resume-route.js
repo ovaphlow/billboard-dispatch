@@ -13,7 +13,18 @@ module.exports = router;
 router.get('/biz/complex/resume', async (ctx) => {
   const { option } = ctx.request.query;
   if (option === '') {
-    console.log(ids, 'ids');
+    //
+  }
+});
+
+// curl -X PUT -d 'status=保密' localhost:8081/api/biz/simple/resume/49?option=status
+router.put('/biz/simple/resume/:id', async (ctx) => {
+  const { option } = ctx.request.query;
+  if (option === 'status') {
+    const { id } = ctx.params;
+    const { status } = ctx.request.body;
+    await repos.update(option, { status, id: parseInt(id, 10) || 0 });
+    ctx.response.status = 200;
   }
 });
 
@@ -38,21 +49,21 @@ router.get('/biz/resume', async (ctx) => {
 // website resume/Retrieval.jsx
 router.put('/resume/filter', async (ctx) => {
   try {
+    // eslint-disable-next-line
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const { filter } = ctx.request.query;
     if (filter === 'employer-filter') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.filter(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response.data);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.filter(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
         });
+      });
       ctx.response.body = await gfetch({ filter, param: ctx.request.body });
     } else {
       ctx.response.body = '[]';
@@ -67,19 +78,19 @@ router.put('/resume/filter', async (ctx) => {
 // wx-minip user/Resume.jsx
 router.get('/resume/user/:candidate_id', async (ctx) => {
   try {
+    // eslint-disable-next-line
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      gclient.get(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await gfetch({
       option: 'by-user',
       param: {
@@ -99,21 +110,22 @@ router.get('/resume/user/:candidate_id', async (ctx) => {
 // website resume/ResumeDetails.jsx
 router.get('/resume/:id', async (ctx) => {
   try {
+    // eslint-disable-next-line
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.get(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      gclient.get(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     const option = ctx.request.query.option || '';
     if (option === 'export') {
+      // eslint-disable-next-line
       const xlsx = require('node-xlsx').default;
 
       const resume = JSON.parse(
@@ -126,7 +138,7 @@ router.get('/resume/:id', async (ctx) => {
           },
         }),
       );
-      let data = [];
+      const data = [];
       data.push(
         ['姓名', resume.name],
         ['性别', resume.gender, null, null, null, '出生日期', resume.birthday],
@@ -181,7 +193,7 @@ router.get('/resume/:id', async (ctx) => {
         range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
       });
 
-      const buffer = xlsx.build([{ name: '简历', data: data }], { '!merges': range });
+      const buffer = xlsx.build([{ name: '简历', data }], { '!merges': range });
       ctx.response.set(
         'content-disposition',
         `attachment; filename=${resume.uuid || resume.id}.xlsx`,
@@ -207,21 +219,21 @@ router.get('/resume/:id', async (ctx) => {
 // wx-minip user/Resume.jsx
 router.put('/resume/:candidate_id', async (ctx) => {
   try {
+    // eslint-disable-next-line
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
     const option = ctx.request.query.option || '';
     if (option === '') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -232,31 +244,29 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'refresh') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({ option, param: { candidate_id: ctx.params.candidate_id } });
       ctx.response.status = 200;
     } else if (option === 'status') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -267,17 +277,16 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'save-career') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -287,17 +296,16 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'update-career') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -307,17 +315,16 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'save-record') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -327,17 +334,16 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'update-record') {
-      const gfetch = (body) =>
-        new Promise((resolve, reject) => {
-          gclient.update(body, (err, response) => {
-            if (err) {
-              logger.error(err);
-              reject(err);
-            } else {
-              resolve(response);
-            }
-          });
+      const gfetch = (body) => new Promise((resolve, reject) => {
+        gclient.update(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response);
+          }
         });
+      });
       await gfetch({
         option,
         param: {
@@ -360,19 +366,19 @@ router.put('/resume/:candidate_id', async (ctx) => {
 // wx-minip user/Resume.jsx
 router.post('/resume/', async (ctx) => {
   try {
+    // eslint-disable-next-line
     const stub = require('./biz-stub');
     const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) =>
-      new Promise((resolve, reject) => {
-        gclient.init(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const gfetch = (body) => new Promise((resolve, reject) => {
+      gclient.init(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     await gfetch(ctx.request.body);
     ctx.response.status = 200;
   } catch (err) {

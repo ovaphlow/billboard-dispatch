@@ -3,30 +3,27 @@ const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
-  statistic: (option, data) => {
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, cnx) => {
-        if (err) reject(err);
-        if ('qty-by-total-today' === option) {
-          let sql = `
+  statistic: (option, data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      if (option === 'qty-by-total-today') {
+        const sql = `
           select (select count(*) from recruitment) total
             , (select count(*) from recruitment where position(? in date) > 0) today
           `;
-          cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
-            if (err) reject(err);
-            resolve(result[0] || { total: 0, today: 0 });
-          });
-        }
-        pool.releaseConnection(cnx);
-      });
+        cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
+          if (err) reject(err);
+          resolve(result[0] || { total: 0, today: 0 });
+        });
+      }
+      pool.releaseConnection(cnx);
     });
-  },
+  }),
 
-  get: (data) => {
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, cnx) => {
-        if (err) reject(err);
-        let sql = `
+  get: (data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      const sql = `
               select id
                 , uuid
                 , name
@@ -50,21 +47,19 @@ module.exports = {
               where id = ?
                 and uuid = ?
               `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result[0] || {});
-        });
-        pool.releaseConnection(cnx);
-      });
-    });
-  },
-
-  update: (option, data) => {
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, cnx) => {
+      cnx.execute(sql, [data.id, data.uuid], (err, result) => {
         if (err) reject(err);
-        if ('' === option) {
-          let sql = `
+        resolve(result[0] || {});
+      });
+      pool.releaseConnection(cnx);
+    });
+  }),
+
+  update: (option, data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      if (option === '') {
+        const sql = `
               update recruitment
               set name = ?,
                 qty = ?,
@@ -82,61 +77,59 @@ module.exports = {
               where id = ?
                 and uuid = ?
               `;
-          cnx.execute(
-            sql,
-            [
-              data.name,
-              data.qty,
-              data.description,
-              data.requirement,
-              data.address1,
-              data.address2,
-              data.address3,
-              data.salary1,
-              data.salary2,
-              data.education,
-              data.category,
-              data.industry,
-              data.position,
-              data.id,
-              data.uuid,
-            ],
-            (err, result) => {
-              if (err) reject(err);
-              resolve(result);
-            },
-          );
-        } else if ('by-status' === option) {
-          let sql = `
+        cnx.execute(
+          sql,
+          [
+            data.name,
+            data.qty,
+            data.description,
+            data.requirement,
+            data.address1,
+            data.address2,
+            data.address3,
+            data.salary1,
+            data.salary2,
+            data.education,
+            data.category,
+            data.industry,
+            data.position,
+            data.id,
+            data.uuid,
+          ],
+          (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          },
+        );
+      } else if (option === 'by-status') {
+        const sql = `
               update recruitment
               set status = ?
               where id = ?
                 and uuid = ?
               `;
-          cnx.execute(sql, [data.status, data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('refresh' === option) {
-          let sql = `
+        cnx.execute(sql, [data.status, data.id, data.uuid], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'refresh') {
+        const sql = `
             update recruitment set date_refresh = now() where id = ?
             `;
-          cnx.execute(sql, [data.id], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        }
-        pool.releaseConnection(cnx);
-      });
+        cnx.execute(sql, [data.id], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      }
+      pool.releaseConnection(cnx);
     });
-  },
+  }),
 
-  filter: (option, data) => {
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, cnx) => {
-        if (err) reject(err);
-        if ('by-id' === option) {
-          let sql = `
+  filter: (option, data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      if (option === 'by-id') {
+        const sql = `
               select address1
                 , address2
                 , address3
@@ -161,12 +154,12 @@ module.exports = {
               from recruitment
               where id in (${data.list})
               `;
-          cnx.execute(sql, [], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('list-by-employer-id' === option) {
-          let sql = `
+        cnx.execute(sql, [], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'list-by-employer-id') {
+        const sql = `
               select address1
                 , address2
                 , address3
@@ -191,12 +184,12 @@ module.exports = {
                 and enterprise_uuid = ?
                 and position(? in status) > 0
               `;
-          cnx.execute(sql, [data.id, data.uuid, data.status], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('by-fair-id' === option) {
-          let sql = `
+        cnx.execute(sql, [data.id, data.uuid, data.status], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'by-fair-id') {
+        const sql = `
               select address1
                 , address2
                 , address3
@@ -222,12 +215,12 @@ module.exports = {
               where json_search(job_fair_id, "one", ?)
               order by id desc
               `;
-          cnx.execute(sql, [data.id], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('by-ref_id-fair' === option) {
-          let sql = `
+        cnx.execute(sql, [data.id], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'by-ref_id-fair') {
+        const sql = `
               select id
                 , job_fair_id
                 , json_overlaps(job_fair_id, '[${data.list}]') qty
@@ -235,13 +228,13 @@ module.exports = {
               where enterprise_id = ?
                 and enterprise_uuid = ?
               `;
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('by-category-address_level2-industry-name' === option) {
-          console.log(data.category, data.address_level2);
-          let sql = `
+        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'by-category-address_level2-industry-name') {
+        console.log(data.category, data.address_level2);
+        const sql = `
               select address1
                 , address2
                 , address3
@@ -273,25 +266,23 @@ module.exports = {
               order by date_refresh desc, id desc
               limit ${data.page > 1 ? (data.page - 1) * 100 : 0}, 100
               `;
-          cnx.execute(sql, [data.category, data.address_level2, data.industry, data.name, data.name], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        }
-        pool.releaseConnection(cnx);
-      });
+        cnx.execute(sql, [data.category, data.address_level2, data.industry, data.name, data.name], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      }
+      pool.releaseConnection(cnx);
     });
-  },
+  }),
 
   /**
    * 参加/退出 线上招聘会
    */
-  batchUpdate: (option, data) => {
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, cnx) => {
-        if (err) reject(err);
-        if ('fair-save-by-employer' === option) {
-          let sql = `
+  batchUpdate: (option, data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      if (option === 'fair-save-by-employer') {
+        const sql = `
               update recruitment
               set job_fair_id = (
                 case
@@ -302,25 +293,24 @@ module.exports = {
               where enterprise_id = ?
                 and id in (${data.list})
               `;
-          cnx.execute(sql, [data.fair_id, `${data.fair_id}`, data.employer_id], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        } else if ('fair-remove-by-employer' === option) {
-          let sql = `
+        cnx.execute(sql, [data.fair_id, `${data.fair_id}`, data.employer_id], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      } else if (option === 'fair-remove-by-employer') {
+        const sql = `
               update recruitment
               set job_fair_id = json_remove(job_fair_id,
                   ifnull(json_unquote(json_search(job_fair_id, 'one', ?)), '$.E'))
               where enterprise_id = ?
                 and id in (${data.list})
               `;
-          cnx.execute(sql, [`${data.fair_id}`, data.employer_id], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        }
-        pool.releaseConnection(cnx);
-      });
+        cnx.execute(sql, [`${data.fair_id}`, data.employer_id], (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        });
+      }
+      pool.releaseConnection(cnx);
     });
-  },
+  }),
 };

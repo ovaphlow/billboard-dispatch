@@ -17,17 +17,16 @@ router.put('/search/one/', async (ctx) => {
   try {
     const stub = require('./miscellaneus-stub');
     const grpcClient = new stub.Favorite(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.searchOne(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
+    const grpcFetch = (body) => new Promise((resolve, reject) => {
+      grpcClient.searchOne(body, (err, response) => {
+        if (err) {
+          logger.error(err);
+          reject(err);
+        } else {
+          resolve(response.data);
+        }
       });
+    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);

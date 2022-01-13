@@ -19,20 +19,21 @@ router.get('/biz/complex/resume', async (ctx) => {
 
 // curl -X PUT -d 'status=保密' localhost:8081/api/biz/simple/resume/49?option=status
 router.put('/biz/simple/resume/:id', async (ctx) => {
+  const { id } = ctx.params;
   const { option } = ctx.request.query;
   if (option === 'status') {
-    const { id } = ctx.params;
     const { status } = ctx.request.body;
     await repos.update(option, { status, id: parseInt(id, 10) || 0 });
     ctx.response.status = 200;
   }
   if (option === 'certificate') {
-    const { id } = ctx.params;
     const { certificate } = ctx.request.body;
-    await repos.update(option, {
-      certificate,
-      id: parseInt(id, 10) || 0,
-    });
+    await repos.update(option, { certificate, id: parseInt(id, 10) || 0 });
+    ctx.response.status = 200;
+  }
+  if (option === 'skill') {
+    const { skill } = ctx.request.body;
+    await repos.update(option, { skill, id: parseInt(id, 10) || 0 });
     ctx.response.status = 200;
   }
 });

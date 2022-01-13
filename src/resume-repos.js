@@ -99,6 +99,13 @@ module.exports = {
           resolve(result);
         });
       }
+      if (option === 'skill') {
+        const sql = 'update billboard.resume set skill = ? where id = ?';
+        cnx.execute(sql, [data.skill, data.id], (errExecute, result) => {
+          if (errExecute) reject(errExecute);
+          resolve(result);
+        });
+      }
       pool.releaseConnection(cnx);
     });
   }),

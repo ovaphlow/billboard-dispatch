@@ -11,7 +11,7 @@ router.post('/staff/sign-in', async (ctx) => {
   where username = ?
     and detail->>'$.password' = ?
   `;
-  const [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.execute(sql, [
     ctx.request.body.username,
     ctx.request.body.password,
   ]);
@@ -25,9 +25,9 @@ router.get('/staff/:id', async (ctx) => {
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  const [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.execute(sql, [
     parseInt(ctx.params.id, 10),
-    ctx.request.query.uuid,
+    ctx.request.execute.uuid,
   ]);
   ctx.response.body = result.length === 1 ? result[0] : {};
 });
@@ -40,11 +40,11 @@ router.put('/staff/:id', async (ctx) => {
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  const [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.execute(sql, [
     ctx.request.body.username,
     ctx.request.body.name,
     parseInt(ctx.params.id, 10),
-    ctx.request.query.uuid,
+    ctx.request.execute.uuid,
   ]);
   ctx.response.body = result;
 });
@@ -55,14 +55,14 @@ router.delete('/staff/:id', async (ctx) => {
   where id = ?
     and detail->>'$.uuid' = ?
   `;
-  const [result] = await ctx.db_client.query(sql, [
+  const [result] = await ctx.db_client.execute(sql, [
     parseInt(ctx.params.id, 10),
-    ctx.request.query.uuid || '',
+    ctx.request.execute.uuid || '',
   ]);
   ctx.response.body = result;
 });
 router.get('/staff', async (ctx) => {
-  const option = ctx.request.query.option || '';
+  const option = ctx.request.execute.option || '';
   if (option === 'tag') {
     const sql = `
     select id , username , detail->>'$.name' name , detail->>'$.uuid' uuid
@@ -71,7 +71,7 @@ router.get('/staff', async (ctx) => {
     order by id desc
     limit 20
     `;
-    const [result] = await ctx.db_client.query(sql, [ctx.request.query.tag]);
+    const [result] = await ctx.db_client.execute(sql, [ctx.request.execute.tag]);
     ctx.response.body = result;
   } else ctx.response.body = [];
 });
@@ -82,7 +82,7 @@ router.post('/staff', async (ctx) => {
   from ovaphlow.subscriber
   where username = ?
   `;
-  let [result] = await ctx.db_client.query(sql, [ctx.request.body.username]);
+  let [result] = await ctx.db_client.execute(sql, [ctx.request.body.username]);
   if (result[0].qty !== 0) {
     ctx.response.status = 401;
     return;
@@ -91,7 +91,7 @@ router.post('/staff', async (ctx) => {
   insert into ovaphlow.subscriber (username, detail)
     values(?, ?)
   `;
-  [result] = await ctx.db_client.query(sql, [
+  [result] = await ctx.db_client.execute(sql, [
     ctx.request.body.username,
     JSON.stringify({
       uuid: uuidv5(ctx.request.body.username, Buffer.from(configuration.SECRET)),

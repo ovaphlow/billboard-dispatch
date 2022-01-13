@@ -36,6 +36,11 @@ router.put('/biz/simple/resume/:id', async (ctx) => {
     await repos.update(option, { skill, id: parseInt(id, 10) || 0 });
     ctx.response.status = 200;
   }
+  if (option === 'career') {
+    const { career } = ctx.request.body;
+    await repos.update(option, { career, id: parseInt(id, 10) || 0 });
+    ctx.response.status = 200;
+  }
 });
 
 router.get('/biz/resume/statistic', async (ctx) => {

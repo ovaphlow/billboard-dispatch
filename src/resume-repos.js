@@ -27,38 +27,7 @@ module.exports = {
     pool.getConnection((err, cnx) => {
       if (err) reject(err);
       if (option === '') {
-        const sql = `
-            select address1
-              , address2
-              , address3
-              , address4
-              , birthday
-              , career
-              , common_user_id
-              , date_begin
-              , date_create
-              , date_end
-              , date_update
-              , education
-              , email
-              , gender
-              , id
-              , major
-              , name
-              , phone
-              , qiwanghangye
-              , qiwangzhiwei
-              , record
-              , school
-              , status
-              , uuid
-              , yixiangchengshi
-              , ziwopingjia
-            from resume
-            where id = ?
-              and uuid = ?
-            limit 1
-            `;
+        const sql = 'select * from resume where id = ?  and uuid = ?';
         cnx.execute(sql, [data.id, data.uuid], (err1, result) => {
           if (err1) reject(err1);
           resolve(result.length === 1 ? result[0] : {});
@@ -102,6 +71,13 @@ module.exports = {
       if (option === 'skill') {
         const sql = 'update billboard.resume set skill = ? where id = ?';
         cnx.execute(sql, [data.skill, data.id], (errExecute, result) => {
+          if (errExecute) reject(errExecute);
+          resolve(result);
+        });
+      }
+      if (option === 'career') {
+        const sql = 'update resume set career = ? where id = ?';
+        cnx.execute(sql, [data.career, data.id], (errExecute, result) => {
           if (errExecute) reject(errExecute);
           resolve(result);
         });

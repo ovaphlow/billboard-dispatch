@@ -26,6 +26,15 @@ router.put('/biz/simple/resume/:id', async (ctx) => {
     await repos.update(option, { status, id: parseInt(id, 10) || 0 });
     ctx.response.status = 200;
   }
+  if (option === 'certificate') {
+    const { id } = ctx.params;
+    const { certificate } = ctx.request.body;
+    await repos.update(option, {
+      certificate,
+      id: parseInt(id, 10) || 0,
+    });
+    ctx.response.status = 200;
+  }
 });
 
 router.get('/biz/resume/statistic', async (ctx) => {

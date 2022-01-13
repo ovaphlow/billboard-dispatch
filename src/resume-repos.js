@@ -92,6 +92,13 @@ module.exports = {
           resolve(result);
         });
       }
+      if (option === 'certificate') {
+        const sql = 'update billboard.resume set certificate = ? where id = ?';
+        cnx.execute(sql, [data.certificate, data.id], (errExecute, result) => {
+          if (errExecute) reject(errExecute);
+          resolve(result);
+        });
+      }
       pool.releaseConnection(cnx);
     });
   }),

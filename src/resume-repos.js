@@ -53,23 +53,21 @@ module.exports = {
     pool.getConnection((err, cnx) => {
       if (err) reject(err);
       if (option === 'status') {
-        const sql = `
-          update billboard.resume set status = ? where id = ?
-          `;
+        const sql = 'update resume set status = ? where id = ?';
         cnx.execute(sql, [data.status, data.id], (err1, result) => {
           if (err1) reject(err1);
           resolve(result);
         });
       }
       if (option === 'certificate') {
-        const sql = 'update billboard.resume set certificate = ? where id = ?';
+        const sql = 'update resume set certificate = ? where id = ?';
         cnx.execute(sql, [data.certificate, data.id], (errExecute, result) => {
           if (errExecute) reject(errExecute);
           resolve(result);
         });
       }
       if (option === 'skill') {
-        const sql = 'update billboard.resume set skill = ? where id = ?';
+        const sql = 'update resume set skill = ? where id = ?';
         cnx.execute(sql, [data.skill, data.id], (errExecute, result) => {
           if (errExecute) reject(errExecute);
           resolve(result);
@@ -78,6 +76,13 @@ module.exports = {
       if (option === 'career') {
         const sql = 'update resume set career = ? where id = ?';
         cnx.execute(sql, [data.career, data.id], (errExecute, result) => {
+          if (errExecute) reject(errExecute);
+          resolve(result);
+        });
+      }
+      if (option === 'record') {
+        const sql = 'update resume set record = ? where id = ?';
+        cnx.execute(sql, [data.record, data.id], (errExecute, result) => {
           if (errExecute) reject(errExecute);
           resolve(result);
         });

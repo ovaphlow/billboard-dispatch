@@ -54,7 +54,6 @@ router.get('/biz/simple/resume', async (ctx) => {
     const {
       education, addressLevel2, qiwanghangye, qiwangzhiwei, page,
     } = ctx.request.query;
-    console.log(education, addressLevel2, qiwanghangye, qiwangzhiwei);
     const result = await repos.filter(option, {
       education, addressLevel2, qiwanghangye, qiwangzhiwei, page: parseInt(page, 10) || 0,
     });

@@ -48,6 +48,20 @@ router.put('/biz/simple/resume/:id', async (ctx) => {
   }
 });
 
+router.get('/biz/simple/resume', async (ctx) => {
+  const { option } = ctx.request.query;
+  if (option === 'by-education-addressLevel2-qiwanghangye-qiwangzhiwei') {
+    const {
+      education, addressLevel2, qiwanghangye, qiwangzhiwei, page,
+    } = ctx.request.query;
+    console.log(education, addressLevel2, qiwanghangye, qiwangzhiwei);
+    const result = await repos.filter(option, {
+      education, addressLevel2, qiwanghangye, qiwangzhiwei, page: parseInt(page, 10) || 0,
+    });
+    ctx.response.body = result;
+  }
+});
+
 router.get('/biz/resume/statistic', async (ctx) => {
   ctx.response.body = await repos.statistic(ctx.request.query.option || '');
 });

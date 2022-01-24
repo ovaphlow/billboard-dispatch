@@ -17,7 +17,6 @@ router.get('/biz/complex/resume', async (ctx) => {
   }
 });
 
-// curl -X PUT -d 'status=保密' localhost:8081/api/biz/simple/resume/49?option=status
 router.put('/biz/simple/resume/:id', async (ctx) => {
   const { id } = ctx.params;
   const { option } = ctx.request.query;

@@ -43,8 +43,8 @@ module.exports = {
           if (err) reject(err);
           resolve(result[0]);
         });
-        pool.releaseConnection(cnx);
       }
+      pool.releaseConnection(cnx);
     });
   }),
 

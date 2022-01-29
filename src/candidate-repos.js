@@ -33,6 +33,7 @@ module.exports = {
         if (err) reject(err);
         resolve(result);
       });
+      pool.releaseConnection(cnx);
     });
   }),
 

@@ -253,16 +253,18 @@ module.exports = {
           },
         );
       } else if (option === 'fair') {
-        const sql = `
-              update job_fair
-              set title = ?
-                , content = ?
-                , datime = ?
-                , status = ?
-              where id = ?
-              `;
-        cnx.execute(sql, [data.title, data.content, data.title, data.status, data.id], (err, result) => {
-          if (err) reject(err);
+        cnx.execute(`
+        update job_fair
+        set title = ?, content = ?, datime = ?, status = ?
+        where id = ?
+        `, [
+          data.title,
+          data.content,
+          data.datime,
+          data.status,
+          data.id,
+        ], (errResult, result) => {
+          if (errResult) reject(errResult);
           resolve(result);
         });
       } else if (option === 'notification') {

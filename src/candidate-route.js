@@ -55,8 +55,8 @@ router.put('/biz/candidate/:id', async (ctx) => {
     let hmac = crypto.createHmac('sha256', r.salt);
     hmac.update(ctx.request.body.current_password);
     let passwordSalted = hmac.digest('hex');
-    console.log('salted', passwordSalted);
-    console.log('password', r.password);
+    // console.log('salted', passwordSalted);
+    // console.log('password', r.password);
     if (passwordSalted !== r.password) {
       ctx.response.status = 401;
       return;
@@ -64,7 +64,7 @@ router.put('/biz/candidate/:id', async (ctx) => {
     hmac = crypto.createHmac('sha256', r.salt);
     hmac.update(ctx.request.body.password);
     passwordSalted = hmac.digest('hex');
-    console.log('new salted', passwordSalted);
+    // console.log('new salted', passwordSalted);
     ctx.response.body = await repos.update('password', {
       id: parseInt(ctx.params.id, 10),
       uuid: ctx.request.body.uuid,

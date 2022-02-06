@@ -233,7 +233,6 @@ module.exports = {
           resolve(result);
         });
       } else if (option === 'by-category-address_level2-industry-name') {
-        console.log(data.category, data.address_level2);
         const sql = `
               select address1
                 , address2

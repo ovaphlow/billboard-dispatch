@@ -39,6 +39,13 @@ router.get('/biz/employer/:id', async (ctx) => {
   });
 });
 
+router.put('/biz/employer/:id', async (ctx) => {
+  const { id } = ctx.params;
+  const { option, uuid } = ctx.request.query;
+  await repos.update(option, { ...ctx.request.body, id: parseInt(id, 10), uuid: uuid || '' });
+  ctx.response.status = 200;
+});
+
 router.get('/biz/employer', async (ctx) => {
   ctx.response.body = await repos.filter(ctx.request.query.option || '', {
     list: ctx.request.query.list || '0',

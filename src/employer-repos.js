@@ -119,6 +119,23 @@ module.exports = {
     });
   }),
 
+  update: (option, data) => new Promise((resolve, reject) => {
+    pool.getConnection((err, cnx) => {
+      if (err) reject(err);
+      if (option === 'certificate') {
+        cnx.execute(`
+        update enterprise
+        set status = '认证', yingyezhizhao_tu = null
+        where id = ? and uuid = ?
+        `, [data.id, data.uuid], (errResult, result) => {
+          if (errResult) reject(errResult);
+          resolve(result);
+        });
+      }
+      pool.releaseConnection(cnx);
+    });
+  }),
+
   filter: (option, data) => new Promise((resolve, reject) => {
     pool.getConnection((err, cnx) => {
       if (err) reject(err);

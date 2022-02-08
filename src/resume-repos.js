@@ -169,11 +169,11 @@ module.exports = {
         select *
         from resume
         where education = ?
-           and status != '保密'
-           and status != '在职，暂不找工作'
-           and position(? in address2) > 0
-           and position(? in qiwanghangye) > 0
-           and position(? in qiwangzhiwei) > 0
+            and status != '保密'
+            and status != '在职，暂不找工作'
+            and position(? in address2) > 0
+            and position(? in qiwanghangye) > 0
+            and position(? in qiwangzhiwei) > 0
         order by date_update desc
         limit ${skip}, 20
         `, [

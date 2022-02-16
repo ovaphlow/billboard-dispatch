@@ -4,7 +4,7 @@
     "dev": "node src/app.js | bunyan -o short",
     "serve": "node src/app.js | bunyan -o short",
     "format": "prettier --write src *.js",
-    "lint": "npx eslint --fix src .eslintrc.js"
+    "lint": "npx eslint --fix src *.js"
   },
   "license": "MIT",
   "dependencies": {

@@ -50,11 +50,15 @@ router.put('/biz/simple/resume/:id', async (ctx) => {
 router.get('/biz/simple/resume', async (ctx) => {
   const { option } = ctx.request.query;
   if (option === 'by-education-addressLevel2-qiwanghangye-qiwangzhiwei') {
-    const {
-      education, addressLevel2, qiwanghangye, qiwangzhiwei, page,
-    } = ctx.request.query;
+    // eslint-disable-next-line
+    const { education, addressLevel2, qiwanghangye, qiwangzhiwei, page } =
+      ctx.request.query;
     const result = await repos.filter(option, {
-      education, addressLevel2, qiwanghangye, qiwangzhiwei, page: parseInt(page, 10) || 0,
+      education,
+      addressLevel2,
+      qiwanghangye,
+      qiwangzhiwei,
+      page: parseInt(page, 10) || 0,
     });
     ctx.response.body = result;
   }
@@ -83,19 +87,23 @@ router.put('/resume/filter', async (ctx) => {
   try {
     // eslint-disable-next-line
     const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Resume2102(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const { filter } = ctx.request.query;
     if (filter === 'employer-filter') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.filter(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.filter(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response.data);
+            }
+          });
         });
-      });
       ctx.response.body = await gfetch({ filter, param: ctx.request.body });
     } else {
       ctx.response.body = '[]';
@@ -112,17 +120,21 @@ router.get('/resume/user/:candidate_id', async (ctx) => {
   try {
     // eslint-disable-next-line
     const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) => new Promise((resolve, reject) => {
-      gclient.get(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const gclient = new stub.Resume2102(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.get(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await gfetch({
       option: 'by-user',
       param: {
@@ -144,17 +156,21 @@ router.get('/resume/:id', async (ctx) => {
   try {
     // eslint-disable-next-line
     const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) => new Promise((resolve, reject) => {
-      gclient.get(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const gclient = new stub.Resume2102(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.get(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     const option = ctx.request.query.option || '';
     if (option === 'export') {
       // eslint-disable-next-line
@@ -177,8 +193,19 @@ router.get('/resume/:id', async (ctx) => {
         ['邮箱', resume.email, null, null, null, '电话号码', resume.phone],
         ['毕业院校', resume.school],
         ['专业', resume.major, null, null, null, '学历', resume.education],
-        ['家庭住址', `${resume.address1} ${resume.address2} ${resume.address3}`],
-        ['期望行业', resume.qiwanghangye, null, null, null, '期望职位', resume.qiwangzhiwei],
+        [
+          '家庭住址',
+          `${resume.address1} ${resume.address2} ${resume.address3}`,
+        ],
+        [
+          '期望行业',
+          resume.qiwanghangye,
+          null,
+          null,
+          null,
+          '期望职位',
+          resume.qiwangzhiwei,
+        ],
         ['意向城市', resume.yixiangchengshi],
         [null],
       );
@@ -198,31 +225,77 @@ router.get('/resume/:id', async (ctx) => {
       ];
 
       data.push(['工作经历']);
-      range.push({ s: { c: 0, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
+      });
       JSON.parse(resume.career).forEach((element) => {
         const e = JSON.parse(element);
         data.push(['公司名称', e.employer]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
-        data.push(['职位', e.title, null, null, null, '起止时间', `${e.date_begin} ${e.date_end}`]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 } });
-        range.push({ s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
+        data.push([
+          '职位',
+          e.title,
+          null,
+          null,
+          null,
+          '起止时间',
+          `${e.date_begin} ${e.date_end}`,
+        ]);
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 4, r: data.length - 1 },
+        });
+        range.push({
+          s: { c: 6, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
         data.push(['工作描述', e.description]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
       });
 
       data.push([null]);
 
       data.push(['项目经验']);
-      range.push({ s: { c: 0, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
+      });
       JSON.parse(resume.record).forEach((element) => {
         const e = JSON.parse(element);
         data.push(['项目名称', e.name]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
-        data.push(['职位', e.title, null, null, null, '起止时间', `${e.date_begin} ${e.date_end}`]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 } });
-        range.push({ s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
+        data.push([
+          '职位',
+          e.title,
+          null,
+          null,
+          null,
+          '起止时间',
+          `${e.date_begin} ${e.date_end}`,
+        ]);
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 4, r: data.length - 1 },
+        });
+        range.push({
+          s: { c: 6, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
         data.push(['项目描述', e.description]);
-        range.push({ s: { c: 1, r: data.length - 1 }, e: { c: 8, r: data.length - 1 } });
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
       });
 
       const buffer = xlsx.build([{ name: '简历', data }], { '!merges': range });
@@ -253,19 +326,23 @@ router.put('/resume/:candidate_id', async (ctx) => {
   try {
     // eslint-disable-next-line
     const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Resume2102(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const option = ctx.request.query.option || '';
     if (option === '') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -276,29 +353,34 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'refresh') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
+      await gfetch({
+        option,
+        param: { candidate_id: ctx.params.candidate_id },
       });
-      await gfetch({ option, param: { candidate_id: ctx.params.candidate_id } });
       ctx.response.status = 200;
     } else if (option === 'status') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -309,16 +391,17 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'save-career') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -328,16 +411,17 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'update-career') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -347,16 +431,17 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'save-record') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -366,16 +451,17 @@ router.put('/resume/:candidate_id', async (ctx) => {
       });
       ctx.response.status = 200;
     } else if (option === 'update-record') {
-      const gfetch = (body) => new Promise((resolve, reject) => {
-        gclient.update(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response);
-          }
+      const gfetch = (body) =>
+        new Promise((resolve, reject) => {
+          gclient.update(body, (err, response) => {
+            if (err) {
+              logger.error(err);
+              reject(err);
+            } else {
+              resolve(response);
+            }
+          });
         });
-      });
       await gfetch({
         option,
         param: {
@@ -400,17 +486,21 @@ router.post('/resume/', async (ctx) => {
   try {
     // eslint-disable-next-line
     const stub = require('./biz-stub');
-    const gclient = new stub.Resume2102(ctx.grpc_service, grpc.credentials.createInsecure());
-    const gfetch = (body) => new Promise((resolve, reject) => {
-      gclient.init(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const gclient = new stub.Resume2102(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const gfetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.init(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     await gfetch(ctx.request.body);
     ctx.response.status = 200;
   } catch (err) {

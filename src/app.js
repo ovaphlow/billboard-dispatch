@@ -263,13 +263,15 @@ app.use(async (ctx, next) => {
   app.use(router.allowedMethods());
 })();
 
-import('./complex-route.mjs').then((module) => {
-  const { router } = module;
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-}).catch((err) => {
-  logger.error(err);
-});
+import('./complex-route.mjs')
+  .then((module) => {
+    const { router } = module;
+    app.use(router.routes());
+    app.use(router.allowedMethods());
+  })
+  .catch((err) => {
+    logger.error(err);
+  });
 
 module.exports = app;
 
@@ -287,7 +289,9 @@ if (require.main === module) {
     });
 
     cluster.on('exit', (worker, code, signal) => {
-      logger.error(`子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`);
+      logger.error(
+        `子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`,
+      );
       logger.info(`由主进程(PID:${process.pid})创建新的子进程`);
       cluster.fork();
     });

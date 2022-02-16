@@ -13,17 +13,21 @@ module.exports = router;
 router.get('/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      gclient.get(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const gclient = new stub.Campus(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.get(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.params.uuid = ctx.query.u_id;
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
@@ -36,17 +40,21 @@ router.get('/:id', async (ctx) => {
 router.put('/', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      gclient.search(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(JSON.parse(response.data));
-        }
+    const gclient = new stub.Campus(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        gclient.search(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(JSON.parse(response.data));
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch({ filter: ctx.request.body });
   } catch (err) {
     logger.error(err);

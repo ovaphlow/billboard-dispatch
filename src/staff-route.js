@@ -71,7 +71,9 @@ router.get('/staff', async (ctx) => {
     order by id desc
     limit 20
     `;
-    const [result] = await ctx.db_client.execute(sql, [ctx.request.execute.tag]);
+    const [result] = await ctx.db_client.execute(sql, [
+      ctx.request.execute.tag,
+    ]);
     ctx.response.body = result;
   } else ctx.response.body = [];
 });
@@ -94,7 +96,10 @@ router.post('/staff', async (ctx) => {
   [result] = await ctx.db_client.execute(sql, [
     ctx.request.body.username,
     JSON.stringify({
-      uuid: uuidv5(ctx.request.body.username, Buffer.from(configuration.SECRET)),
+      uuid: uuidv5(
+        ctx.request.body.username,
+        Buffer.from(configuration.SECRET),
+      ),
       name: ctx.request.body.name,
       password: ctx.request.body.password,
       tag: ctx.request.body.tag,

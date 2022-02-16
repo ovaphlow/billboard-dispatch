@@ -3,56 +3,59 @@ const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
-  signIn: (data) => new Promise((resolve, reject) => {
-    pool.getConnection((err, cnx) => {
-      if (err) reject(err);
-      const sql = `
+  signIn: (data) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        const sql = `
             select *
             from enterprise_user
             where phone = ?
               or email = ?
             `;
-      cnx.execute(sql, [data.username, data.username], (err, result) => {
-        if (err) reject(err);
-        resolve(result[0] || {});
+        cnx.execute(sql, [data.username, data.username], (err, result) => {
+          if (err) reject(err);
+          resolve(result[0] || {});
+        });
+        pool.releaseConnection(cnx);
       });
-      pool.releaseConnection(cnx);
-    });
-  }),
+    }),
 
-  statistic: (option, data) => new Promise((resolve, reject) => {
-    pool.getConnection((err, cnx) => {
-      if (err) reject(err);
-      if (option === 'qty-by-total-today') {
-        const sql = `
+  statistic: (option, data) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if (option === 'qty-by-total-today') {
+          const sql = `
               select (select count(*) from enterprise) total
               , (select count(*) from enterprise where position(? in date) > 0) today
               `;
-        cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
-          if (err) reject(err);
-          resolve(result[0] || { total: 0, today: 0 });
-        });
-      } else if (option === 'to-certificate-qty') {
-        const sql = `
+          cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || { total: 0, today: 0 });
+          });
+        } else if (option === 'to-certificate-qty') {
+          const sql = `
               select count(*) as qty
               from enterprise
               where status = '待认证'
                 and yingyezhizhao_tu is not null
               `;
-        cnx.execute(sql, (err, result) => {
-          if (err) reject(err);
-          resolve(result[0]);
-        });
-      }
-      pool.releaseConnection(cnx);
-    });
-  }),
+          cnx.execute(sql, (err, result) => {
+            if (err) reject(err);
+            resolve(result[0]);
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    }),
 
-  get: (option, data) => new Promise((resolve, reject) => {
-    pool.getConnection((err, cnx) => {
-      if (err) reject(err);
-      if (option === '') {
-        const sql = `
+  get: (option, data) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if (option === '') {
+          const sql = `
               select address1
                 , address2
                 , address3
@@ -78,12 +81,12 @@ module.exports = {
                 and uuid = ?
               limit 1
               `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result.length === 1 ? result[0] : {});
-        });
-      } else if (option === 'user-by-employer') {
-        const sql = `
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result.length === 1 ? result[0] : {});
+          });
+        } else if (option === 'user-by-employer') {
+          const sql = `
               select
                 email
                 , id
@@ -95,12 +98,12 @@ module.exports = {
                 and uuid = ?
               limit 1
               `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result[0] || {});
-        });
-      } else if (option === 'user-by-employer1') {
-        const sql = `
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        } else if (option === 'user-by-employer1') {
+          const sql = `
               select id
                 , name
                 , phone
@@ -110,37 +113,43 @@ module.exports = {
               where enterprise_id = ?
                 and enterprise_uuid = ?
               `;
-        cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-          if (err) reject(err);
-          resolve(result[0] || {});
-        });
-      }
-      pool.releaseConnection(cnx);
-    });
-  }),
+          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0] || {});
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    }),
 
-  update: (option, data) => new Promise((resolve, reject) => {
-    pool.getConnection((err, cnx) => {
-      if (err) reject(err);
-      if (option === 'certificate') {
-        cnx.execute(`
+  update: (option, data) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if (option === 'certificate') {
+          cnx.execute(
+            `
         update enterprise
         set status = '认证', yingyezhizhao_tu = null
         where id = ? and uuid = ?
-        `, [data.id, data.uuid], (errResult, result) => {
-          if (errResult) reject(errResult);
-          resolve(result);
-        });
-      }
-      pool.releaseConnection(cnx);
-    });
-  }),
+        `,
+            [data.id, data.uuid],
+            (errResult, result) => {
+              if (errResult) reject(errResult);
+              resolve(result);
+            },
+          );
+        }
+        pool.releaseConnection(cnx);
+      });
+    }),
 
-  filter: (option, data) => new Promise((resolve, reject) => {
-    pool.getConnection((err, cnx) => {
-      if (err) reject(err);
-      if (option === '') {
-        const sql = `
+  filter: (option, data) =>
+    new Promise((resolve, reject) => {
+      pool.getConnection((err, cnx) => {
+        if (err) reject(err);
+        if (option === '') {
+          const sql = `
               select
                 faren
                 , id
@@ -153,12 +162,12 @@ module.exports = {
               order by id desc
               limit 100
               `;
-        cnx.execute(sql, [data.keyword, data.keyword], (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      } else if (option === 'user-by-user-id-list') {
-        const sql = `
+          cnx.execute(sql, [data.keyword, data.keyword], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if (option === 'user-by-user-id-list') {
+          const sql = `
               select
                 email
                 , enterprise_id
@@ -169,12 +178,12 @@ module.exports = {
               from enterprise_user
               where id in (${data.list})
               `;
-        cnx.execute(sql, [], (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      } else if (option === 'filter-user-by-id-list') {
-        const sql = `
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        } else if (option === 'filter-user-by-id-list') {
+          const sql = `
               select
                 email
                 , enterprise_id
@@ -185,13 +194,13 @@ module.exports = {
               from enterprise_user
               where enterprise_id in (${data.list})
               `;
-        cnx.execute(sql, [], (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      }
-      if (option === 'to-certificate') {
-        const sql = `
+          cnx.execute(sql, [], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
+        if (option === 'to-certificate') {
+          const sql = `
           select id, uuid, name, faren
           from enterprise
           where status = '待认证'
@@ -199,12 +208,12 @@ module.exports = {
               and position(? in name) > 0
           order by id desc
           `;
-        cnx.execute(sql, [data.name], (err, result) => {
-          if (err) reject(err);
-          resolve(result);
-        });
-      }
-      pool.releaseConnection(cnx);
-    });
-  }),
+          cnx.execute(sql, [data.name], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+          });
+        }
+        pool.releaseConnection(cnx);
+      });
+    }),
 };

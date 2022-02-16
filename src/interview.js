@@ -19,17 +19,21 @@ router.get('/biz/interview/statistic', async (ctx) => {
 router.get('/offer/ent/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      grpcClient.entList(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.entList(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -41,17 +45,21 @@ router.get('/offer/ent/:id', async (ctx) => {
 router.get('/offer/common/total/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      grpcClient.commonTotal(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.commonTotal(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -63,17 +71,21 @@ router.get('/offer/common/total/:id', async (ctx) => {
 router.get('/offer/common/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      grpcClient.commonList(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.commonList(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch(ctx.params);
   } catch (err) {
     logger.error(err);
@@ -86,17 +98,21 @@ router.get('/offer/common/:id', async (ctx) => {
 router.post('/offer/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      grpcClient.insert(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.insert(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch(ctx.request.body);
   } catch (err) {
     logger.error(err);

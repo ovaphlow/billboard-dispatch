@@ -3,10 +3,8 @@
  * 用于替换banner.js recommend.js, topic.js, campus.js 等
  */
 const Router = require('@koa/router');
-const grpc = require('grpc');
 const dayjs = require('dayjs');
 
-const logger = require('./logger');
 const repos = require('./bulletin-repos');
 
 const router = new Router({

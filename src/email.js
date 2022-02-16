@@ -19,7 +19,10 @@ module.exports = router;
 // website enterprise/User.jsx
 router.put('/', async (ctx) => {
   try {
-    const math = parseInt(Math.floor(Math.random() * (999999 - 100000 + 1) + 100000), 10);
+    const math = parseInt(
+      Math.floor(Math.random() * (999999 - 100000 + 1) + 100000),
+      10,
+    );
     const code = math.toString();
     const transporter = nodemailer.createTransport(configuration.email);
     const mailOptions = {
@@ -39,17 +42,21 @@ router.put('/', async (ctx) => {
     });
 
     const stub = require('./miscellaneus-stub');
-    const grpcClient = new stub.Email(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) => new Promise((resolve, reject) => {
-      grpcClient.insert(body, (err, response) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(response.data);
-        }
+    const grpcClient = new stub.Email(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
+    const grpcFetch = (body) =>
+      new Promise((resolve, reject) => {
+        grpcClient.insert(body, (err, response) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(response.data);
+          }
+        });
       });
-    });
     ctx.response.body = await grpcFetch({
       ...ctx.request.body,
       code,

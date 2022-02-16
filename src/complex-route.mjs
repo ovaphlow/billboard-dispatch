@@ -13,7 +13,9 @@ router.get('/resume', async (ctx) => {
     // 不包括岗位信息
     const { ids } = ctx.request.query;
     const sendinList = await sendin.filter('by-job', { list: ids });
-    const resumeList = await resume.filter('by-id', { list: sendinList.map((current) => current.resume_id) });
+    const resumeList = await resume.filter('by-id', {
+      list: sendinList.map((current) => current.resume_id),
+    });
     const result = sendinList.map((current) => {
       const r = resumeList.find((element) => element.id === current.resume_id);
       if (r) {

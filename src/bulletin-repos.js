@@ -682,13 +682,12 @@ module.exports = {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
         if (option === 'banner') {
-          const sql = `
-              insert into banner
-                (uuid, status, category, title, comment, datime, data_url)
-                values(uuid(), ?, ?, ?, ?, ?, ?)
-              `;
           cnx.execute(
-            sql,
+            `
+            insert into
+                banner (uuid, status, category, title, comment, datime, data_url)
+                values (uuid(), ?, ?, ?, ?, ?, ?)
+            `,
             [
               data.status,
               data.category,
@@ -697,58 +696,33 @@ module.exports = {
               data.datime,
               data.data_url,
             ],
-            (err, result) => {
-              if (err) reject(err);
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );
         } else if (option === 'bulletin') {
-          const sql = `
-            insert into bulletin (uuid
-              , title
-              , dday
-              , receiver
-              , doc)
-              values(?, ?, ?, ?, ?)
-            `;
           cnx.execute(
-            sql,
+            `
+            insert into bulletin (uuid, title, dday, receiver, doc)
+                values(?, ?, ?, ?, ?)
+            `,
             [data.uuid, data.title, data.dday, data.receiver, data.doc],
-            (err, result) => {
-              if (err) reject(err);
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );
         } else if (option === 'campus') {
           const sql = `
-              insert into campus (
-                uuid
-                , mis_user_id
-                , title
-                , date
-                , time
-                , address_level1
-                , address_level2
-                , address_level3
-                , address_level4
-                , school
-                , content
-                , category
-              ) values(
-                uuid()
-                , 0
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-              )
-              `;
+          insert into
+              campus (uuid, mis_user_id, title, date, time
+                  , address_level1, address_level2, address_level3, address_level4
+                  , school, content, category)
+              values(uuid(), 0, ?, ?, ?
+                  , ?, ?, ?, ?
+                  , ?, ?, ?)
+          `;
           cnx.execute(
             sql,
             [
@@ -763,54 +737,34 @@ module.exports = {
               data.content,
               data.category,
             ],
-            (err, result) => {
-              if (err) reject(err);
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );
         } else if (option === 'fair') {
           const sql = `
-              insert into job_fair (title
-                                    , content
-                                    , datime)
-              values(?, ?, ?)
-              `;
+          insert into job_fair (title, content, datime, status)
+              values(?, ?, ?, ?)
+          `;
           cnx.execute(
             sql,
-            [data.title, data.content, data.datime],
-            (err, result) => {
-              if (err) reject(err);
+            [data.title, data.content, data.datime, data.status],
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );
         } else if (option === 'notification') {
           const sql = `
-              insert into recommend (
-                uuid
-                , category
-                , title
-                , date1
-                , date2
-                , address_level1
-                , address_level2
-                , publisher
-                , qty
-                , baomignfangshi
-                , content
-              ) values(
-                uuid()
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-              )
-              `;
+          insert into
+              recommend (uuid, category, title
+                  , date1, date2, address_level1, address_level2
+                  , publisher, qty, baomignfangshi, content)
+              values (uuid(), ?, ?
+                , ?, ?, ?, ?
+                , ?, ?, ?, ?)
+          `;
           cnx.execute(
             sql,
             [
@@ -825,36 +779,24 @@ module.exports = {
               data.baomingfangshi,
               data.content,
             ],
-            (err, result) => {
-              if (err) reject(err);
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );
         } else if (option === 'topic') {
           const sql = `
-              insert into topic (
-                uuid
-                , mis_user_id
-                , tag
-                , title
-                , date
-                , time
-                , content
-              ) values(
-                uuid()
-                , 0
-                , ?
-                , ?
-                , ?
-                , ?
-                , ?
-              )
-              `;
+          insert into
+              topic (uuid, mis_user_id, tag, title
+                  , date, time, content)
+              values (uuid(), 0, ?, ?
+                  , ?, ?, ?)
+          `;
           cnx.execute(
             sql,
             [data.tag, data.title, data.date, data.time, data.content],
-            (err, result) => {
-              if (err) reject(err);
+            (errResult, result) => {
+              if (errResult) reject(errResult);
               resolve(result);
             },
           );

@@ -353,38 +353,38 @@ module.exports = {
         if (err) reject(err);
         if (option === 'banner') {
           const sql = 'delete from banner where id = ? and uuid = ?';
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
+          cnx.execute(sql, [data.id, data.uuid], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         } else if (option === '') {
           const sql = 'delete from bulletin where id = ? and uuid = ?';
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
+          cnx.execute(sql, [data.id, data.uuid], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         } else if (option === 'campus') {
           const sql = 'delete from campus where id = ? and uuid = ?';
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
+          cnx.execute(sql, [data.id, data.uuid], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         } else if (option === 'fair') {
-          const sql = 'delete from job_fair where id = ? 1';
-          cnx.execute(sql, [data.id], (err, result) => {
-            if (err) reject(err);
+          const sql = 'delete from job_fair where id = ?';
+          cnx.execute(sql, [data.id], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         } else if (option === 'notification') {
           const sql = 'delete from recommend where id = ? and uuid = ?';
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
+          cnx.execute(sql, [data.id, data.uuid], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         } else if (option === 'topic') {
           const sql = 'delete from topic where id = ? and uuid = ?';
-          cnx.execute(sql, [data.id, data.uuid], (err, result) => {
-            if (err) reject(err);
+          cnx.execute(sql, [data.id, data.uuid], (errResult, result) => {
+            if (errResult) reject(errResult);
             resolve(result);
           });
         }

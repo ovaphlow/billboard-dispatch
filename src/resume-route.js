@@ -176,16 +176,21 @@ router.get('/resume/:id', async (ctx) => {
       // eslint-disable-next-line
       const xlsx = require('node-xlsx').default;
 
-      const resume = JSON.parse(
-        await gfetch({
-          option: '',
-          param: {
-            id: ctx.params.id,
-            uuid: ctx.request.query.u_id,
-            user_id: ctx.request.query.u_i,
-          },
-        }),
-      );
+      const resume = await repos.get('', {
+        id: parseInt(ctx.params.id, 10),
+        uuid: ctx.request.query.u_id,
+      });
+      console.log(resume);
+      // const resume = JSON.parse(
+      //   await gfetch({
+      //     option: '',
+      //     param: {
+      //       id: ctx.params.id,
+      //       uuid: ctx.request.query.u_id,
+      //       user_id: ctx.request.query.u_i,
+      //     },
+      //   }),
+      // );
       const data = [];
       data.push(
         ['姓名', resume.name],
@@ -209,6 +214,7 @@ router.get('/resume/:id', async (ctx) => {
         ['意向城市', resume.yixiangchengshi],
         [null],
       );
+      // 合并单元格
       const range = [
         { s: { c: 1, r: 0 }, e: { c: 8, r: 0 } },
         { s: { c: 1, r: 1 }, e: { c: 4, r: 1 } },
@@ -224,12 +230,30 @@ router.get('/resume/:id', async (ctx) => {
         { s: { c: 1, r: 7 }, e: { c: 8, r: 7 } },
       ];
 
+      data.push(['证书']);
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
+      });
+      resume.certificate.forEach((current) => {
+        const e = JSON.parse(current);
+        data.push(['证书', e.certificate, null, null, null, '时间', e.time]);
+        range.push({
+          s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 }
+        });
+        range.push({
+          s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 }
+        });
+      });
+
+      data.push([null]);
+
       data.push(['工作经历']);
       range.push({
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      JSON.parse(resume.career).forEach((element) => {
+      resume.career.forEach((element) => {
         const e = JSON.parse(element);
         data.push(['公司名称', e.employer]);
         range.push({
@@ -267,7 +291,7 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      JSON.parse(resume.record).forEach((element) => {
+      resume.record.forEach((element) => {
         const e = JSON.parse(element);
         data.push(['项目名称', e.name]);
         range.push({

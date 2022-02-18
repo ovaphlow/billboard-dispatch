@@ -29,7 +29,7 @@ module.exports = {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
         if (option === '') {
-          const sql = 'select * from resume where id = ?  and uuid = ?';
+          const sql = 'select * from resume where id = ? and uuid = ?';
           cnx.execute(sql, [data.id, data.uuid], (err1, result) => {
             if (err1) reject(err1);
             resolve(result.length === 1 ? result[0] : {});

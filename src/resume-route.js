@@ -239,10 +239,39 @@ router.get('/resume/:id', async (ctx) => {
         const e = JSON.parse(current);
         data.push(['证书', e.certificate, null, null, null, '时间', e.time]);
         range.push({
-          s: { c: 1, r: data.length - 1 }, e: { c: 4, r: data.length - 1 }
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 4, r: data.length - 1 },
         });
         range.push({
-          s: { c: 6, r: data.length - 1 }, e: { c: 8, r: data.length - 1 }
+          s: { c: 6, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
+      });
+
+      data.push([null]);
+
+      // skill: [ '{"name":"熟练掌握word PPT等办公软件","length":"12","level":"良好"}' ],
+      data.push(['专业技能']);
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
+      });
+      resume.skill.forEach((current) => {
+        const e = JSON.parse(current);
+        data.push([
+          '技能',
+          e.name,
+          null,
+          null,
+          null,
+          '时长(月)',
+          e.length,
+          '熟练程度',
+          e.level,
+        ]);
+        range.push({
+          s: { c: 1, r: data.length - 1 },
+          e: { c: 4, r: data.length - 1 },
         });
       });
 

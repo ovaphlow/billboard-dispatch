@@ -180,7 +180,6 @@ router.get('/resume/:id', async (ctx) => {
         id: parseInt(ctx.params.id, 10),
         uuid: ctx.request.query.u_id,
       });
-      console.log(resume);
       // const resume = JSON.parse(
       //   await gfetch({
       //     option: '',

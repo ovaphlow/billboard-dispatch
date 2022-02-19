@@ -249,7 +249,6 @@ router.get('/resume/:id', async (ctx) => {
 
       data.push([null]);
 
-      // skill: [ '{"name":"熟练掌握word PPT等办公软件","length":"12","level":"良好"}' ],
       data.push(['专业技能']);
       range.push({
         s: { c: 0, r: data.length - 1 },
@@ -348,6 +347,19 @@ router.get('/resume/:id', async (ctx) => {
           s: { c: 1, r: data.length - 1 },
           e: { c: 8, r: data.length - 1 },
         });
+      });
+
+      data.push([null]);
+
+      data.push(['自我评价']);
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
+      });
+      data.push([resume.ziwopingjia]);
+      range.push({
+        s: { c: 0, r: data.length - 1 },
+        e: { c: 8, r: data.length - 1 },
       });
 
       const buffer = xlsx.build([{ name: '简历', data }], { '!merges': range });

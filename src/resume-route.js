@@ -368,14 +368,16 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      const intro = resume.ziwopingjia
-        .replaceAll('<p>', '')
-        .replaceAll('</p>', '');
-      data.push([intro]);
-      range.push({
-        s: { c: 0, r: data.length - 1 },
-        e: { c: 8, r: data.length - 1 },
-      });
+      if (resume.ziwopingjia !== undefined) {
+        const intro = resume.ziwopingjia
+          .replaceAll('<p>', '')
+          .replaceAll('</p>', '');
+        data.push([intro]);
+        range.push({
+          s: { c: 0, r: data.length - 1 },
+          e: { c: 8, r: data.length - 1 },
+        });
+      }
 
       const buffer = xlsx.build([{ name: '简历', data }], { '!merges': range });
       ctx.response.set(

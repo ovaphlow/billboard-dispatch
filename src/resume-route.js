@@ -238,7 +238,6 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      console.log(resume.certificate);
       if (resume.certificate !== null) {
         resume.certificate.forEach((current) => {
           const e = JSON.parse(current);

@@ -178,8 +178,12 @@ router.get('/resume/:id', async (ctx) => {
 
       const resume = await repos.get('', {
         id: parseInt(ctx.params.id, 10),
-        uuid: ctx.request.query.u_id,
+        uuid: ctx.request.query.u_id || '',
       });
+      if (!resume.id) {
+        ctx.response.status = 404;
+        return;
+      }
       // const resume = JSON.parse(
       //   await gfetch({
       //     option: '',
@@ -234,18 +238,21 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      resume.certificate.forEach((current) => {
-        const e = JSON.parse(current);
-        data.push(['证书', e.certificate, null, null, null, '时间', e.time]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 4, r: data.length - 1 },
+      console.log(resume.certificate);
+      if (resume.certificate !== null) {
+        resume.certificate.forEach((current) => {
+          const e = JSON.parse(current);
+          data.push(['证书', e.certificate, null, null, null, '时间', e.time]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 4, r: data.length - 1 },
+          });
+          range.push({
+            s: { c: 6, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
         });
-        range.push({
-          s: { c: 6, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
-        });
-      });
+      }
 
       data.push([null]);
 
@@ -254,24 +261,26 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      resume.skill.forEach((current) => {
-        const e = JSON.parse(current);
-        data.push([
-          '技能',
-          e.name,
-          null,
-          null,
-          null,
-          '时长(月)',
-          e.length,
-          '熟练程度',
-          e.level,
-        ]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 4, r: data.length - 1 },
+      if (resume.skill !== null) {
+        resume.skill.forEach((current) => {
+          const e = JSON.parse(current);
+          data.push([
+            '技能',
+            e.name,
+            null,
+            null,
+            null,
+            '时长(月)',
+            e.length,
+            '熟练程度',
+            e.level,
+          ]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 4, r: data.length - 1 },
+          });
         });
-      });
+      }
 
       data.push([null]);
 
@@ -280,36 +289,38 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      resume.career.forEach((element) => {
-        const e = JSON.parse(element);
-        data.push(['公司名称', e.employer]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
+      if (resume.career !== null) {
+        resume.career.forEach((element) => {
+          const e = JSON.parse(element);
+          data.push(['公司名称', e.employer]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
+          data.push([
+            '职位',
+            e.title,
+            null,
+            null,
+            null,
+            '起止时间',
+            `${e.date_begin} ${e.date_end}`,
+          ]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 4, r: data.length - 1 },
+          });
+          range.push({
+            s: { c: 6, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
+          data.push(['工作描述', e.description]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
         });
-        data.push([
-          '职位',
-          e.title,
-          null,
-          null,
-          null,
-          '起止时间',
-          `${e.date_begin} ${e.date_end}`,
-        ]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 4, r: data.length - 1 },
-        });
-        range.push({
-          s: { c: 6, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
-        });
-        data.push(['工作描述', e.description]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
-        });
-      });
+      }
 
       data.push([null]);
 
@@ -318,36 +329,38 @@ router.get('/resume/:id', async (ctx) => {
         s: { c: 0, r: data.length - 1 },
         e: { c: 8, r: data.length - 1 },
       });
-      resume.record.forEach((element) => {
-        const e = JSON.parse(element);
-        data.push(['项目名称', e.name]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
+      if (resume.record !== null) {
+        resume.record.forEach((element) => {
+          const e = JSON.parse(element);
+          data.push(['项目名称', e.name]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
+          data.push([
+            '职位',
+            e.title,
+            null,
+            null,
+            null,
+            '起止时间',
+            `${e.date_begin} ${e.date_end}`,
+          ]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 4, r: data.length - 1 },
+          });
+          range.push({
+            s: { c: 6, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
+          data.push(['项目描述', e.description]);
+          range.push({
+            s: { c: 1, r: data.length - 1 },
+            e: { c: 8, r: data.length - 1 },
+          });
         });
-        data.push([
-          '职位',
-          e.title,
-          null,
-          null,
-          null,
-          '起止时间',
-          `${e.date_begin} ${e.date_end}`,
-        ]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 4, r: data.length - 1 },
-        });
-        range.push({
-          s: { c: 6, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
-        });
-        data.push(['项目描述', e.description]);
-        range.push({
-          s: { c: 1, r: data.length - 1 },
-          e: { c: 8, r: data.length - 1 },
-        });
-      });
+      }
 
       data.push([null]);
 

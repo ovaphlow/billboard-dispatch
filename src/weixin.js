@@ -1,7 +1,7 @@
 const Router = require('@koa/router');
 const superagent = require('superagent');
 
-const { configuration } = require('./app');
+// const { configuration } = require('./app');
 const logger = require('./logger');
 
 const router = new Router({
@@ -15,16 +15,19 @@ router.post('/token', async (ctx) => {
     const path = [
       'https://api.weixin.qq.com/cgi-bin/token',
       '?grant_type=client_credential',
-      `&appid=${configuration.weixin.appid}`,
-      `&secret=${configuration.weixin.secret}`,
+      // `&appid=${configuration.weixin.appid}`,
+      // `&secret=${configuration.weixin.secret}`,
+      `&appid=${process.env.WX_APPID}`,
+      `&secret=${process.env.WX_SECRET}`,
     ];
     const response = await superagent.get(path.join(''));
-    logger.info(response.body.access_token, response.body.expires_in);
+    // logger.info(response.body.access_token, response.body.expires_in);
     const { access_token } = response.body;
     const _path = `https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=${access_token}`;
-    const _response = await superagent.post(_path).send(ctx.request.body);
-    logger.info(_response);
-    logger.info(_response.text);
+    await superagent.post(_path).send(ctx.request.body);
+    // const _response = await superagent.post(_path).send(ctx.request.body);
+    // logger.info(_response);
+    // logger.info(_response.text);
     // ctx.response.body = _response.text;
     // ctx.response.body = response.body;
     ctx.response.status = 200;
@@ -58,14 +61,16 @@ router.post('/sign-in', async (ctx) => {
     // GET https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
     const path = [
       'https://api.weixin.qq.com/sns/jscode2session',
-      `?appid=${configuration.weixin.appid}`,
-      `&secret=${configuration.weixin.secret}`,
+      // `?appid=${configuration.weixin.appid}`,
+      // `&secret=${configuration.weixin.secret}`,
+      `?appid=${process.env.WX_APPID}`,
+      `&secret=${process.env.SECRET}`,
       `&js_code=${ctx.request.body.code}`,
       '&grant_type=authorization_code',
     ];
     const response = await superagent.get(path.join(''));
-    logger.info(response);
-    logger.info(response.text); // correct
+    // logger.info(response);
+    // logger.info(response.text); // correct
     ctx.response.body = response.text;
   } catch (err) {
     logger.error(err.stack);

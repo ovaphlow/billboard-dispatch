@@ -3,7 +3,7 @@ const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
-  statistic: (option, data) =>
+  statistic: (option) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);

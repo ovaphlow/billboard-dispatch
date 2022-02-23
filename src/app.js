@@ -6,47 +6,8 @@ const bodyParser = require('koa-bodyparser');
 require('dotenv').config();
 
 const logger = require('./logger');
-const pool = require('./mysql');
 
 const app = new Koa();
-
-let configuration;
-
-// configuration
-(() => {
-  const fs = require('fs');
-
-  const yaml = require('js-yaml');
-
-  const configuration_template = require('./configuration_template');
-
-  const conf_path = './configuration.yaml';
-
-  const saveConfig = (conf_path, config) => {
-    fs.writeFileSync(conf_path, config, (err) => {
-      if (err) {
-        logger.error(`写入配置文件(${conf_path})失败`);
-        logger.error(err);
-      }
-    });
-  };
-
-  if (fs.existsSync(conf_path)) {
-    configuration = yaml.load(fs.readFileSync(conf_path, 'utf8'));
-    configuration = { ...configuration, api_module: [] };
-  } else {
-    logger.info('首次运行');
-    const template = yaml.dump(configuration_template, { sortKeys: true });
-    logger.info('读取配置文件模板');
-    logger.info(template);
-    saveConfig(conf_path, template);
-    logger.info(`生成配置文件 ${conf_path}`);
-    logger.info('请编辑配置文件后再次运行');
-    process.exit(0);
-  }
-})();
-
-module.exports.configuration = configuration;
 
 app.env = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
@@ -60,11 +21,6 @@ app.use(async (ctx, next) => {
   logger.debug(`--> ${ctx.request.method} ${ctx.request.url}`);
   await next();
   logger.debug(`<-- ${ctx.request.method} ${ctx.request.url}`);
-});
-
-app.use(async (ctx, next) => {
-  ctx.db_client = pool.promise();
-  await next();
 });
 
 app.on('error', (err, ctx) => {
@@ -82,47 +38,23 @@ app.on('error', (err, ctx) => {
 
   router.post('/configuration', async (ctx) => {
     try {
-      /**
-       * 启用需要同时修改所有router中初始化gRPC客户端部分的代码
-       */
-      // const target = ctx.request.body.host.split(':');
-      // configuration.grpc_service = `${target[0] || '127.0.0.1'}:${target[1] || '50051'}`;
 
-      if (ctx.request.body.token !== configuration.secret_token) {
+      if (ctx.request.body.token !== process.env.SECRET_TOKEN) {
         ctx.response.status = 200;
         return;
       }
 
       ctx.response.body = {
-        persistence_host: configuration.persistence.host,
-        persistence_port: configuration.persistence.port,
-        persistence_user: configuration.persistence.user,
-        persistence_password: configuration.persistence.password,
-        persistence_database: configuration.persistence.database,
+        persistence_host: process.env.DB_HOST,
+        persistence_port: process.env.DB_PORT,
+        persistence_user: process.env.DB_USERNAME,
+        persistence_password: process.env.DB_PASSWORD,
+        persistence_database: 'billboard',
       };
     } catch (err) {
       logger.error(err);
       ctx.response.status = 500;
     }
-  });
-
-  router.post('/sentinel', async (ctx) => {
-    logger.info(ctx.request.ip);
-    logger.info(ctx.request.body);
-    configuration.api_module.push({
-      host: ctx.request.ip,
-      port: ctx.request.body.port,
-      prefix: ctx.request.body.path_prefix,
-    });
-    logger.info(configuration.api_module);
-    ctx.response.body = {
-      persistence_host: configuration.persistence.host,
-      persistence_port: configuration.persistence.port,
-      persistence_user: configuration.persistence.user,
-      persistence_password: configuration.persistence.password,
-      persistence_database: configuration.persistence.database,
-    };
-    // router.
   });
 
   app.use(router.routes());
@@ -133,7 +65,7 @@ app.on('error', (err, ctx) => {
  * 设定grpc服务地址
  */
 app.use(async (ctx, next) => {
-  ctx.grpc_service = configuration.grpc_service;
+  ctx.grpc_service = process.env.GRPC_SERVICE;
   await next();
 });
 
@@ -253,12 +185,6 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./weixin');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./staff-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();

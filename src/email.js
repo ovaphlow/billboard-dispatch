@@ -2,7 +2,7 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 const nodemailer = require('nodemailer');
 
-const { configuration } = require('./app');
+// const { configuration } = require('./app');
 const logger = require('./logger');
 
 const router = new Router({
@@ -24,9 +24,17 @@ router.put('/', async (ctx) => {
       10,
     );
     const code = math.toString();
-    const transporter = nodemailer.createTransport(configuration.email);
+    // const transporter = nodemailer.createTransport(configuration.email);
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_AUTH_USER,
+        pass: process.env.EMAIL_AUTH_PASS,
+      },
+    });
     const mailOptions = {
-      from: configuration.email.auth.user,
+      // from: configuration.email.auth.user,
+      from: process.env.EMAIL_AUTH_USER,
       to: ctx.request.body.email,
       subject: '学子就业网邮箱验证',
       html: `您的验证码是:<br/>

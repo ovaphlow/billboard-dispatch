@@ -9,10 +9,14 @@ const router = new Router({
 
 module.exports = router;
 
+// wx-minip recruit/Details.jsx
 router.get('/:id', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Campus(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.get(body, (err, response) => {
@@ -32,10 +36,14 @@ router.get('/:id', async (ctx) => {
   }
 });
 
+// wx-minip recruit/KeywordSearch.jsx
 router.put('/', async (ctx) => {
   try {
     const stub = require('./bulletin-stub');
-    const gclient = new stub.Campus(ctx.grpc_service, grpc.credentials.createInsecure());
+    const gclient = new stub.Campus(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         gclient.search(body, (err, response) => {

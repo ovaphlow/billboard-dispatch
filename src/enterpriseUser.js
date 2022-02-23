@@ -17,10 +17,14 @@ const getSalted = (password, salt) => {
 
 module.exports = router;
 
+// website Login.jsx
 router.post('/log-in/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.signIn(body, (err, response) => {
@@ -36,7 +40,10 @@ router.post('/log-in/', async (ctx) => {
     if (result.message) {
       ctx.response.body = result;
     } else {
-      const passwordSalted = getSalted(ctx.request.body.password, result.content.salt);
+      const passwordSalted = getSalted(
+        ctx.request.body.password,
+        result.content.salt,
+      );
       if (passwordSalted !== result.content.password) {
         ctx.response.body = { message: '用户名或密码错误', content: '' };
       } else {
@@ -51,11 +58,15 @@ router.post('/log-in/', async (ctx) => {
   }
 });
 
+// website SignIn.jsx
 // 注册：拼写错误，应为sign-up
 router.post('/sign-in', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.signUp(body, (err, response) => {
@@ -80,10 +91,14 @@ router.post('/sign-in', async (ctx) => {
   }
 });
 
+// website enterprise/UpdatePassword.jsx
 router.put('/updatePassword/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.upPasswordCheck(body, (err, response) => {
@@ -112,7 +127,10 @@ router.put('/updatePassword/:id', async (ctx) => {
     if (result.message) {
       ctx.response.body = result;
     } else {
-      const passwordSalted = getSalted(ctx.request.body.old_password, result.content.salt);
+      const passwordSalted = getSalted(
+        ctx.request.body.old_password,
+        result.content.salt,
+      );
       if (passwordSalted !== result.content.password) {
         ctx.response.body = { message: '密码错误' };
       } else {
@@ -132,10 +150,14 @@ router.put('/updatePassword/:id', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/checkEmail/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkEmail(body, (err, response) => {
@@ -154,10 +176,14 @@ router.put('/checkEmail/', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/checkPhone/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkPhone(body, (err, response) => {
@@ -176,10 +202,14 @@ router.put('/checkPhone/', async (ctx) => {
   }
 });
 
+// website Recover.jsx
 router.put('/checkRecover/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.checkRecover(body, (err, response) => {
@@ -198,10 +228,14 @@ router.put('/checkRecover/', async (ctx) => {
   }
 });
 
+// website Recover.jsx
 router.put('/recover/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.recover(body, (err, response) => {
@@ -244,10 +278,14 @@ router.put('/recover/', async (ctx) => {
   }
 });
 
+// website enterprise/User.jsx
 router.put('/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.updateUser(body, (err, response) => {

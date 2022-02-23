@@ -3,6 +3,7 @@ const http = require('http');
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+require('dotenv').config();
 
 const logger = require('./logger');
 const pool = require('./mysql');
@@ -34,7 +35,7 @@ let configuration;
     configuration = yaml.load(fs.readFileSync(conf_path, 'utf8'));
     configuration = { ...configuration, api_module: [] };
   } else {
-    logger.info(`首次运行`);
+    logger.info('首次运行');
     const template = yaml.dump(configuration_template, { sortKeys: true });
     logger.info('读取配置文件模板');
     logger.info(template);
@@ -137,13 +138,13 @@ app.use(async (ctx, next) => {
 });
 
 (() => {
-  const router = require('./enterpriseUser');
+  const router = require('./bulletin-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
 (() => {
-  const router = require('./candidate');
+  const router = require('./candidate-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -155,7 +156,13 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./resume');
+  const router = require('./enterpriseUser');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
+  const router = require('./resume-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -167,7 +174,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./job');
+  const router = require('./job-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -179,19 +186,13 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./journal');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./favorite');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
 (() => {
-  const router = require('./send-in');
+  const router = require('./send_in-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -203,25 +204,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./miscellaneus');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./feedback');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./message');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./employer');
+  const router = require('./employer-route');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -234,12 +217,6 @@ app.use(async (ctx, next) => {
 
 (() => {
   const router = require('./interview');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./topic');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -263,25 +240,7 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./bulletin');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./notification');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./email');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
-  const router = require('./chart');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
@@ -293,25 +252,35 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./hypervisor');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./weixin');
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
 
+(() => {
+  const router = require('./staff-route');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+import('./complex-route.mjs')
+  .then((module) => {
+    const { router } = module;
+    app.use(router.routes());
+    app.use(router.allowedMethods());
+  })
+  .catch((err) => {
+    logger.error(err);
+  });
+
 module.exports = app;
 
 if (require.main === module) {
-  const port = parseInt(process.env.NODE_PORT, 10) || 8080;
+  const port = parseInt(process.env.PORT, 10) || 8080;
   if (cluster.isMaster) {
     logger.info(`主进程 PID:${process.pid}`);
 
-    for (let i = 0; i < parseInt(process.env.NODE_PROC || 1, 10); i += 1) {
+    for (let i = 0; i < parseInt(process.env.PROC || 1, 10); i += 1) {
       cluster.fork();
     }
 
@@ -320,7 +289,9 @@ if (require.main === module) {
     });
 
     cluster.on('exit', (worker, code, signal) => {
-      logger.error(`子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`);
+      logger.error(
+        `子进程 PID:${worker.process.pid}终止，错误代码:${code}，信号:${signal}`,
+      );
       logger.info(`由主进程(PID:${process.pid})创建新的子进程`);
       cluster.fork();
     });

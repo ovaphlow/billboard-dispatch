@@ -2,17 +2,27 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+const repos = require('./interview-repos');
 
 const router = new Router({
-  prefix: '/api/offer',
+  prefix: '/api',
 });
 
-module.exports = router;
+router.get('/biz/interview/statistic', async (ctx) => {
+  ctx.response.body = await repos.statistic(ctx.request.query.option || '', {
+    ref_id: parseInt(ctx.request.query.ref_id, 10),
+    status: ctx.request.query.status,
+  });
+});
 
-router.get('/ent/:id', async (ctx) => {
+// website message/Offer.jsx
+router.get('/offer/ent/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.entList(body, (err, response) => {
@@ -31,10 +41,14 @@ router.get('/ent/:id', async (ctx) => {
   }
 });
 
-router.get('/common/total/:id', async (ctx) => {
+// wx-minip user/User.jsx
+router.get('/offer/common/total/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.commonTotal(body, (err, response) => {
@@ -53,10 +67,14 @@ router.get('/common/total/:id', async (ctx) => {
   }
 });
 
-router.get('/common/:id', async (ctx) => {
+// wx-minip user/Offer.jsx
+router.get('/offer/common/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.commonList(body, (err, response) => {
@@ -75,10 +93,15 @@ router.get('/common/:id', async (ctx) => {
   }
 });
 
-router.post('/', async (ctx) => {
+// website resume/ListDetails.jsx
+// website resume/ResumeDetails.jsx
+router.post('/offer/', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Interview(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Interview(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.insert(body, (err, response) => {
@@ -96,3 +119,5 @@ router.post('/', async (ctx) => {
     ctx.response.body = { message: '服务器错误' };
   }
 });
+
+module.exports = router;

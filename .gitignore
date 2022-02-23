@@ -1,6 +1,8 @@
 .env
 configuration.yaml
 
+.env
+
 node_modules/
 *.log
 .vscode/

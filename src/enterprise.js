@@ -2,40 +2,20 @@ const Router = require('@koa/router');
 const grpc = require('grpc');
 
 const logger = require('./logger');
+// const repos = require('./')
 
 const router = new Router({
-  prefix: '/api/enterprise',
+  prefix: '/api',
 });
 
-module.exports = router;
-
-router.get('/subject/:name', async (ctx) => {
+// wx-minip job-fair/Details.jsx
+router.get('/enterprise/job-fair/:job_fair_id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
-    const grpcFetch = (body) =>
-      new Promise((resolve, reject) => {
-        grpcClient.subject(body, (err, response) => {
-          if (err) {
-            logger.error(err);
-            reject(err);
-          } else {
-            resolve(response.data);
-          }
-        });
-      });
-    ctx.request.body.name = ctx.params.name;
-    ctx.response.body = await grpcFetch(ctx.request.body);
-  } catch (err) {
-    logger.error(err);
-    ctx.response.body = { message: '服务器错误' };
-  }
-});
-
-router.get('/job-fair/:job_fair_id', async (ctx) => {
-  try {
-    const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.jobFairList(body, (err, response) => {
@@ -54,10 +34,17 @@ router.get('/job-fair/:job_fair_id', async (ctx) => {
   }
 });
 
-router.get('/:id', async (ctx) => {
+// wx-minip recruitment/Enterprise.jsx
+// wx-minip user/Report.jsx
+// website enterprise/Revise.jsx
+// website enterprise/Update.jsx
+router.get('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.get(body, (err, response) => {
@@ -77,10 +64,15 @@ router.get('/:id', async (ctx) => {
   }
 });
 
-router.get('/check/:id', async (ctx) => {
+// website resume/ListDetails.jsx
+// website resume/ResumeDetails.jsx
+router.get('/enterprise/check/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.check(body, (err, response) => {
@@ -100,10 +92,15 @@ router.get('/check/:id', async (ctx) => {
   }
 });
 
-router.put('/:id', async (ctx) => {
+// website enterprise/Revise.jsx
+// website enterprise/Update.jsx
+router.put('/enterprise/:id', async (ctx) => {
   try {
     const stub = require('./biz-stub');
-    const grpcClient = new stub.Employer(ctx.grpc_service, grpc.credentials.createInsecure());
+    const grpcClient = new stub.Employer(
+      ctx.grpc_service,
+      grpc.credentials.createInsecure(),
+    );
     const grpcFetch = (body) =>
       new Promise((resolve, reject) => {
         grpcClient.update(body, (err, response) => {
@@ -123,3 +120,5 @@ router.put('/:id', async (ctx) => {
     ctx.response.body = { message: '服务器错误' };
   }
 });
+
+module.exports = router;

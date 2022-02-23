@@ -8,7 +8,7 @@ const logger = bunyan.createLogger({
       stream: process.stdout,
     },
     {
-      level: 'warn',
+      level: 'info',
       path: 'billboard-dispatch-logbook.log',
     },
   ],

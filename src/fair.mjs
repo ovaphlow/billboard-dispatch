@@ -1,17 +1,27 @@
-const Router = require('@koa/router');
-const grpc = require('grpc');
-const logger = require('./logger');
+import Router from '@koa/router';
+import grpc from 'grpc';
 
-const router = new Router({
+import { default as stub } from './bulletin-stub.js';
+import { default as logger } from './logger.js';
+import { default as pool } from './mysql.js';
+
+export const router = new Router({
   prefix: '/api/job-fair',
 });
 
-module.exports = router;
+export const filterFairById = async (data) => {
+  const client = pool.promise();
+  const sql = `
+  select * from job_fair where id = ?
+  `;
+  const param = [data.id];
+  const [result] = await client.execute(sql, param);
+  return result;
+};
 
 // wx-minip job-fair/List.jsx
 router.get('/', async (ctx) => {
   try {
-    const stub = require('./bulletin-stub'); // eslint-disable-line
     const grpcClient = new stub.Fair(
       ctx.grpc_service,
       grpc.credentials.createInsecure(),
@@ -37,7 +47,6 @@ router.get('/', async (ctx) => {
 // wx-minip job-fair/Details.jsx
 router.get('/:id', async (ctx) => {
   try {
-    const stub = require('./bulletin-stub'); // eslint-disable-line
     const grpcClient = new stub.Fair(
       ctx.grpc_service,
       grpc.credentials.createInsecure(),

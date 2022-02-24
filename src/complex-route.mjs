@@ -1,5 +1,8 @@
+import dayjs from 'dayjs';
 import Router from '@koa/router';
 
+import { filterFairById } from './fair.mjs';
+import { default as job } from './job-repos.js';
 import { default as resume } from './resume-repos.js';
 import { default as sendin } from './send_in-repos.js';
 
@@ -11,6 +14,18 @@ router.get('/resume', async (ctx) => {
   const { option } = ctx.request.query;
   if (option === 'by-fair') {
     // 线上招聘会
+    const { fairId } = ctx.request.query;
+    // 获取招聘会时间
+    const fairList = await filterFairById({ id: parseInt(fairId, 10) });
+    const [fairData] = fairList;
+    console.log(fairData);
+    const { datime } = fairData;
+    console.log(datime);
+    console.log(dayjs(datime).add(28, 'day').format('YYYY-MM-DD HH:mm:ss'));
+    // 获取招聘会职位
+    const jobList = await job.filterJobByFair({ fairId: `["${fairId}"]` });
+    // 招聘会开始后的28天内投递到jobList中的记录数
+    ctx.response.body = jobList;
   }
   if (option === 'by-job_ids') {
     // 不包括岗位信息

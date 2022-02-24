@@ -38,7 +38,6 @@ app.on('error', (err, ctx) => {
 
   router.post('/configuration', async (ctx) => {
     try {
-
       if (ctx.request.body.token !== process.env.SECRET_TOKEN) {
         ctx.response.status = 200;
         return;
@@ -178,12 +177,6 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
-  const router = require('./fair');
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-})();
-
-(() => {
   const router = require('./staff');
   app.use(router.routes());
   app.use(router.allowedMethods());
@@ -194,6 +187,16 @@ app.use(async (ctx, next) => {
   app.use(router.routes());
   app.use(router.allowedMethods());
 })();
+
+import('./fair.mjs')
+  .then((module) => {
+    const { router } = module;
+    app.use(router.routes());
+    app.use(router.allowedMethods());
+  })
+  .catch((err) => {
+    logger.error(err);
+  });
 
 import('./complex-route.mjs')
   .then((module) => {

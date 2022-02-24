@@ -3,6 +3,18 @@ const dayjs = require('dayjs');
 const pool = require('./mysql');
 
 module.exports = {
+  filterJobByFair: async (data) => {
+    const client = pool.promise();
+    const sql = `
+    select id
+    from recruitment
+    where json_contains(job_fair_id, ?) = true
+    `;
+    const param = [data.fairId];
+    const [result] = await client.execute(sql, param);
+    return result;
+  },
+
   statistic: (option) =>
     new Promise((resolve, reject) => {
       pool.getConnection((err, cnx) => {
@@ -10,7 +22,7 @@ module.exports = {
         if (option === 'qty-by-total-today') {
           const sql = `
           select (select count(*) from recruitment) total
-            , (select count(*) from recruitment where position(? in date) > 0) today
+              , (select count(*) from recruitment where position(? in date) > 0) today
           `;
           cnx.execute(sql, [dayjs().format('YYYY-MM-DD')], (err, result) => {
             if (err) reject(err);

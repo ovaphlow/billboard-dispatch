@@ -78,9 +78,7 @@ router.get('/staff', async (ctx) => {
     order by id desc
     limit 20
     `;
-    const [result] = await client.execute(sql, [
-      ctx.request.execute.tag,
-    ]);
+    const [result] = await client.execute(sql, [ctx.request.execute.tag]);
     ctx.response.body = result;
   } else ctx.response.body = [];
 });

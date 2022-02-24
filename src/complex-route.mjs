@@ -9,6 +9,9 @@ export const router = new Router({
 
 router.get('/resume', async (ctx) => {
   const { option } = ctx.request.query;
+  if (option === 'by-fair') {
+    // 线上招聘会
+  }
   if (option === 'by-job_ids') {
     // 不包括岗位信息
     const { ids } = ctx.request.query;

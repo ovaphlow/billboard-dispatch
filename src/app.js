@@ -184,6 +184,12 @@ app.use(async (ctx, next) => {
 })();
 
 (() => {
+  const router = require('./staff');
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+})();
+
+(() => {
   const router = require('./weixin');
   app.use(router.routes());
   app.use(router.allowedMethods());

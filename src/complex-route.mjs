@@ -18,14 +18,16 @@ router.get('/resume', async (ctx) => {
     // 获取招聘会时间
     const fairList = await filterFairById({ id: parseInt(fairId, 10) });
     const [fairData] = fairList;
-    console.log(fairData);
     const { datime } = fairData;
-    console.log(datime);
-    console.log(dayjs(datime).add(28, 'day').format('YYYY-MM-DD HH:mm:ss'));
     // 获取招聘会职位
     const jobList = await job.filterJobByFair({ fairId: `["${fairId}"]` });
     // 招聘会开始后的28天内投递到jobList中的记录数
-    ctx.response.body = jobList;
+    const sendinList = await sendin.filter('by-job-id-and-date', {
+      list: jobList.map((current) => current.id).join(','),
+      date: dayjs(datime).format('YYYY-MM-DD HH:mm:ss'),
+      date2: dayjs(datime).add(28, 'day').format('YYYY-MM-DD HH:mm:ss'),
+    });
+    ctx.response.body = sendinList;
   }
   if (option === 'by-job_ids') {
     // 不包括岗位信息

@@ -29,7 +29,6 @@ module.exports = {
       pool.getConnection((err, cnx) => {
         if (err) reject(err);
         if (option === 'by-job-id-and-date') {
-          console.log(data);
           cnx.execute(
             `
             select datime, id, recruitment_id, recruitment_uuid, resume_id, resume_uuid, status
